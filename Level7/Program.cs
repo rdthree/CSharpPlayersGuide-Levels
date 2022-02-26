@@ -7,6 +7,33 @@
 
 CalcTriArea();
 EggDivider();
+PassTheDuchy();
+
+Console.ReadKey();
+
+/*
+ * users enter how many provinces, duchies, estates they have.  the program returns the total value
+ * each estate is   1
+ * each duchy is    3
+ * each province is 6
+ */
+
+void PassTheDuchy()
+{
+    Console.WriteLine("What is your new worth?");
+    Console.Write("Total Estates: ");
+    var estates = InputToUint();
+    Console.Write("Total Duchies: ");
+    var duchies = InputToUint() * 3;
+    Console.Write("Total Provinces: ");
+    var provinces = InputToUint() * 6;
+    Console.WriteLine($"You own:\n" +
+                      $"{duchies} \tin duchies\n" +
+                      $"{estates} \tin estates\n" +
+                      $"{provinces} \tin provinces\n" +
+                      $"-----------------------\n" +
+                      $"{duchies+estates+provinces} \ttotal net worth");
+}
 
 /*
  * take input of daily egs, divide input equally among 4 sisters
