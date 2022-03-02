@@ -5,6 +5,14 @@
  * https://gist.github.com/ZacharyPatten/798ed612d692a560bdd529367b6a7dbd#example-6-optional-code-style-changes-over-example-5
  */
 
+Console.Beep(440, 100);
+Console.Beep(840, 50);
+Console.Beep(1240, 100);
+
+Console.Title = "Level 7";
+Console.BackgroundColor = ConsoleColor.DarkBlue;
+Console.ForegroundColor = ConsoleColor.White;
+
 CalcTriArea();
 EggDivider();
 PassTheDuchy();
@@ -45,13 +53,14 @@ void EggDivider()
     var eggs = InputToUint();
     var eggsDivided = eggs / 4;
     var eggsRemainder = eggs % 4;
-    Console.WriteLine($"Each sister gets {eggsDivided}. The duckbear gets {eggsRemainder}.");
+    Console.WriteLine($"Each sister gets {eggsDivided, 30}.\nThe duckbear gets {eggsRemainder, 30}.");
 
 
     Console.WriteLine("\nFYI");
     Console.WriteLine("These egg quantities result in the duckbear getting more eggs than each sister:");
     for (var i = 0; i < 100; i++)
-        if (i / 4 < i % 4) Console.Write($"(({i})) ");
+        if (i / 4 < i % 4) Console.Write($"\n\t\t(({i})) ");
+    Console.WriteLine("\n");
 }
 
 /*
