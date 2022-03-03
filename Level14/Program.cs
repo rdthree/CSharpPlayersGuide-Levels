@@ -1,6 +1,5 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
-using System.Runtime.Serialization.Json;
 using MonchoUtils;
 
 // HUNTING THE MANTICORE
@@ -23,75 +22,124 @@ using MonchoUtils;
  * use different colors for different types of messages
  */
 
-// starting vars
-
-var manticoreDist = new Random(DateTime.Now.Millisecond).Next(100);
-var manticoreStartingHealth = 15;
+// starting parameters
+var manticoreDist = new Random(DateTime.Now.Millisecond).Next(100); // location of enemy
+const int manticoreStartingHealth = 15;
 var manticoreHealth = manticoreStartingHealth;
-var cityStartingHealth = 10;
+const int cityStartingHealth = 10;
 var cityHealth = cityStartingHealth;
-int cannonShot;
-int round = 0;
-int damage = 0;
-const int whitespace = 5;
-const int padding = 26;
+// location and power of cannon shots
+const int damageMin = 1;
+const int damageMed = 3;
+const int damageMax = 10;
+var round = 0; // increments each game loop
+
+// helper consts for console messages
+const int padding = 40;
 
 while (manticoreHealth > 0 || cityHealth > 0)
 {
+    // each round these parameters change
     round += 1;
     manticoreDist -= 1;
 
-    if (round % 3 == 0 && round % 5 == 0) damage = 10;
-    else if (round % 3 == 0 || round % 5 == 0) damage = 3;
-    else damage = 1;
+    // initial parameters based on minimums and round bonuses
+    var damage = damageMin;
+    if (round % 3 == 0 && round % 5 == 0) damage = damageMax;
+    else if (round % 3 == 0 || round % 5 == 0) damage = damageMed;
 
-    GameStats();
+    // stats should update each round
+    GameStats(damage, round, cityHealth, manticoreHealth, manticoreDist, padding);
 
+    // input next cannon shot at end of stats
     Console.Write("Input Range: ");
-    cannonShot = MoUtils.InputToInt();
+    var cannonShot = MoUtils.InputToInt();
 
-    if (cannonShot > manticoreDist)
+    // console messages built into hit function, clear previous input and stats
+    Console.Clear();
+    var hit = Hit(cannonShot, manticoreDist, damage, damageMin, damageMed, damageMax);
+
+    // hit results and endgame conditions
+    if (hit) manticoreHealth -= damage;
+    else if (!hit) cityHealth -= 1;
+    
+    // endgame conditions
+    if (EndGame(cityHealth, manticoreHealth)) break;
+}
+
+Console.ReadKey();
+
+void GameStats(int damage, int currentRound, int playerHealth, int enemyHealth, int enemyLocation, int paddings)
+{
+    // for some reason i can't pass this as a const parameter...caca!
+    const int whitespace = 20;
+    
+    Console.WriteLine(("").PadRight(paddings, '-'));
+    Console.WriteLine($"Round:              {currentRound,whitespace}");
+    Console.WriteLine($"Possible Damage:    {damage,whitespace}");
+    Console.WriteLine($"Manticore Health:   {enemyHealth,whitespace}");
+    Console.WriteLine($"City Health:        {playerHealth,whitespace}");
+    //Console.WriteLine($"Manticore Location: {enemyLocation,whitespace}");
+    Console.WriteLine(("").PadRight(paddings, '-'));
+}
+
+bool Hit(int shot, int badDist, int damage, int damagePowerMin, int damagePowerMed, int damagePowerMax)
+{
+    if (shot == badDist)
     {
-        Console.WriteLine($"you overshot by {cannonShot - manticoreDist}");
-        cityHealth -= 1;
-    }
-    else if (cannonShot < manticoreDist)
-    {
-        Console.WriteLine($"you undershot by {manticoreDist - cannonShot}");
-        cityHealth -= 1;
+        if (damage == damagePowerMax)
+        {
+            Console.BackgroundColor = ConsoleColor.Red;
+            Console.ForegroundColor = ConsoleColor.Black;
+            Console.WriteLine("WHAMMER");
+        }
+        else if (damage == damagePowerMed)
+        {
+            Console.BackgroundColor = ConsoleColor.Yellow;
+            Console.ForegroundColor = ConsoleColor.Black;
+            Console.WriteLine("BLAMMER");
+        }
+        else if (damage == damagePowerMin)
+        {
+            Console.BackgroundColor = ConsoleColor.White;
+            Console.ForegroundColor = ConsoleColor.Black;
+            Console.WriteLine("HIT");
+        }
+        Console.ResetColor();
+        return true;
     }
     else
     {
-        if (damage == 10)
+        if (shot > badDist)
         {
-            Console.WriteLine($"WHAMMER! {manticoreHealth -= 10}");
-            continue;
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine($"OVERSHOT by {shot - badDist}");
         }
-        else if (damage == 3)
+        else if (shot < badDist)
         {
-            Console.WriteLine($"BLAMMER! {manticoreHealth -= 3}");
-            continue;
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine($"UNDERSHOT by {badDist - shot}");
         }
-        else
-        {
-            Console.WriteLine($"HIT! {manticoreHealth -= 1}");
-            continue;
-        }
+        Console.ResetColor();
+        return false;
     }
 }
 
-void GameStats()
+bool EndGame(int playerHealth, int enemyHealth)
 {
-    Console.WriteLine(("").PadRight(padding, '-'));
-    Console.WriteLine($"Round:              {round,whitespace}");
-    Console.WriteLine($"Possible Damage:    {damage,whitespace}");
-    Console.WriteLine($"Manticore Health:   {manticoreHealth,whitespace}");
-    Console.WriteLine($"City Health:        {cityHealth,whitespace}");
-    Console.WriteLine($"Manticore Location: {manticoreDist,whitespace}");
-    Console.WriteLine(("").PadRight(padding, '-'));
-}
-
-bool Hit(int shot, int badDist)
-{
-    return true;
+    if (enemyHealth <= 0)
+    {
+        Console.Beep(500, 150);
+        Console.ForegroundColor = ConsoleColor.Cyan;
+        Console.WriteLine($"WIN");
+        return true;
+    }
+    else if (playerHealth <= 0)
+    {
+        Console.Beep(250, 150);
+        Console.ForegroundColor = ConsoleColor.DarkGreen;
+        Console.WriteLine($"LOSE");
+        return true;
+    }
+    else return false;
 }
