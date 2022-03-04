@@ -1,4 +1,6 @@
 ﻿// See https://aka.ms/new-console-template for more information
+
+using System.Runtime.Serialization.Json;
 using MonchoUtils;
 
 /*
@@ -17,24 +19,85 @@ using MonchoUtils;
  *   - this should be possible by just showing the enum value, not converting it to a string again
 */
 
+(FoodType foodType, FoodIngredient foodIngredient, FoodSeasoning foodSeasoning) aFood;
+var foodType = FoodType.Soup;
+var foodIngredientType = FoodIngredient.Mushrooms;
+var foodSeasoningType = FoodSeasoning.Spicy;
+aFood = (foodType, foodIngredientType, foodSeasoningType);
+
+while (true)
+{
+    Console.Clear();
+    canIHitItAndQuit();
+    
+    if (Console.ReadKey().Key == ConsoleKey.T)
+    {
+        if (foodType == FoodType.Soup) foodType = FoodType.Stew;
+        else if (foodType == FoodType.Stew) foodType = FoodType.Gumbo;
+        else foodType = FoodType.Soup;
+        aFood = (foodType, foodIngredientType, foodSeasoningType);
+        Console.Clear();
+        canIHitItAndQuit();
+    }
+    
+    if (Console.ReadKey().Key == ConsoleKey.I)
+    {
+        if (foodIngredientType == FoodIngredient.Mushrooms) foodIngredientType = FoodIngredient.Chicken;
+        else if (foodIngredientType == FoodIngredient.Chicken) foodIngredientType = FoodIngredient.Carrots;
+        else if (foodIngredientType == FoodIngredient.Carrots) foodIngredientType = FoodIngredient.Potatoes;
+        else foodIngredientType = FoodIngredient.Mushrooms;
+        aFood = (foodType, foodIngredientType, foodSeasoningType);
+        Console.Clear();
+        canIHitItAndQuit();
+    }
+
+    if (Console.ReadKey().Key == ConsoleKey.S)
+    {
+        if (foodSeasoningType == FoodSeasoning.Spicy) foodSeasoningType = FoodSeasoning.Salty;
+        else if (foodSeasoningType == FoodSeasoning.Salty) foodSeasoningType = FoodSeasoning.Sweet;
+        else foodSeasoningType = FoodSeasoning.Spicy;
+        aFood = (foodType, foodIngredientType, foodSeasoningType);
+        Console.Clear();
+        canIHitItAndQuit();
+    }
+}
+
+void canIHitItAndQuit()
+{
+    Console.Clear();
+    Console.ResetColor();
+    Console.Write("Which type of food would you like? <press 'T'> ");
+    Console.ForegroundColor = ConsoleColor.Red;
+    Console.WriteLine($"{foodType}");
+    Console.ResetColor();
+    Console.Write("What main ingredient are looking for? <press 'I'> ");
+    Console.ForegroundColor = ConsoleColor.Cyan;
+    Console.WriteLine($"{foodIngredientType}");
+    Console.ResetColor();
+    Console.Write("How would you like it seasoned? <press 'S'> ");
+    Console.ForegroundColor = ConsoleColor.Yellow;
+    Console.WriteLine($"{foodSeasoningType}");
+    Console.WriteLine($"Excellent Choice Sir, '{aFood.foodSeasoning} {aFood.foodType} with {aFood.foodIngredient}'");
+}
+
 enum FoodType
 {
- Soup,
- Stew,
- Gumbo
+    Soup,
+    Stew,
+    Gumbo
 }
 
 enum FoodIngredient
 {
- Mushrooms,
- Chicken,
- Carrots,
- Potatoes
+    Mushrooms,
+    Chicken,
+    Carrots,
+    Potatoes
 }
 
 enum FoodSeasoning
 {
- Spicy,
- Salty,
- Sweet
+    Spicy,
+    Salty,
+    Sweet
 }
