@@ -17,6 +17,9 @@ using MonchoUtils;
  * DISPLAY:
  *   - when done show contents of soup tuple as a description of the food
  *   - this should be possible by just showing the enum value, not converting it to a string again
+ *
+ * INFO: this helped with the readline issues on the console
+ * https://stackoverflow.com/questions/37354142/c-sharp-console-how-to-readline-without-the-need-of-pressing-enter
 */
 
 (FoodType foodType, FoodIngredient foodIngredient, FoodSeasoning foodSeasoning) aFood;
@@ -25,63 +28,50 @@ var foodIngredientType = FoodIngredient.Mushrooms;
 var foodSeasoningType = FoodSeasoning.Spicy;
 aFood = (foodType, foodIngredientType, foodSeasoningType);
 
-bool foodTypeSelector = true;
-bool foodIngredientSelector = true;
-bool foodSeasoningSelector = true;
-
-while (foodTypeSelector)
+while (true)
 {
-    Console.Clear();
-    Console.ResetColor();
-    Console.Write("Which type of food would you like? <press 'T'> ");
-    Console.ForegroundColor = ConsoleColor.Red;
-    Console.WriteLine($"{foodType}");
-    if (Console.ReadKey().Key == ConsoleKey.T)
+    CanIHitItAndQuit();
+    var input = Console.ReadKey();
+    /*
+    switch (input.Key)
     {
-        if (foodType == FoodType.Soup) foodType = FoodType.Stew;
-        else if (foodType == FoodType.Stew) foodType = FoodType.Gumbo;
-        else foodType = FoodType.Soup;
+        case ConsoleKey.T when foodType == FoodType.Soup:
+            foodType = FoodType.Stew;
+            break;
+        case ConsoleKey.T when foodType == FoodType.Stew:
+            foodType = FoodType.Gumbo;
+            break;
+        case ConsoleKey.T:
+            foodType = FoodType.Soup;
+            break;
+        case ConsoleKey.I when foodIngredientType == FoodIngredient.Mushrooms:
+            foodIngredientType = FoodIngredient.Chicken;
+            break;
+        case ConsoleKey.I when foodIngredientType == FoodIngredient.Chicken:
+            foodIngredientType = FoodIngredient.Carrots;
+            break;
+        case ConsoleKey.I when foodIngredientType == FoodIngredient.Carrots:
+            foodIngredientType = FoodIngredient.Potatoes;
+            break;
+        case ConsoleKey.I:
+            foodIngredientType = FoodIngredient.Mushrooms;
+            break;
+        case ConsoleKey.S when foodSeasoningType == FoodSeasoning.Spicy:
+            foodSeasoningType = FoodSeasoning.Salty;
+            break;
+        case ConsoleKey.S when foodSeasoningType == FoodSeasoning.Salty:
+            foodSeasoningType = FoodSeasoning.Sweet;
+            break;
+        case ConsoleKey.S:
+            foodSeasoningType = FoodSeasoning.Spicy;
+            break;
     }
-    else if (Console.ReadKey().Key == ConsoleKey.Enter) foodTypeSelector = false;
+        */
 }
 
-while (foodIngredientSelector)
+void CanIHitItAndQuit()
 {
-    Console.Clear();
-    Console.ResetColor();
-    Console.Write("What main ingredient are looking for? <press 'I'> ");
-    Console.ForegroundColor = ConsoleColor.Cyan;
-    Console.WriteLine($"{foodIngredientType}");
-    if (Console.ReadKey().Key == ConsoleKey.I)
-    {
-        if (foodIngredientType == FoodIngredient.Mushrooms) foodIngredientType = FoodIngredient.Chicken;
-        else if (foodIngredientType == FoodIngredient.Chicken) foodIngredientType = FoodIngredient.Carrots;
-        else if (foodIngredientType == FoodIngredient.Carrots) foodIngredientType = FoodIngredient.Potatoes;
-        else foodIngredientType = FoodIngredient.Mushrooms;
-    }
-    else if (Console.ReadKey().Key == ConsoleKey.Enter) foodIngredientSelector = false;
-}
-
-while (foodSeasoningSelector)
-{
-    Console.Clear();
-    Console.ResetColor();
-    Console.Write("How would you like it seasoned? <press 'S'> ");
-    Console.ForegroundColor = ConsoleColor.Yellow;
-    Console.WriteLine($"{foodSeasoningType}");
-    if (Console.ReadKey().Key == ConsoleKey.S)
-    {
-        if (foodSeasoningType == FoodSeasoning.Spicy) foodSeasoningType = FoodSeasoning.Salty;
-        else if (foodSeasoningType == FoodSeasoning.Salty) foodSeasoningType = FoodSeasoning.Sweet;
-        else foodSeasoningType = FoodSeasoning.Spicy;
-    }
-    else if (Console.ReadKey().Key == ConsoleKey.Enter) foodSeasoningSelector = false;
-}
-
-Console.WriteLine($"Excellent Choice Sir, '{aFood.foodSeasoning} {aFood.foodType} with {aFood.foodIngredient}'");
-
-void canIHitItAndQuit()
-{
+    aFood = (foodType, foodIngredientType, foodSeasoningType);
     Console.Clear();
     Console.ResetColor();
     Console.Write("Which type of food would you like? <press 'T'> ");
@@ -95,6 +85,7 @@ void canIHitItAndQuit()
     Console.Write("How would you like it seasoned? <press 'S'> ");
     Console.ForegroundColor = ConsoleColor.Yellow;
     Console.WriteLine($"{foodSeasoningType}");
+    Console.ForegroundColor = ConsoleColor.Green;
     Console.WriteLine($"Excellent Choice Sir, '{aFood.foodSeasoning} {aFood.foodType} with {aFood.foodIngredient}'");
 }
 
