@@ -1,7 +1,5 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
-using System.Runtime.Serialization.Json;
-using MonchoUtils;
 
 /*
  * define enumerations:
@@ -30,53 +28,61 @@ aFood = (foodType, foodIngredientType, foodSeasoningType);
 
 while (true)
 {
-    CanIHitItAndQuit();
+    CanIHitItAndQuit(foodType, foodIngredientType, foodSeasoningType);
     var input = Console.ReadKey();
-    /*
     switch (input.Key)
     {
-        case ConsoleKey.T when foodType == FoodType.Soup:
-            foodType = FoodType.Stew;
-            break;
-        case ConsoleKey.T when foodType == FoodType.Stew:
-            foodType = FoodType.Gumbo;
-            break;
         case ConsoleKey.T:
-            foodType = FoodType.Soup;
-            break;
-        case ConsoleKey.I when foodIngredientType == FoodIngredient.Mushrooms:
-            foodIngredientType = FoodIngredient.Chicken;
-            break;
-        case ConsoleKey.I when foodIngredientType == FoodIngredient.Chicken:
-            foodIngredientType = FoodIngredient.Carrots;
-            break;
-        case ConsoleKey.I when foodIngredientType == FoodIngredient.Carrots:
-            foodIngredientType = FoodIngredient.Potatoes;
+            foodType = FoodTypeSwitcher(foodType);
             break;
         case ConsoleKey.I:
-            foodIngredientType = FoodIngredient.Mushrooms;
-            break;
-        case ConsoleKey.S when foodSeasoningType == FoodSeasoning.Spicy:
-            foodSeasoningType = FoodSeasoning.Salty;
-            break;
-        case ConsoleKey.S when foodSeasoningType == FoodSeasoning.Salty:
-            foodSeasoningType = FoodSeasoning.Sweet;
+            foodIngredientType = FoodIngredientSwitcher(foodIngredientType);
             break;
         case ConsoleKey.S:
-            foodSeasoningType = FoodSeasoning.Spicy;
+            foodSeasoningType = FoodSeasoningSwitcher(foodSeasoningType);
             break;
     }
-        */
 }
 
-void CanIHitItAndQuit()
+FoodType FoodTypeSwitcher(FoodType foodTypeSwitch)
 {
-    aFood = (foodType, foodIngredientType, foodSeasoningType);
+    return foodTypeSwitch switch
+    {
+        FoodType.Soup => foodTypeSwitch = FoodType.Stew,
+        FoodType.Stew => foodTypeSwitch = FoodType.Gumbo,
+        _ => foodTypeSwitch = FoodType.Soup
+    };
+}
+
+FoodIngredient FoodIngredientSwitcher(FoodIngredient foodIngredientTypeSwitch)
+{
+    return foodIngredientTypeSwitch switch
+    {
+        FoodIngredient.Mushrooms => foodIngredientTypeSwitch = FoodIngredient.Chicken,
+        FoodIngredient.Chicken => foodIngredientTypeSwitch = FoodIngredient.Carrots,
+        FoodIngredient.Carrots => foodIngredientTypeSwitch = FoodIngredient.Potatoes,
+        _ => foodIngredientTypeSwitch = FoodIngredient.Mushrooms
+    };
+}
+
+FoodSeasoning FoodSeasoningSwitcher(FoodSeasoning foodSeasoningTypeSwitch)
+{
+    return foodSeasoningTypeSwitch switch
+    {
+        FoodSeasoning.Spicy => foodSeasoningTypeSwitch = FoodSeasoning.Salty,
+        FoodSeasoning.Salty => foodSeasoningTypeSwitch = FoodSeasoning.Sweet,
+        _ => foodSeasoningTypeSwitch = FoodSeasoning.Spicy
+    };
+}
+
+void CanIHitItAndQuit(FoodType foodTypeParam, FoodIngredient foodIngredient, FoodSeasoning foodSeasoning)
+{
+    aFood = (foodTypeParam, foodIngredientType, foodSeasoningType);
     Console.Clear();
     Console.ResetColor();
     Console.Write("Which type of food would you like? <press 'T'> ");
     Console.ForegroundColor = ConsoleColor.Red;
-    Console.WriteLine($"{foodType}");
+    Console.WriteLine($"{foodTypeParam}");
     Console.ResetColor();
     Console.Write("What main ingredient are looking for? <press 'I'> ");
     Console.ForegroundColor = ConsoleColor.Cyan;
@@ -86,7 +92,8 @@ void CanIHitItAndQuit()
     Console.ForegroundColor = ConsoleColor.Yellow;
     Console.WriteLine($"{foodSeasoningType}");
     Console.ForegroundColor = ConsoleColor.Green;
-    Console.WriteLine($"Excellent Choice Sir, '{aFood.foodSeasoning} {aFood.foodType} with {aFood.foodIngredient}'");
+    Console.WriteLine(
+        $"Excellent Choice Sir, '{aFood.foodSeasoning} {aFood.foodType} with {aFood.foodIngredient}'");
 }
 
 enum FoodType
