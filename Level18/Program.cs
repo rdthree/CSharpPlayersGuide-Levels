@@ -42,17 +42,17 @@ while (true)
     Console.WriteLine("'X' to save arrow to quiver and reset, 'Q' to show/hide quiver");
     Console.ResetColor();
 
-    if (quiverDisplay) QuiverShow(quiver);
-    else ArrowChoice(arrow);
+    if (quiverDisplay) ArrowUI.QuiverShow(quiver);
+    else ArrowUI.ArrowChoice(arrow);
 
     var input = Console.ReadKey(true);
     switch (input.Key)
     {
         case ConsoleKey.H:
-            arrow.ArrowHead = ArrowHeadSwitcher(arrow.ArrowHead);
+            arrow.ArrowHead = ArrowUI.ArrowHeadSwitcher(arrow.ArrowHead);
             break;
         case ConsoleKey.F:
-            arrow.Fletching = FletchingSwitcher(arrow.Fletching);
+            arrow.Fletching = ArrowUI.FletchingSwitcher(arrow.Fletching);
             break;
         case ConsoleKey.L:
             Console.ForegroundColor = ConsoleColor.Yellow;
@@ -75,74 +75,51 @@ while (true)
     Console.ResetColor();
 }
 
-void QuiverShow(List<Arrow> quiverShow)
+internal static class ArrowUI
 {
-    foreach (var arrowShow in quiverShow)
+    internal static void QuiverShow(List<Arrow> quiverShow)
     {
-        Console.WriteLine($"{arrowShow.ArrowLength} | {arrowShow.ArrowHead} | {arrowShow.Fletching}");
+        foreach (var arrowShow in quiverShow)
+            Console.WriteLine($"{arrowShow.ArrowLength} | {arrowShow.ArrowHead} | {arrowShow.Fletching}");
+    }
+
+    internal static ArrowHead ArrowHeadSwitcher(ArrowHead arrowHeadSwitcher)
+    {
+        return arrowHeadSwitcher switch
+        {
+            ArrowHead.Obsidian => arrowHeadSwitcher = ArrowHead.Steel,
+            ArrowHead.Steel => arrowHeadSwitcher = ArrowHead.Wood,
+            ArrowHead.Wood => arrowHeadSwitcher = ArrowHead.Obsidian,
+            _ => throw new ArgumentOutOfRangeException(nameof(arrowHeadSwitcher), arrowHeadSwitcher, null)
+        };
+    }
+
+    internal static Fletching FletchingSwitcher(Fletching fletchingSwitcher)
+    {
+        return fletchingSwitcher switch
+        {
+            Fletching.Plastic => fletchingSwitcher = Fletching.GooseFeathers,
+            Fletching.GooseFeathers => fletchingSwitcher = Fletching.TurkeyFeathers,
+            Fletching.TurkeyFeathers => fletchingSwitcher = Fletching.Plastic,
+            _ => throw new ArgumentOutOfRangeException(nameof(fletchingSwitcher), fletchingSwitcher, null)
+        };
+    }
+
+    public static void ArrowChoice(Arrow arrowChosen)
+    {
+        var arrowHead = arrowChosen.ArrowHead;
+        var arrowLength = arrowChosen.ArrowLength;
+        var fletching = arrowChosen.Fletching;
+        var cost = Arrow.GetCost(arrowHead, arrowLength, fletching);
+
+        Console.WriteLine($"Arrow Head: \t\t{arrowHead}\n" +
+                          $"Arrow Length: \t\t{arrowLength}\n" +
+                          $"Arrow Fletching: \t{fletching}");
+        Console.ForegroundColor = ConsoleColor.Red;
+        Console.WriteLine($"Arrow Cost: \t\t{cost:C}");
     }
 }
 
-ArrowHead ArrowHeadSwitcher(ArrowHead arrowHeadSwitcher)
-{
-    return arrowHeadSwitcher switch
-    {
-        ArrowHead.Obsidian => arrowHeadSwitcher = ArrowHead.Steel,
-        ArrowHead.Steel => arrowHeadSwitcher = ArrowHead.Wood,
-        ArrowHead.Wood => arrowHeadSwitcher = ArrowHead.Obsidian,
-        _ => throw new ArgumentOutOfRangeException(nameof(arrowHeadSwitcher), arrowHeadSwitcher, null)
-    };
-}
-
-Fletching FletchingSwitcher(Fletching fletchingSwitcher)
-{
-    return fletchingSwitcher switch
-    {
-        Fletching.Plastic => fletchingSwitcher = Fletching.GooseFeathers,
-        Fletching.GooseFeathers => fletchingSwitcher = Fletching.TurkeyFeathers,
-        Fletching.TurkeyFeathers => fletchingSwitcher = Fletching.Plastic,
-        _ => throw new ArgumentOutOfRangeException(nameof(fletchingSwitcher), fletchingSwitcher, null)
-    };
-}
-
-void ArrowChoice(Arrow arrowChosen)
-{
-    var arrowHead = arrowChosen.ArrowHead;
-    var arrowLength = arrowChosen.ArrowLength;
-    var fletching = arrowChosen.Fletching;
-    var cost = GetCost(arrowHead, arrowLength, fletching);
-
-    Console.WriteLine($"Arrow Head: \t\t{arrowHead}\n" +
-                      $"Arrow Length: \t\t{arrowLength}\n" +
-                      $"Arrow Fletching: \t{fletching}");
-    Console.ForegroundColor = ConsoleColor.Red;
-    Console.WriteLine($"Arrow Cost: \t\t{cost:C}");
-}
-
-static double GetCost(ArrowHead arrowHead, double arrowLength, Fletching fletching)
-{
-    double arrowHeadCost = 0;
-    var arrowLengthCost = arrowLength * 0.05;
-    double fletchingCost = 0;
-
-    arrowHeadCost = arrowHead switch
-    {
-        ArrowHead.Obsidian => 5.0,
-        ArrowHead.Steel => 10.0,
-        ArrowHead.Wood => 3.0,
-        _ => arrowHeadCost
-    };
-
-    fletchingCost = fletching switch
-    {
-        Fletching.Plastic => 10.0,
-        Fletching.GooseFeathers => 5.0,
-        Fletching.TurkeyFeathers => 3.0,
-        _ => fletchingCost
-    };
-
-    return arrowHeadCost + arrowLengthCost + fletchingCost;
-}
 
 internal class Arrow
 {
@@ -162,6 +139,31 @@ internal class Arrow
         ArrowHead = arrowHead;
         ArrowLength = arrowLength;
         Fletching = fletching;
+    }
+
+    public static double GetCost(ArrowHead arrowHead, double arrowLength, Fletching fletching)
+    {
+        double arrowHeadCost = 0;
+        var arrowLengthCost = arrowLength * 0.05;
+        double fletchingCost = 0;
+
+        arrowHeadCost = arrowHead switch
+        {
+            ArrowHead.Obsidian => 5.0,
+            ArrowHead.Steel => 10.0,
+            ArrowHead.Wood => 3.0,
+            _ => arrowHeadCost
+        };
+
+        fletchingCost = fletching switch
+        {
+            Fletching.Plastic => 10.0,
+            Fletching.GooseFeathers => 5.0,
+            Fletching.TurkeyFeathers => 3.0,
+            _ => fletchingCost
+        };
+
+        return arrowHeadCost + arrowLengthCost + fletchingCost;
     }
 }
 
