@@ -15,25 +15,12 @@ class Rectangle
     {
         _width = width;
         _height = height;
-        _area = UpdateArea(width, height);
     }
 
     public double GetWidth() => _width;
     public double GetHeight() => _height;
-    public double GetArea() => _area;
+    public double GetArea() => _width * _height;
 
-    public void SetWidth(double widthNew)
-    {
-        _width = widthNew;
-        UpdateArea(widthNew, _height);
-    }
-
-    public void SetHeight(double heightNew)
-    {
-        _height = heightNew;
-        _area = _height * heightNew;
-        UpdateArea(_width, heightNew);
-    }
-
-    private double UpdateArea(double width, double height) => width * height;
+    public void SetWidth(double widthNew) => _width = widthNew;
+    public void SetHeight(double heightNew) => _height = heightNew;
 }
