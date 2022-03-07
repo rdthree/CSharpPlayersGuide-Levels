@@ -24,6 +24,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Level18", "Level18\Level18.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Level19", "Level19\Level19.csproj", "{724F9057-7093-4E51-9062-10F50B26E60A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Level20", "Level20\Level20.csproj", "{729B429D-70FB-44CD-901D-30A35C269E50}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Level21", "Level21\Level21.csproj", "{B32C9DD1-8B3A-4E23-A7C2-8D69B59B53CB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -78,5 +82,13 @@ Global
 		{724F9057-7093-4E51-9062-10F50B26E60A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{724F9057-7093-4E51-9062-10F50B26E60A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{724F9057-7093-4E51-9062-10F50B26E60A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{729B429D-70FB-44CD-901D-30A35C269E50}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{729B429D-70FB-44CD-901D-30A35C269E50}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{729B429D-70FB-44CD-901D-30A35C269E50}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{729B429D-70FB-44CD-901D-30A35C269E50}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B32C9DD1-8B3A-4E23-A7C2-8D69B59B53CB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B32C9DD1-8B3A-4E23-A7C2-8D69B59B53CB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B32C9DD1-8B3A-4E23-A7C2-8D69B59B53CB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B32C9DD1-8B3A-4E23-A7C2-8D69B59B53CB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
