@@ -1,32 +1,34 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Level03", "Level03\Level03.csproj", "{1679AB7A-3734-4D27-AD9D-51E916DC58E5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Level03_FirstProgram", "Level03_FirstProgram\Level03_FirstProgram.csproj", "{1679AB7A-3734-4D27-AD9D-51E916DC58E5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Level04", "Level04\Level04.csproj", "{C5A535C9-FC58-4202-892D-3E5AFA49A4CE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Level04_Comments_ThingNamer3000", "Level04_Comments_ThingNamer3000\Level04_Comments_ThingNamer3000.csproj", "{C5A535C9-FC58-4202-892D-3E5AFA49A4CE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Level07", "Level07\Level07.csproj", "{FBB30723-E083-479A-983F-1E90BD184F49}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Level07_Math_TriangleFarmer", "Level07_Math_TriangleFarmer\Level07_Math_TriangleFarmer.csproj", "{FBB30723-E083-479A-983F-1E90BD184F49}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Level10", "Level10\Level10.csproj", "{8300E529-0B56-40C0-9E47-749482F3896A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Level10_Switches_BuyingInventory", "Level10_Switches_BuyingInventory\Level10_Switches_BuyingInventory.csproj", "{8300E529-0B56-40C0-9E47-749482F3896A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonchoUtils", "MonchoUtils\MonchoUtils.csproj", "{D7492AE2-9DAF-404A-BBFA-DEED723789CB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Level12", "Level12\Level12.csproj", "{D51DF44C-844C-4889-8D7A-15DF6F3726F4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Level12_Arrays", "Level12_Arrays\Level12_Arrays.csproj", "{D51DF44C-844C-4889-8D7A-15DF6F3726F4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Level13", "Level13\Level13.csproj", "{9E8ACC79-8E99-4023-A0B3-995674E0DFC4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Level13_Methods_RecursionFactorialCountdown", "Level13_Methods_RecursionFactorialCountdown\Level13_Methods_RecursionFactorialCountdown.csproj", "{9E8ACC79-8E99-4023-A0B3-995674E0DFC4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Level14", "Level14\Level14.csproj", "{02F89684-DB5A-40BB-8DFA-A34E6EC574DB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Level14_MemoryManagement_ManticoreGame", "Level14_MemoryManagement_ManticoreGame\Level14_MemoryManagement_ManticoreGame.csproj", "{02F89684-DB5A-40BB-8DFA-A34E6EC574DB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Level16", "Level16\Level16.csproj", "{3FD874F8-87EE-4532-84E4-EAE7D1852F26}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Level16_Enums_OpenChestGame", "Level16_Enums_OpenChestGame\Level16_Enums_OpenChestGame.csproj", "{3FD874F8-87EE-4532-84E4-EAE7D1852F26}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Level17", "Level17\Level17.csproj", "{27D3C2DB-D756-45B0-A392-860DB0452007}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Level17_Tuples_SoupIngredientGame", "Level17_Tuples_SoupIngredientGame\Level17_Tuples_SoupIngredientGame.csproj", "{27D3C2DB-D756-45B0-A392-860DB0452007}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Level18", "Level18\Level18.csproj", "{1D934667-150E-42A6-B1F7-9F75742BB123}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Level18_Classes_ArrowMakerGame", "Level18_Classes_ArrowMakerGame\Level18_Classes_ArrowMakerGame.csproj", "{1D934667-150E-42A6-B1F7-9F75742BB123}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Level19", "Level19\Level19.csproj", "{724F9057-7093-4E51-9062-10F50B26E60A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Level19_Abstraction_ArrowMakerGame", "Level19_Abstraction_ArrowMakerGame\Level19_Abstraction_ArrowMakerGame.csproj", "{724F9057-7093-4E51-9062-10F50B26E60A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Level20", "Level20\Level20.csproj", "{729B429D-70FB-44CD-901D-30A35C269E50}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Level20_Properties", "Level20_Properties\Level20_Properties.csproj", "{729B429D-70FB-44CD-901D-30A35C269E50}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Level21", "Level21\Level21.csproj", "{B32C9DD1-8B3A-4E23-A7C2-8D69B59B53CB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Level21_Static_ArrowMakerGame", "Level21_Static_ArrowMakerGame\Level21_Static_ArrowMakerGame.csproj", "{B32C9DD1-8B3A-4E23-A7C2-8D69B59B53CB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Level24_TheFivePrototypes", "Level24_TheFivePrototypes\Level24_TheFivePrototypes.csproj", "{BDB5B45D-AB87-4563-B8B8-D51B79DBD13B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -90,5 +92,9 @@ Global
 		{B32C9DD1-8B3A-4E23-A7C2-8D69B59B53CB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B32C9DD1-8B3A-4E23-A7C2-8D69B59B53CB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B32C9DD1-8B3A-4E23-A7C2-8D69B59B53CB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BDB5B45D-AB87-4563-B8B8-D51B79DBD13B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BDB5B45D-AB87-4563-B8B8-D51B79DBD13B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BDB5B45D-AB87-4563-B8B8-D51B79DBD13B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BDB5B45D-AB87-4563-B8B8-D51B79DBD13B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
