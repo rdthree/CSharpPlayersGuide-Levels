@@ -1,16 +1,15 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
-// point tests
+using MonchoUtils;
 
-using Microsoft.VisualBasic;
-
+// point class tests
 var point1 = new Point(2.0, 3.0);
 var point2 = new Point(-4.0, 0.0);
 var origin = Point.Origin();
 Console.WriteLine($"x = {point1.X}, y = {point1.Y}");
 Console.WriteLine($"origin = ({origin.X},{origin.Y})");
 
-// color tests
+// color class tests
 var color1 = new Color(300, -3, 20);
 var color2 = new Color(50, 30, 40);
 var color3 = Color.Purple;
@@ -18,7 +17,7 @@ Console.WriteLine($"color1: R{color1.R}, G{color1.G}, B{color1.B}");
 Console.WriteLine($"color2: R{color2.R}, G{color2.G}, B{color2.B}");
 Console.WriteLine($"color3: R{color3.R}, G{color3.G}, B{color3.B}");
 
-// card tests
+// card class tests
 List<Card> deck = new List<Card>();
 var cardNumber = 0;
 foreach (var color in Enum.GetValues<CardColor>())
@@ -41,6 +40,15 @@ foreach (var card in deck)
     Console.WriteLine("");
 }
 
+// door lock/unlock class tests
+var door = new LockingDoor("hoobydoobie");
+string command = "o";
+if (command == "o")
+{
+    if (door.State == DoorStates.ClosedUnlocked) 
+        door = new LockingDoor(DoorStates.Open);
+
+}
 
 /// <summary>
 /// Point Class with X and Y coordinates
@@ -181,3 +189,30 @@ public enum CardRank
     Ampersand
 }
 
+internal class LockingDoor
+{
+    private string _password;
+    public DoorStates State { get; set; }
+
+    internal LockingDoor(DoorStates state){}
+    internal LockingDoor(string password, DoorStates state) => _password = password;
+
+    public void newPass(string password)
+    {
+        Console.WriteLine("input current password: ");
+        if (password == _password)
+        {
+            string newPassword = Console.ReadLine();
+            _password = newPassword;
+            Console.WriteLine("Password has been changed");
+        }
+        else Console.WriteLine("incorrect password");
+    }
+}
+
+enum DoorStates
+{
+    Open,
+    ClosedUnlocked,
+    ClosedLocked,
+}

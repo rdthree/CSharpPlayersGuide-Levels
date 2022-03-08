@@ -92,6 +92,7 @@ A door that can only lock with the correct passcode. Operation:
 - Passcode can be changed by using the current code
 
 ## Objectives & CRC
+Logic should stay within the door class so that the password can stay secure and control the door states.  Making the door condition immutable causes weird issues with the password.
 
 - Door class tracks locked, open, closed
 - Performs transitions with methods
