@@ -1,5 +1,6 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
+using System.ComponentModel.Design;
 using MonchoUtils;
 
 // point class tests
@@ -41,13 +42,39 @@ foreach (var card in deck)
 }
 
 // door lock/unlock class tests
-var door = new LockingDoor("hoobydoobie");
-string command = "o";
-if (command == "o")
+var door = new LockingDoor("mob");
+while (true)
 {
-    if (door.State == DoorStates.ClosedUnlocked) 
-        door = new LockingDoor(DoorStates.Open);
-
+    Console.WriteLine("'o' to open or unlock, 'c' to close, 'l' to lock");
+    Console.WriteLine($"door is: {door.State}");
+    var command = Console.ReadLine();
+    switch (command)
+    {
+        case "o" when door.State == DoorStates.ClosedUnlocked:
+            door.State = DoorStates.Open;
+            break;
+        case "o":
+        {
+            if (door.State == DoorStates.ClosedLocked)
+            {
+                Console.Write("input current password");
+                if (door.NewPass(Console.ReadLine()))
+                    door.State = DoorStates.ClosedUnlocked;
+            }
+            break;
+        }
+        case "c":
+        {
+            if (door.State == DoorStates.Open) door.State = DoorStates.ClosedUnlocked;
+            break;
+        }
+        case "l":
+        {
+            Console.Write("input password: ");
+            if (door.IsPass(Console.ReadLine())) door.State = DoorStates.ClosedLocked;
+            break;
+        }
+    }
 }
 
 /// <summary>
@@ -192,12 +219,12 @@ public enum CardRank
 internal class LockingDoor
 {
     private string _password;
-    public DoorStates State { get; set; }
+    public DoorStates State { get; set; } = DoorStates.Open;
 
-    internal LockingDoor(DoorStates state){}
+    internal LockingDoor(string password) => _password = password;
     internal LockingDoor(string password, DoorStates state) => _password = password;
 
-    public void newPass(string password)
+    public bool NewPass(string? password)
     {
         Console.WriteLine("input current password: ");
         if (password == _password)
@@ -205,8 +232,24 @@ internal class LockingDoor
             string newPassword = Console.ReadLine();
             _password = newPassword;
             Console.WriteLine("Password has been changed");
+            return true;
         }
-        else Console.WriteLine("incorrect password");
+        else
+        {
+            Console.WriteLine("incorrect password");
+            return false;
+        }
+    }
+
+    public bool IsPass(string? password)
+    {
+        Console.WriteLine("input current password: ");
+        if (password == _password) return true;
+        else
+        {
+            Console.WriteLine("wrong key");
+            return false;
+        }
     }
 }
 
