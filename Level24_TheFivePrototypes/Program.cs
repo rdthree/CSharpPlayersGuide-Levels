@@ -43,40 +43,27 @@ foreach (var card in deck)
 }
 
 // door lock/unlock class tests
-var door = new LockingDoor("mob");
+Console.ForegroundColor = ConsoleColor.Yellow;
+Console.Write("input password for new door lock: ");
+Console.ResetColor();
+var newPass = Console.ReadLine();
+var door = new LockingDoor(newPass);
 while (true)
 {
-    Console.WriteLine("'o' to open or unlock, 'c' to close, 'l' to lock, 'p' to change password");
-    Console.WriteLine($"door is: {door.State}");
+    Console.ForegroundColor = ConsoleColor.Green;
+    Console.WriteLine("'o' to open, 'c' to close, 'u' to unlock,  'l' to lock, 'p' to change password");
+    Console.ForegroundColor = ConsoleColor.Red;
+    Console.Write($"door is: {door.State}, what would you like to do? ");
+    Console.ResetColor();
     var command = Console.ReadLine();
-    switch (command)
+    bool userInput = command switch
     {
-        case "o":
-        {
-            door.Open();
-            break;
-        }
-        case "c":
-        {
-            door.Close();
-            break;
-        }
-        case "l":
-        {
-            door.Lock();
-            break;
-        }
-        case "u":
-        {
-            door.Unlock();
-            break;
-        }
-        case "p":
-        {
-            door.ChangePassword();
-            break;
-        }
-    }
+        "o" => door.Open(),
+        "c" => door.Close(),
+        "l" => door.Lock(),
+        "u" => door.Unlock(),
+        "p" => door.ChangePassword(),
+    };
 }
 
 /// <summary>
@@ -226,77 +213,86 @@ internal class LockingDoor
     internal LockingDoor(string? password) => _password = password;
     internal LockingDoor(string? password, DoorStates state) => _password = password;
 
-    public void Open()
+    public bool Open()
     {
         switch (State)
         {
             case DoorStates.Open:
-                Console.WriteLine("its already open");
-                break;
+                DoorMessages.AlreadyOpen();
+                return false;
             case DoorStates.ClosedLocked:
-                Console.WriteLine("its locked");
-                break;
+                DoorMessages.Locked();
+                return false;
             case DoorStates.ClosedUnlocked:
                 State = DoorStates.Open;
-                break;
+                return true;
+            default:
+                return false;
         }
     }
 
-    public void Close()
+    public bool Close()
     {
         switch (State)
         {
             case DoorStates.ClosedUnlocked:
-                Console.WriteLine("its already closed");
-                break;
+                DoorMessages.AlreadyClosed();
+                return false;
             case DoorStates.ClosedLocked:
-                Console.WriteLine("it's locked");
-                break;
+                DoorMessages.Locked();
+                return false;
             case DoorStates.Open:
                 State = DoorStates.ClosedUnlocked;
-                break;
+                DoorMessages.Closed();
+                return true;
+            default:
+                return false;
         }
     }
 
-    public void Lock()
+    public bool Lock()
     {
         switch (State)
         {
             case DoorStates.ClosedLocked:
-                Console.WriteLine("it's already locked");
-                break;
+                DoorMessages.AlreadyLocked();
+                return false;
             case DoorStates.Open:
-                Console.WriteLine("first close the door");
-                break;
+                DoorMessages.Open();
+                return false;
             case DoorStates.ClosedUnlocked:
                 Console.Write("input password: ");
                 if (IsPass(Console.ReadLine())) State = DoorStates.ClosedLocked;
                 Console.WriteLine("door is locked");
-                break;
+                return true;
+            default:
+                return false;
         }
     }
 
-    public void Unlock()
+    public bool Unlock()
     {
         switch (State)
         {
             case DoorStates.ClosedUnlocked:
-                Console.WriteLine("its already unlocked");
-                break;
+                DoorMessages.AlreadyUnlocked();
+                return false;
             case DoorStates.Open:
-                Console.WriteLine("it's open and unlocked");
-                break;
+                DoorMessages.AlreadyOpen();
+                return false;
             case DoorStates.ClosedLocked:
                 Console.Write("input password: ");
                 if (IsPass(Console.ReadLine())) State = DoorStates.ClosedUnlocked;
                 Console.WriteLine("door is unlocked");
-                break;
+                return true;
+            default: 
+                return false;
         }
     }
 
-    public void ChangePassword()
+    public bool ChangePassword()
     {
-        Console.WriteLine(NewPass() ? "password has been changed" : "incorrect");
+        return NewPass();
     }
 
     private bool NewPass()
@@ -316,6 +312,20 @@ internal class LockingDoor
             Console.WriteLine("incorrect password");
             return false;
         }
+    }
+
+    private class DoorMessages
+    {
+        internal static void Open() => Console.WriteLine("door is open");
+        internal static void AlreadyOpen() => Console.WriteLine("door is already open");
+        internal static void Closed() => Console.WriteLine("door is closed");
+        internal static void AlreadyClosed() => Console.WriteLine("door is already closed");
+
+        internal static void Locked() => Console.WriteLine("door is locked");
+        internal static void AlreadyLocked() => Console.WriteLine("door is already locked");
+
+        internal static void Unlocked() => Console.WriteLine("door is unlocked");
+        internal static void AlreadyUnlocked() => Console.WriteLine("door is already unlocked");
     }
 
     public bool IsPass(string? password)
