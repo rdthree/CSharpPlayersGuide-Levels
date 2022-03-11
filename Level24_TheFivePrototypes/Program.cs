@@ -48,10 +48,12 @@ Console.Write("input password for new door lock: ");
 Console.ResetColor();
 var newPass = Console.ReadLine();
 var door = new LockingDoor(newPass);
-while (true)
+var goDoor = true;
+while (goDoor)
 {
     Console.ForegroundColor = ConsoleColor.Green;
-    Console.WriteLine("'o' to open, 'c' to close, 'u' to unlock,  'l' to lock, 'p' to change password");
+    Console.WriteLine("'o' to open, 'c' to close, 'u' to unlock,  'l' to lock, 'p' to change password, " +
+                      "any other key to quit");
     Console.ForegroundColor = ConsoleColor.Red;
     Console.Write($"door is: {door.State}, what would you like to do? ");
     Console.ResetColor();
@@ -63,8 +65,12 @@ while (true)
         "l" => door.Lock(),
         "u" => door.Unlock(),
         "p" => door.ChangePassword(),
+        _ => goDoor = false
     };
 }
+
+PasswordValidator.TestPass();
+
 
 /// <summary>
 /// Point Class with X and Y coordinates
@@ -285,7 +291,7 @@ internal class LockingDoor
                 if (IsPass(Console.ReadLine())) State = DoorStates.ClosedUnlocked;
                 Console.WriteLine("door is unlocked");
                 return true;
-            default: 
+            default:
                 return false;
         }
     }
@@ -345,4 +351,76 @@ enum DoorStates
     Open,
     ClosedUnlocked,
     ClosedLocked,
+}
+
+internal static class PasswordValidator
+{
+    private static string? _password;
+
+    //internal PasswordValidator(string? password)
+    static PasswordValidator()
+    {
+    }
+
+    public static void TestPass()
+    {
+        // no-no
+        var badChar = false;
+        // yes-yes
+        var upperCaseCheck = false;
+        var lowerCaseCheck = false;
+        var numberCheck = false;
+
+        var passLoop = false;
+        while (!passLoop)
+        {
+            Console.WriteLine("set new password. between 6 and 12 characters.\n" +
+                              "one capital letter. one lower case letter. one number.\n" +
+                              "no 'T'. no '&'.");
+            var password = Console.ReadLine();
+
+            if (password != null && (password.Length < 6 || password.Length > 13))
+            {
+                Console.WriteLine("password must be between 6 and 13 characters");
+                continue;
+            }
+
+            if (password != null)
+            {
+                foreach (var character in password)
+                {
+                    if (character is 'T' or '&')
+                    {
+                        badChar = true;
+                        Console.WriteLine("'T' or '&' are illegal characters");
+                        break;
+                    }
+                    else if (char.IsUpper(character))
+                    {
+                        upperCaseCheck = true;
+                    }
+                    else if (char.IsLower(character))
+                    {
+                        lowerCaseCheck = true;
+                    }
+                    else if (char.IsNumber(character))
+                    {
+                        numberCheck = true;
+                    }
+                }
+
+                if (upperCaseCheck != true || lowerCaseCheck != true || numberCheck != true ||
+                    badChar != false)
+                {
+                    Console.WriteLine("invalid password, please try again.");
+                    continue;
+                }
+
+                Console.WriteLine("new password successfully set");
+                _password = password;
+            }
+
+            passLoop = true;
+        }
+    }
 }

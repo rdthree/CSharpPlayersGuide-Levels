@@ -108,3 +108,26 @@ Logic should stay within the door class so that the password can stay secure and
 | User can operate door continuously      |      |
 
 ---
+
+# The Password Validator
+
+Determine if a password is valid.
+- password between 6 and 13 characters long
+- one uppercase letter
+- one lower case letter
+- one number
+- cannot contain 'T'
+- cannot contain '&'
+ 
+## Objectives & CRC
+- New PasswordValidator class that takes the password and validates it based on the rules at hand
+- Loops until the password is correct
+
+| PasswordValidator Class       |                   |
+|-------------------------------|-------------------|
+| take input                    | PasswordValidator |
+|  check each character         |                   |
+| repeat until password correct |                   |
+
+
+
