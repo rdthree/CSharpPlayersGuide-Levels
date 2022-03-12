@@ -26,10 +26,11 @@
 | Points                        |        |
 | Rounds Played                 |        |
 
-| Game Class |      |
-|------------|------|
-| Rounds     | Game |
-| Scoreboard |      |
+| Game Class     |       |
+|----------------|-------|
+| Rounds         | Game  |
+| Win/Loss/Draw  |       |
+| Scoreboard     |       |
 
 | Enum RockPaperScissors |                   |
 |------------------------|-------------------|
