@@ -129,5 +129,7 @@ Determine if a password is valid.
 |  check each character         |                   |
 | repeat until password correct |                   |
 
+---
+
 
 

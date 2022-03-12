@@ -30,6 +30,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Level21_Static_ArrowMakerGa
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Level24_TheFivePrototypes", "Level24_TheFivePrototypes\Level24_TheFivePrototypes.csproj", "{BDB5B45D-AB87-4563-B8B8-D51B79DBD13B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Level24_Game01_RockPaperScissors", "Level24_Game01_RockPaperScissors\Level24_Game01_RockPaperScissors.csproj", "{3A47C18E-A50A-40A4-A705-8C34FDA1C5BE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -96,5 +98,9 @@ Global
 		{BDB5B45D-AB87-4563-B8B8-D51B79DBD13B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BDB5B45D-AB87-4563-B8B8-D51B79DBD13B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BDB5B45D-AB87-4563-B8B8-D51B79DBD13B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3A47C18E-A50A-40A4-A705-8C34FDA1C5BE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3A47C18E-A50A-40A4-A705-8C34FDA1C5BE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3A47C18E-A50A-40A4-A705-8C34FDA1C5BE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3A47C18E-A50A-40A4-A705-8C34FDA1C5BE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
