@@ -26,11 +26,27 @@
 | Points                        |        |
 | Rounds Played                 |        |
 
-| Game Class     |       |
-|----------------|-------|
-| Rounds         | Game  |
-| Win/Loss/Draw  |       |
-| Scoreboard     |       |
+| Game Class |         |
+|------------|---------|
+| Game Loop  | Game    |
+|            | Players |
+|            | Round   |
+|            | Record  |
+
+| Game Round Class |     |
+|------------------|-----|
+| Win              |     |
+| Loss             |     |
+| Draw             |     |
+
+| Game Record Class |        |
+|-------------------|--------|
+| Stats per Player  | Record |
+| Rounds            |        |
+| Wins              |        |
+| Losses            |        |
+| Draws             |        |
+
 
 | Enum RockPaperScissors |                   |
 |------------------------|-------------------|
@@ -38,6 +54,10 @@
 | Paper                  |                   |
 | Scissors               |                   |
 
-
+| Enum WinLoseDraw |             |
+|------------------|-------------|
+| Win              | WinLoseDraw |
+| Lose             |             |
+| Draw             |             |
 
 ---

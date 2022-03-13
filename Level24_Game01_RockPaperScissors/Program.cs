@@ -12,109 +12,161 @@ go.Play();
 // game engine: result
 // dashboard : stats
 
-
-internal class RockPaperScissorsGame
+internal class GameRecordTracker
 {
-    private int Round { get; set; }
-    private readonly int _maxRounds;
-    private readonly Player _playerOne;
-    private readonly Player _playerTwo;
+    private readonly Player? _playerOne;
+    private readonly Player? _playerTwo;
+    private readonly GameRoundTracker _gameRound;
 
-    internal RockPaperScissorsGame(int maxRounds)
+    internal GameRecordTracker(Player? playerOne, Player? playerTwo, GameRoundTracker gameRound)
     {
-        _maxRounds = maxRounds;
-        Console.WriteLine("Player 1");
-        _playerOne = new Player();
-        Console.WriteLine("Player 2");
-        _playerTwo = new Player();
+        _playerOne = playerOne;
+        _playerTwo = playerTwo;
+        _gameRound = gameRound;
     }
 
-    public void Play()
+    internal void RoundResults()
     {
-        Console.WriteLine($"Best out of {_maxRounds} Rounds");
-        while (Round < 10)
-        {
-            PlayRound();
-            Stats();
-        }
-
-        FinalStats();
-    }
-
-    private void PlayRound()
-    {
-        _playerOne.Choose();
-        _playerTwo.Choose();
-
-        RoundResults();
-
-        Round++;
-    }
-
-    private void RoundResults()
-    {
-        if (_playerOne.Choice != _playerTwo.Choice)
+        if (_playerTwo != null && _playerOne != null && _playerOne.Choice != _playerTwo.Choice)
         {
             if (_playerOne.Choice == RockPaperScissors.Rock & _playerTwo.Choice == RockPaperScissors.Scissors)
-                _playerOne.WinRound = true;
+                WhoWon(_playerOne);
             else if (_playerOne.Choice == RockPaperScissors.Scissors & _playerTwo.Choice == RockPaperScissors.Paper)
-                _playerOne.WinRound = true;
+                WhoWon(_playerOne);
             else if (_playerOne.Choice == RockPaperScissors.Paper & _playerTwo.Choice == RockPaperScissors.Rock)
-                _playerOne.WinRound = true;
-            else _playerTwo.WinRound = true;
+                WhoWon(_playerOne);
+            else WhoWon(_playerTwo);
 
             WinLose();
+            return;
         }
 
-        if (_playerOne.Choice != _playerTwo.Choice) return;
-        _playerOne.Draws++;
-        _playerTwo.Draws++;
+        if (_playerOne != null) _playerOne.Draws++;
+        if (_playerTwo != null) _playerTwo.Draws++;
     }
 
     private void WinLose()
     {
-        if (_playerOne.WinRound)
+        if (_playerTwo == null && _playerOne == null) return;
+        if (_playerOne is { WinRound: true })
         {
-            _playerOne.Wins++;
-            _playerTwo.WinRound = false;
-            _playerTwo.Losses++;
+            if (_playerTwo != null)
+            {
+                Console.WriteLine($"{_playerOne.Name} wins round, {_playerOne.Choice} beats {_playerTwo.Choice}!");
+                _playerOne.Wins++;
+                _playerTwo.WinRound = false;
+                _playerTwo.Losses++;
+            }
         }
-        else if (_playerTwo.WinRound)
+        else if (_playerTwo is { WinRound: true })
         {
+            Console.WriteLine($"{_playerTwo?.Name} wins round, {_playerTwo.Choice} beats {_playerOne.Choice}!");
             _playerTwo.Wins++;
             _playerOne.WinRound = false;
             _playerOne.Losses++;
         }
     }
 
-    private void FinalStats()
+    private void WhoWon(Player player)
+    {
+        if (player == _playerOne)
+        {
+            _playerOne.WinRound = true;
+            if (_playerTwo != null) _playerTwo.WinRound = false;
+        }
+        else
+        {
+            if (_playerOne != null) _playerOne.WinRound = false;
+            if (_playerTwo != null) _playerTwo.WinRound = true;
+        }
+    }
+
+    internal void FinalStats()
     {
         Console.WriteLine("__________________________");
 
-        if (_playerOne.Wins == _playerTwo.Wins)
+        if (_playerTwo != null && _playerOne != null && _playerOne.Wins == _playerTwo.Wins)
             Console.WriteLine("ITS A DRAW");
-        else if (_playerOne.Wins > _playerTwo.Wins)
+        else if (_playerTwo != null && _playerOne != null && _playerOne.Wins > _playerTwo.Wins)
             Console.WriteLine($"{_playerOne.Name} WINS BY {_playerOne.Wins - _playerTwo.Wins} POINTS");
-        if (_playerOne.Wins < _playerTwo.Wins)
+        if (_playerTwo != null && _playerOne != null && _playerOne.Wins < _playerTwo.Wins)
             Console.WriteLine($"{_playerTwo.Name} WINS BY {_playerTwo.Wins - _playerOne.Wins} POINTS");
     }
 
-    private void Stats()
+    internal void Stats()
     {
-        Console.WriteLine($"Rounds: {Round}");
-        Console.WriteLine($"Draws: {_playerOne.Draws}");
-        Console.WriteLine("__________________________");
-        Console.ForegroundColor = ConsoleColor.Red;
-        Console.WriteLine($"{_playerOne.Name}");
-        Console.WriteLine($"Wins: {_playerOne.Wins}");
-        Console.WriteLine($"Losses: {_playerOne.Losses}");
+        Console.WriteLine($"Rounds: {_gameRound.Round}");
+        if (_playerOne != null)
+        {
+            Console.WriteLine($"Draws: {_playerOne.Draws}");
+            Console.WriteLine("__________________________");
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine($"{_playerOne.Name}");
+            Console.WriteLine($"Wins: {_playerOne.Wins}");
+            Console.WriteLine($"Losses: {_playerOne.Losses}");
+        }
+
         Console.ResetColor();
         Console.WriteLine("__________________________");
         Console.ForegroundColor = ConsoleColor.Blue;
-        Console.WriteLine($"{_playerTwo.Name}");
-        Console.WriteLine($"Wins: {_playerTwo.Wins}");
-        Console.WriteLine($"Losses: {_playerTwo.Losses}");
+        Console.WriteLine($"{_playerTwo?.Name}");
+        if (_playerTwo != null)
+        {
+            Console.WriteLine($"Wins: {_playerTwo.Wins}");
+            Console.WriteLine($"Losses: {_playerTwo.Losses}");
+        }
+
         Console.ResetColor();
+    }
+}
+
+internal class GameRoundTracker
+{
+    public int Round { get; internal set; }
+    public int MaxRounds { get; }
+
+    internal GameRoundTracker(int maxRounds)
+    {
+        Round = 0;
+        MaxRounds = maxRounds;
+    }
+}
+
+internal class RockPaperScissorsGame
+{
+    private GameRoundTracker GameRound { get; }
+    private GameRecordTracker GameRecord { get; }
+    private readonly Player? _playerOne;
+    private readonly Player? _playerTwo;
+
+    internal RockPaperScissorsGame(int maxRounds)
+    {
+        Console.WriteLine("Player 1");
+        _playerOne = new Player();
+        Console.WriteLine("Player 2");
+        _playerTwo = new Player();
+        GameRound = new GameRoundTracker(maxRounds);
+        GameRecord = new GameRecordTracker(_playerOne, _playerTwo, GameRound);
+    }
+
+    public void Play()
+    {
+        Console.WriteLine($"Best out of {GameRound.MaxRounds} Rounds");
+        while (GameRound.Round < 10)
+        {
+            PlayRound();
+            GameRecord.Stats();
+        }
+
+        GameRecord.FinalStats();
+    }
+
+    private void PlayRound()
+    {
+        _playerOne?.Choose();
+        _playerTwo?.Choose();
+        GameRecord.RoundResults();
+        GameRound.Round++;
     }
 }
 
@@ -137,10 +189,10 @@ internal class Player
         Name = Console.ReadLine();
     }
 
-    internal RockPaperScissors Choose()
+    internal void Choose()
     {
         Console.Write($"{Name}, make a choice: 'r', 'p', 's': ");
-        string? input = Console.ReadLine();
+        var input = Console.ReadLine();
         Choice = input switch
         {
             "r" => RockPaperScissors.Rock,
@@ -149,11 +201,6 @@ internal class Player
             _ => throw new ArgumentOutOfRangeException()
         };
         Console.WriteLine($"you have chosen {Choice}");
-        return Choice;
-    }
-
-    internal class Win
-    {
     }
 }
 
@@ -162,11 +209,4 @@ internal enum RockPaperScissors
     Rock,
     Paper,
     Scissors
-}
-
-internal enum WinLoseDraw
-{
-    Win,
-    Lose,
-    Draw
 }
