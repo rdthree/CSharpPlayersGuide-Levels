@@ -11,6 +11,77 @@ go.Play();
 // player two: choose
 // game engine: result
 // dashboard : stats
+internal class RockPaperScissorsGame
+{
+    private GameRoundTracker GameRound { get; }
+    private GameRecordTracker GameRecord { get; }
+    private readonly Player? _playerOne;
+    private readonly Player? _playerTwo;
+
+    internal RockPaperScissorsGame(int maxRounds)
+    {
+        Console.WriteLine("Player 1");
+        _playerOne = new Player();
+        Console.WriteLine("Player 2");
+        _playerTwo = new Player();
+        GameRound = new GameRoundTracker(maxRounds);
+        GameRecord = new GameRecordTracker(_playerOne, _playerTwo, GameRound);
+    }
+
+    public void Play()
+    {
+        Console.WriteLine($"Best out of {GameRound.MaxRounds} Rounds");
+        while (GameRound.Round < 10)
+        {
+            PlayRound();
+            GameRecord.Stats();
+        }
+
+        GameRecord.FinalStats();
+    }
+
+    private void PlayRound()
+    {
+        _playerOne?.Choose();
+        _playerTwo?.Choose();
+        GameRecord.RoundResults();
+        GameRound.Round++;
+    }
+}
+
+internal class Player
+{
+    public string? Name { get; init; }
+    public int Wins { get; internal set; }
+    public bool WinRound { get; internal set; }
+    public int Losses { get; internal set; }
+    public int Draws { get; internal set; }
+    public RockPaperScissors Choice { get; private set; }
+
+    internal Player()
+    {
+        Wins = 0;
+        Losses = 0;
+        Draws = 0;
+
+        Console.Write("input player name: ");
+        Name = Console.ReadLine();
+    }
+
+    internal void Choose()
+    {
+        Console.Write($"{Name}, make a choice: 'r', 'p', 's': ");
+        var input = Console.ReadLine();
+        Choice = input switch
+        {
+            "r" => RockPaperScissors.Rock,
+            "p" => RockPaperScissors.Paper,
+            "s" => RockPaperScissors.Scissors,
+            _ => throw new ArgumentOutOfRangeException()
+        };
+        Console.WriteLine($"you have chosen {Choice}");
+    }
+}
 
 internal class GameRecordTracker
 {
@@ -132,77 +203,6 @@ internal class GameRoundTracker
     }
 }
 
-internal class RockPaperScissorsGame
-{
-    private GameRoundTracker GameRound { get; }
-    private GameRecordTracker GameRecord { get; }
-    private readonly Player? _playerOne;
-    private readonly Player? _playerTwo;
-
-    internal RockPaperScissorsGame(int maxRounds)
-    {
-        Console.WriteLine("Player 1");
-        _playerOne = new Player();
-        Console.WriteLine("Player 2");
-        _playerTwo = new Player();
-        GameRound = new GameRoundTracker(maxRounds);
-        GameRecord = new GameRecordTracker(_playerOne, _playerTwo, GameRound);
-    }
-
-    public void Play()
-    {
-        Console.WriteLine($"Best out of {GameRound.MaxRounds} Rounds");
-        while (GameRound.Round < 10)
-        {
-            PlayRound();
-            GameRecord.Stats();
-        }
-
-        GameRecord.FinalStats();
-    }
-
-    private void PlayRound()
-    {
-        _playerOne?.Choose();
-        _playerTwo?.Choose();
-        GameRecord.RoundResults();
-        GameRound.Round++;
-    }
-}
-
-internal class Player
-{
-    public string? Name { get; init; }
-    public int Wins { get; internal set; }
-    public bool WinRound { get; internal set; }
-    public int Losses { get; internal set; }
-    public int Draws { get; internal set; }
-    public RockPaperScissors Choice { get; private set; }
-
-    internal Player()
-    {
-        Wins = 0;
-        Losses = 0;
-        Draws = 0;
-
-        Console.Write("input player name: ");
-        Name = Console.ReadLine();
-    }
-
-    internal void Choose()
-    {
-        Console.Write($"{Name}, make a choice: 'r', 'p', 's': ");
-        var input = Console.ReadLine();
-        Choice = input switch
-        {
-            "r" => RockPaperScissors.Rock,
-            "p" => RockPaperScissors.Paper,
-            "s" => RockPaperScissors.Scissors,
-            _ => throw new ArgumentOutOfRangeException()
-        };
-        Console.WriteLine($"you have chosen {Choice}");
-    }
-}
 
 internal enum RockPaperScissors
 {
