@@ -34,13 +34,7 @@ internal class Board
         GameBoard = new int[Size, Size];
     }
 
-    // what row?
-    // what column?
     // left/right/up/down?
-
-    // tiles
-    // matrix
-    // random layout
     // movement logic
 }
 
@@ -77,7 +71,7 @@ internal class BoardUI
             for (var j = 0; j < _gameBoard.Size; j++)
             {
                 var k = _gameBoard.GameBoard[i, j];
-                if (k == 0)
+                if (k == _gameBoard.GameBoard.Length)
                 {
                     iZeroIndex = i;
                     jZeroIndex = j;
@@ -94,7 +88,7 @@ internal class BoardUI
             Math.Abs(iSelected - iZeroIndex) == 0 && Math.Abs(jSelected - jZeroIndex) == 1)
         {
             _gameBoard.GameBoard[iZeroIndex, jZeroIndex] = selectedTileValue;
-            _gameBoard.GameBoard[iSelected, jSelected] = 0;
+            _gameBoard.GameBoard[iSelected, jSelected] = _gameBoard.GameBoard.Length;
             iZeroIndex = iSelected;
             jZeroIndex = jSelected;
         }
@@ -128,13 +122,13 @@ internal class BoardUI
             $"input matrix location (i,j)");
         Console.Write($"(0 to {_gameBoard.Size - 1}) i: ");
         var i = int.Parse(Console.ReadLine() ?? string.Empty);
-        //if (i > _gameBoard.Size - 1) i = _gameBoard.Size - 1;
-        //if (i < _gameBoard.Size - 1) i = 0;
+        if (i > _gameBoard.Size - 1) i = _gameBoard.Size - 1;
+        if (i < 0) i = 0;
 
         Console.Write($"(0 to {_gameBoard.Size - 1}) j: ");
         var j = int.Parse(Console.ReadLine() ?? string.Empty);
-        //if (j > _gameBoard.Size - 1) j = _gameBoard.Size - 1;
-        //if (j < _gameBoard.Size - 1) j = 0;
+        if (j > _gameBoard.Size - 1) j = _gameBoard.Size - 1;
+        if (j < 0) j = 0;
 
         ShowBoard(i, j);
         Console.WriteLine();
