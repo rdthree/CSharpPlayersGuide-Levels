@@ -1,26 +1,34 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
-// var game = new Game();
+var game = new Game();
 
-var board = new Board();
-var bui = new BoardUI(board);
-Console.WriteLine($"board size: {board.Size}");
-bui.BoardKey();
-bui.CorrectBoard();
-bui.ShowBoard();
-while (true)
-{
-    bui.SelectIndices();
-}
+// TODO: TRACK WINS
+// TODO: THERE IS A WEIRD GLITCH AT STARTUP WITH THE EMPTY TILE, HAPPENED WHEN MOVING LOGIC TO PLAYER FROM BOARDUI
+// TODO: IMPROVE ERGONOMICS, KEYS? ACTUAL NUMBER?
+// TODO: PLAYER NAME
+
 
 internal class Game
 {
-    // board
-    // game state
-    // player
-    // UI + stats
-
-    // game loop
+    internal Game(int size = 4)
+    {
+        var board = new Board();
+        var player = new Player(board);
+        var bui = new BoardUI(board);
+        var boardState = new BoardState(board);
+        
+        Console.WriteLine($"board size: {board.Size}");
+        
+        bui.BoardKey();
+        boardState.CheckIfWin();
+        bui.ShowBoard();
+        
+        while (true)
+        {
+            player.SelectIndices();
+            if (player.Moves > 100) break;
+        }
+    }
 }
 
 internal class Board
@@ -116,7 +124,7 @@ internal class BoardUI
         }
     }
 
-    public void SelectIndices()
+    /*public void SelectIndices()
     {
         Console.WriteLine(
             $"input matrix location (i,j)");
@@ -132,13 +140,13 @@ internal class BoardUI
 
         ShowBoard(i, j);
         Console.WriteLine();
-    }
+    }*/
 
     public void CorrectBoard()
     {
         Console.WriteLine("this is a correct game board");
         var indexer = 1;
-        var correctBoard = new int[_gameBoard.Size,_gameBoard.Size];
+        var correctBoard = new int[_gameBoard.Size, _gameBoard.Size];
         for (var i = 0; i < _gameBoard.Size; i++)
         {
             for (var j = 0; j < _gameBoard.Size; j++)
@@ -175,12 +183,84 @@ internal class BoardUI
 
 internal class BoardState
 {
+    private int[,] _correctBoard;
+
+    private Board _gameBoard;
     // win / restart
+
+    internal BoardState(Board gameBoard)
+    {
+        _gameBoard = gameBoard;
+        _correctBoard = new int[_gameBoard.Size, _gameBoard.Size];
+        var indexer = 1;
+        for (var i = 0; i < _gameBoard.Size; i++)
+        {
+            for (var j = 0; j < _gameBoard.Size; j++)
+            {
+                _correctBoard[i, j] = indexer;
+                indexer++;
+            }
+        }
+    }
+
+    public void ShowCorrectBoard()
+    {
+        Console.WriteLine("this is a correct game board");
+        for (var i = 0; i < _gameBoard.Size; i++)
+        {
+            for (var j = 0; j < _gameBoard.Size; j++)
+            {
+                var k = _correctBoard[i, j];
+                Console.Write(k == _correctBoard.Length ? "   " : $"{k:00} ");
+            }
+
+            Console.WriteLine();
+        }
+
+        Console.WriteLine();
+    }
+
+    public bool CheckIfWin()
+    {
+        // flattens the two boards and checks if win
+        var board1 = _correctBoard;
+        var board2 = _gameBoard.GameBoard;
+        return new[] { board1 }.SequenceEqual(new[] { board2 });
+    }
 }
 
 internal class Player
 {
-    // move logic
-    // total moves
+    private Board _gameBoard;
+    private BoardUI _boardUI;
+    internal int Moves { get; private set; }
+
+
+    internal Player(Board gameBoard)
+    {
+        _gameBoard = gameBoard;
+        _boardUI = new BoardUI(gameBoard);
+    }
+
+    public void SelectIndices()
+    {
+        Console.WriteLine();
+        Console.WriteLine(
+            $"input matrix location (i,j)");
+        Console.Write($"(0 to {_gameBoard.Size - 1}) i: ");
+        var i = int.Parse(Console.ReadLine() ?? string.Empty);
+        if (i > _gameBoard.Size - 1) i = _gameBoard.Size - 1;
+        if (i < 0) i = 0;
+
+        Console.Write($"(0 to {_gameBoard.Size - 1}) j: ");
+        var j = int.Parse(Console.ReadLine() ?? string.Empty);
+        if (j > _gameBoard.Size - 1) j = _gameBoard.Size - 1;
+        if (j < 0) j = 0;
+
+        Moves++;
+        _boardUI.ShowBoard(i, j);
+        Console.WriteLine();
+        Console.WriteLine($"Total moves: {Moves}");
+    }
     // wins
 }
