@@ -5,10 +5,11 @@
 var board = new Board();
 var bui = new BoardUI(board);
 Console.WriteLine($"board size: {board.Size}");
+bui.BoardKey();
+bui.CorrectBoard();
+bui.ShowBoard();
 while (true)
 {
-    bui.BoardKey();
-    bui.ShowBoard();
     bui.SelectIndices();
 }
 
@@ -46,28 +47,75 @@ internal class Board
 internal class BoardUI
 {
     private readonly Board _gameBoard;
-    private int _indexer;
-    private readonly int[] _boardFlat;
+    private readonly int _indexer;
     private readonly Random _rnd = new Random();
 
     internal BoardUI(Board gameBoard)
     {
         _gameBoard = gameBoard;
-        _boardFlat = Enumerable.Range(0, gameBoard.GameBoard.Length).OrderBy(c => _rnd.Next()).ToArray();
-    }
-
-    public void ShowBoard()
-    {
-        _indexer = 0; // reset for multiple runs
+        var boardFlat = Enumerable.Range(1, gameBoard.GameBoard.Length).OrderBy(_ => _rnd.Next()).ToArray();
+        // build 2D matrix game board with i rows and j cols
         for (var i = 0; i < _gameBoard.Size; i++)
         {
             for (var j = 0; j < _gameBoard.Size; j++)
             {
-                var value = _boardFlat[_indexer];
+                var value = boardFlat[_indexer];
                 _gameBoard.GameBoard[i, j] = value;
-                var k = _gameBoard.GameBoard[i, j];
-                Console.Write(value == 0 ? "   " : $"{k:00} ");
                 _indexer++;
+            }
+        }
+    }
+
+    public void ShowBoard(int iSelected = default, int jSelected = default)
+    {
+        int iZeroIndex = default;
+        int jZeroIndex = default;
+
+        // save the indices of the tile that equals zero
+        for (var i = 0; i < _gameBoard.Size; i++)
+        {
+            for (var j = 0; j < _gameBoard.Size; j++)
+            {
+                var k = _gameBoard.GameBoard[i, j];
+                if (k == 0)
+                {
+                    iZeroIndex = i;
+                    jZeroIndex = j;
+                }
+            }
+        }
+
+        Console.WriteLine($"blank tile: ({iZeroIndex},{jZeroIndex})");
+        var selectedTileValue = _gameBoard.GameBoard[iSelected, jSelected];
+        Console.WriteLine(
+            $"you have selected tile ({iSelected},{jSelected}) = {selectedTileValue:00}");
+
+        if (Math.Abs(iSelected - iZeroIndex) == 1 && Math.Abs(jSelected - jZeroIndex) == 0 ||
+            Math.Abs(iSelected - iZeroIndex) == 0 && Math.Abs(jSelected - jZeroIndex) == 1)
+        {
+            _gameBoard.GameBoard[iZeroIndex, jZeroIndex] = selectedTileValue;
+            _gameBoard.GameBoard[iSelected, jSelected] = 0;
+            iZeroIndex = iSelected;
+            jZeroIndex = jSelected;
+        }
+
+        // next the game board with selected tile in red
+        for (var i = 0; i < _gameBoard.Size; i++)
+        {
+            for (var j = 0; j < _gameBoard.Size; j++)
+            {
+                var k = _gameBoard.GameBoard[i, j];
+
+                if (Math.Abs(i - iZeroIndex) == 1 && Math.Abs(j - jZeroIndex) == 0 ||
+                    Math.Abs(i - iZeroIndex) == 0 && Math.Abs(j - jZeroIndex) == 1)
+                    Console.ForegroundColor = ConsoleColor.Yellow;
+
+                if (k == selectedTileValue)
+                    Console.ForegroundColor = ConsoleColor.Red;
+
+                //Console.Write(k == 0 ? "   " : $"{k:00} ");
+                Console.Write(k == _gameBoard.GameBoard.Length ? "   " : $"{k:00} ");
+                Console.ResetColor();
             }
 
             Console.WriteLine();
@@ -77,21 +125,42 @@ internal class BoardUI
     public void SelectIndices()
     {
         Console.WriteLine(
-            $"input matrix location (i,j)\nstarting index is 0, max rows or cols is {_gameBoard.Size - 1}");
-        Console.Write("i: ");
+            $"input matrix location (i,j)");
+        Console.Write($"(0 to {_gameBoard.Size - 1}) i: ");
         var i = int.Parse(Console.ReadLine() ?? string.Empty);
-        Console.Write("j: ");
+        //if (i > _gameBoard.Size - 1) i = _gameBoard.Size - 1;
+        //if (i < _gameBoard.Size - 1) i = 0;
+
+        Console.Write($"(0 to {_gameBoard.Size - 1}) j: ");
         var j = int.Parse(Console.ReadLine() ?? string.Empty);
-        Console.WriteLine($"you have selected tile {i},{j} = {_gameBoard.GameBoard[i, j]:00}");
+        //if (j > _gameBoard.Size - 1) j = _gameBoard.Size - 1;
+        //if (j < _gameBoard.Size - 1) j = 0;
+
+        ShowBoard(i, j);
+        Console.WriteLine();
     }
 
-    public void SelectTile()
+    public void CorrectBoard()
     {
-        // select the tile number instead of the indices
+        Console.WriteLine("this is a correct game board");
+        var indexer = 1;
+        var correctBoard = new int[_gameBoard.Size,_gameBoard.Size];
+        for (var i = 0; i < _gameBoard.Size; i++)
+        {
+            for (var j = 0; j < _gameBoard.Size; j++)
+            {
+                correctBoard[i, j] = indexer;
+                var k = correctBoard[i, j];
+                Console.Write(k == correctBoard.Length ? "   " : $"{k:00} ");
+                indexer++;
+            }
+
+            Console.WriteLine();
+        }
+
+        Console.WriteLine();
     }
-    
-    // currently selected is red?
-    // possible moves are red?
+
 
     public void BoardKey()
     {
