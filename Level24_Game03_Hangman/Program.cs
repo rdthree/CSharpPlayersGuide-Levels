@@ -18,6 +18,7 @@ internal class Game
     {
         _hangman = new Hangman(words);
         _player = new Player();
+        _gameState = new GameState(_hangman, _player);
     }
 
     internal void Run()
@@ -25,7 +26,11 @@ internal class Game
         while (true)
         {
             // setup
-            Console.WriteLine($"guess the word, it has {_hangman._wordProgress.Length}: words.  " +
+            Console.WriteLine("Stats:");
+            Console.WriteLine($"Guesses: {_gameState.Guesses} |" +
+                              $" Correct Guesses: {_gameState.CorrectGuesses} |" +
+                              $" Incorrect Guesses: {_gameState.WrongGuesses}");
+            Console.WriteLine($"guess the word, it has {_hangman._wordProgress.Length}: letters.  " +
                               $"You have {_hangman.MaxGuesses} guesses.");
             Console.ForegroundColor = ConsoleColor.Red;
             Console.WriteLine($"{_hangman._wordProgress}\n");
@@ -46,8 +51,8 @@ internal class Game
                 Console.WriteLine($"guess again");
             }
 
-            if (_gameState.WinLose) continue;
-            else break;
+            if (_gameState.WinLose) break;
+            else continue;
         }
     }
 }
@@ -140,8 +145,6 @@ internal class Player
 {
     public char C { get; private set; }
 
-    // total losses
-    // total wins
     internal Player()
     {
     }
