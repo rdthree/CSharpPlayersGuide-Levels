@@ -1,7 +1,5 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
-using System.Diagnostics.Tracing;
-using System.Reflection.Metadata.Ecma335;
 
 var guessWords = new List<string>() { "test", "password", "hangman", "boring" };
 
@@ -10,9 +8,9 @@ game.Run();
 
 internal class Game
 {
-    private Hangman _hangman;
-    private GameState _gameState;
-    private Player _player;
+    private readonly Hangman _hangman;
+    private readonly GameState _gameState;
+    private readonly Player _player;
 
     internal Game(List<string> words)
     {
@@ -26,33 +24,47 @@ internal class Game
         while (true)
         {
             // setup
-            Console.WriteLine("Stats:");
             Console.WriteLine($"Guesses: {_gameState.Guesses} |" +
                               $" Correct Guesses: {_gameState.CorrectGuesses} |" +
                               $" Incorrect Guesses: {_gameState.WrongGuesses}");
-            Console.WriteLine($"guess the word, it has {_hangman._wordProgress.Length}: letters.  " +
-                              $"You have {_hangman.MaxGuesses} guesses.");
-            Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine($"{_hangman._wordProgress}\n");
-            Console.ForegroundColor = ConsoleColor.Yellow;
-            Console.Write("guess a letter:");
-
-            // input
-            var c = _player.InputChar();
-
-            // checking logic
-            Console.ResetColor();
-            if (_hangman.WordChecker(c))
+            Console.WriteLine($"Letters Remaining: {_gameState.LettersRemaining} |" +
+                              $" Current Letter: {_gameState.CurrentLetter}");
+            if (_hangman.WordProgress != null)
             {
-                Console.WriteLine($"{_hangman._wordProgress}\n");
-            }
-            else
-            {
-                Console.WriteLine($"guess again");
+                Console.WriteLine($"guess the word, it has {_hangman.WordProgress.Length}: letters.  " +
+                                  $"You have {_hangman.MaxGuesses - _gameState.Guesses} guesses remaining.");
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine($"{_hangman.WordProgress}\n");
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.Write("guess a letter:");
+
+                // input
+                var c = _player.InputChar();
+
+                // checking logic
+                Console.ResetColor();
+                if (_hangman.WordChecker(c))
+                {
+                    Console.WriteLine($"{_hangman.WordProgress}\n");
+                }
+                else
+                {
+                    Console.WriteLine($"guess again");
+                }
             }
 
-            if (_gameState.WinLose) break;
-            else continue;
+            _gameState.WinLoseProgress();
+
+            if (_gameState.Win)
+            {
+                Console.WriteLine("you win mang!");
+                break;
+            }
+            if (_gameState.Lose)
+            {
+                Console.WriteLine("you lose mang!");
+                break;
+            }
         }
     }
 }
@@ -63,38 +75,36 @@ internal class Hangman
     private readonly string? _word;
     public int MaxGuesses { get; } = 20;
     public int CorrectGuess { get; private set; }
-    internal string? _wordProgress { get; set; }
+    internal string? WordProgress { get; set; }
 
-    private char[] _wordChars;
-
-    private char[] _wordProgressChars;
+    private readonly char[] _wordProgressChars;
 
     internal Hangman(List<string> words)
     {
         Words = words;
         var rnd = new Random();
         _word = Words[rnd.Next(Words.Count)];
-        _wordProgress = new string('_', _word.Length);
-        _wordProgressChars = _wordProgress.ToCharArray();
+        WordProgress = new string('_', _word.Length);
+        _wordProgressChars = WordProgress.ToCharArray();
 
         // char array
-        _wordChars = new char[_word.Length];
+        var wordChars = new char[_word.Length];
         for (int i = 0; i < _word.Length; i++)
         {
-            _wordChars[i] = _word[i];
+            wordChars[i] = _word[i];
         }
     }
 
     internal bool WordChecker(char c)
     {
-        if (_word.Contains(c))
+        if (_word != null && _word.Contains(c))
         {
             for (int i = 0; i < _word.Length; i++)
             {
                 if (_word[i] == c)
                     _wordProgressChars[i] = c;
 
-                _wordProgress = new string(_wordProgressChars);
+                WordProgress = new string(_wordProgressChars);
             }
 
             CorrectGuess++;
@@ -107,9 +117,10 @@ internal class Hangman
 
 internal class GameState
 {
-    private Hangman _hangman;
-    private Player _player;
-    public bool WinLose { get; private set; }
+    private readonly Hangman _hangman;
+    private readonly Player _player;
+    public bool Win { get; private set; }
+    public bool Lose { get; private set; }
     public int Guesses { get; private set; }
     public int CorrectGuesses { get; private set; }
     public int WrongGuesses { get; private set; }
@@ -128,26 +139,23 @@ internal class GameState
         Guesses++;
         CurrentLetter = _player.C;
         LettersRemaining = 0;
-        foreach (char c in _hangman._wordProgress)
-        {
-            if (c == '_') LettersRemaining++;
-        }
+        if (_hangman.WordProgress != null)
+            foreach (var c in _hangman.WordProgress)
+            {
+                if (c == '_') LettersRemaining++;
+            }
 
         CorrectGuesses = _hangman.CorrectGuess;
         WrongGuesses = Guesses - CorrectGuesses;
 
-        if (Guesses > _hangman.MaxGuesses) WinLose = false;
-        else if (LettersRemaining == 0) WinLose = true;
+        if (Guesses > _hangman.MaxGuesses) Lose = true;
+        else if (LettersRemaining == 0) Win = true;
     }
 }
 
 internal class Player
 {
     public char C { get; private set; }
-
-    internal Player()
-    {
-    }
 
     public char InputChar()
     {
