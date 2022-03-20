@@ -11,6 +11,13 @@
 - win/draw/cat outcomes displayed
 - show state of board during game
 
+```
+012
+345
+678
+```
+
+
 ## Objectives & CRC
 - design the game as best out of 5
 

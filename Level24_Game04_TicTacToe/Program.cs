@@ -1,16 +1,13 @@
-﻿using System.Security.Cryptography.X509Certificates;
-using Microsoft.VisualBasic;
-
-var game = new Game();
+﻿var game = new Game();
 game.Run();
 
 internal class Game
 {
     // ticTacToe
-    private TicTacToe _ticTacToe;
-    private GameState _gameState;
-    private Player _player1;
-    private Player _player2;
+    private readonly TicTacToe _ticTacToe;
+    private readonly GameState _gameState;
+    private readonly Player _player1;
+    private readonly Player _player2;
 
     // state
     // ui stats
@@ -27,18 +24,30 @@ internal class Game
     {
         while ((_gameState.XWin + _gameState.YWin + _gameState.Cat) < 5)
         {
-            Console.WriteLine(
-                $"Best out of 5. X:{_gameState.XWin}, Y:{_gameState.YWin}, CAT:{_gameState.Cat}, Remaining Moves: {9 - _gameState.CatCounter} ");
+            Stats();
             Console.WriteLine($"Player One, choose a tile:");
             _ticTacToe.PlayerMoveIndex(_player1);
             _ticTacToe.Board();
             _gameState.WinConditions();
 
+            Stats();
             Console.WriteLine($"Player Two, choose a tile:");
             _ticTacToe.PlayerMoveIndex(_player2);
             _ticTacToe.Board();
             _gameState.WinConditions();
         }
+
+        Console.ForegroundColor = ConsoleColor.Yellow;
+        Stats();
+        Console.ResetColor();
+        _gameState.EndGame();
+    }
+
+    public void Stats()
+    {
+        Console.WriteLine(
+            $"Best out of 5. X:{_gameState.XWin}, Y:{_gameState.YWin}," +
+            $" CAT:{_gameState.Cat}, Remaining Moves: {9 - _gameState.CatCounter} ");
     }
 }
 
@@ -103,20 +112,16 @@ internal class TicTacToe
 
 internal class GameState
 {
-    private TicTacToe _ticTacToe;
+    private readonly TicTacToe _ticTacToe;
     public int XWin { get; private set; }
     public int YWin { get; private set; }
     public int Cat { get; private set; }
-
     public int CatCounter { get; private set; }
-
-    internal GameState(TicTacToe ticTacToe)
-    {
-        _ticTacToe = ticTacToe;
-    }
+    internal GameState(TicTacToe ticTacToe) => _ticTacToe = ticTacToe;
 
     internal bool WinConditions()
     {
+        // cat game
         CatCounter = 0;
         foreach (var square in _ticTacToe.Squares)
             if (square != "-")
@@ -128,33 +133,34 @@ internal class GameState
             return true;
         }
 
-        // horiz
+        // horizontal win
         for (int i = 0; i < 7; i++)
         {
-            if (0 % 3 == 0)
+            if (i % 3 == 0)
             {
                 if (_ticTacToe.Squares[i] == _ticTacToe.Squares[i + 1] &&
                     _ticTacToe.Squares[i + 1] == _ticTacToe.Squares[i + 2])
                 {
-                    whoWon(i);
-                    //Console.WriteLine($"{_ticTacToe.Squares[i]}, {_ticTacToe.Squares[i+1]}, {_ticTacToe.Squares[i+2]}");
+                    WhoWon(i);
+                    //Console.WriteLine("horizontal win");
                     return true;
                 }
             }
         }
 
-        //vert
+        //vertical win
         for (int i = 0; i < 3; i++)
         {
             if (_ticTacToe.Squares[i] == _ticTacToe.Squares[i + 3] &&
                 _ticTacToe.Squares[i + 3] == _ticTacToe.Squares[i + 6])
             {
-                whoWon(i);
+                WhoWon(i);
+                //Console.WriteLine("vertical win");
                 return true;
             }
         }
 
-        //diag
+        //diagonal win
         for (int i = 0; i < 3; i++)
         {
             if (i == 0)
@@ -162,7 +168,8 @@ internal class GameState
                 if (_ticTacToe.Squares[i] == _ticTacToe.Squares[i + 4] &&
                     _ticTacToe.Squares[i + 4] == _ticTacToe.Squares[i + 8])
                 {
-                    whoWon(i);
+                    WhoWon(i);
+                    //Console.WriteLine("diagonal win");
                     return true;
                 }
             }
@@ -172,18 +179,17 @@ internal class GameState
                 if (_ticTacToe.Squares[i] == _ticTacToe.Squares[i + 2] &&
                     _ticTacToe.Squares[i + 2] == _ticTacToe.Squares[i + 4])
                 {
-                    whoWon(i);
+                    WhoWon(i);
+                    //Console.WriteLine("diagonal win");
                     return true;
                 }
             }
         }
 
-
         return false;
     }
-    // win / lose / cat
 
-    private void whoWon(int i)
+    private void WhoWon(int i)
     {
         if (_ticTacToe.Squares[i] == "-") return;
         if (_ticTacToe.Squares[i] == "X")
@@ -199,6 +205,14 @@ internal class GameState
             _ticTacToe.Reset();
         }
     }
+
+    internal void EndGame()
+    {
+        Console.ForegroundColor = ConsoleColor.Red;
+        if (XWin > YWin) Console.WriteLine("X Wins Game");
+        else if (XWin < YWin) Console.WriteLine("Y Wins Game");
+        else if (XWin == YWin) Console.WriteLine("Tie Game");
+    }
 }
 
 internal class Player
@@ -209,16 +223,16 @@ internal class Player
 
     internal int MakeMove()
     {
-        var move = 0;
-        Console.WriteLine("select an available tile from 1 - 9");
-        if (!int.TryParse(Console.ReadLine(), out move)) MakeMove();
+        Console.WriteLine("choose an available tile from 1 - 9");
+        if (!int.TryParse(Console.ReadLine(), out var move)) MakeMove();
         Move = move - 1;
         if (move is > 9 or < 1) MakeMove();
         return Move;
     }
 }
 
-enum XO
+// ReSharper disable once InconsistentNaming
+internal enum XO
 {
     X,
     O
