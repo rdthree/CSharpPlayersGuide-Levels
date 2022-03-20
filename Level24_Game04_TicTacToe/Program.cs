@@ -1,4 +1,5 @@
-﻿using Microsoft.VisualBasic;
+﻿using System.Security.Cryptography.X509Certificates;
+using Microsoft.VisualBasic;
 
 var game = new Game();
 game.Run();
@@ -24,8 +25,10 @@ internal class Game
 
     public void Run()
     {
-        while (true)
+        while ((_gameState.XWin + _gameState.YWin + _gameState.Cat) < 5)
         {
+            Console.WriteLine(
+                $"Best out of 5. X:{_gameState.XWin}, Y:{_gameState.YWin}, CAT:{_gameState.Cat}, Remaining Moves: {9 - _gameState.CatCounter} ");
             Console.WriteLine($"Player One, choose a tile:");
             _ticTacToe.PlayerMoveIndex(_player1);
             _ticTacToe.Board();
@@ -41,23 +44,11 @@ internal class Game
 
 internal class TicTacToe
 {
-    // game board
     public string[] Squares { get; private set; } = new string[9];
-    // locations 1-9
-    // compare current selected
-    // best out of 5
 
     internal TicTacToe()
     {
-        var indexer = 0;
-        for (int i = 0; i < 3; i++)
-        {
-            for (int j = 0; j < 3; j++)
-            {
-                Squares[indexer] = "-";
-                indexer++;
-            }
-        }
+        Reset();
     }
 
     internal void Board()
@@ -91,7 +82,21 @@ internal class TicTacToe
             {
                 XO.X => "X",
                 XO.O => "O",
+                _ => "!"
             };
+        }
+    }
+
+    internal void Reset()
+    {
+        var indexer = 0;
+        for (int i = 0; i < 3; i++)
+        {
+            for (int j = 0; j < 3; j++)
+            {
+                Squares[indexer] = "-";
+                indexer++;
+            }
         }
     }
 }
@@ -101,6 +106,9 @@ internal class GameState
     private TicTacToe _ticTacToe;
     public int XWin { get; private set; }
     public int YWin { get; private set; }
+    public int Cat { get; private set; }
+
+    public int CatCounter { get; private set; }
 
     internal GameState(TicTacToe ticTacToe)
     {
@@ -109,11 +117,16 @@ internal class GameState
 
     internal bool WinConditions()
     {
-        var xWins = "X wins";
-        var yWins = "X wins";
-        var vert = 0;
-        var horiz = 0;
-        var diag = 0;
+        CatCounter = 0;
+        foreach (var square in _ticTacToe.Squares)
+            if (square != "-")
+                CatCounter++;
+        if (CatCounter == 9)
+        {
+            Cat++;
+            _ticTacToe.Reset();
+            return true;
+        }
 
         // horiz
         for (int i = 0; i < 7; i++)
@@ -165,6 +178,7 @@ internal class GameState
             }
         }
 
+
         return false;
     }
     // win / lose / cat
@@ -176,11 +190,13 @@ internal class GameState
         {
             Console.WriteLine("X Wins");
             XWin++;
+            _ticTacToe.Reset();
         }
         else
         {
             Console.WriteLine("Y Wins");
             YWin++;
+            _ticTacToe.Reset();
         }
     }
 }
@@ -188,25 +204,16 @@ internal class GameState
 internal class Player
 {
     public XO Mark { get; private set; }
-
-    public int Move { get; private set; }
-
-    // player one or two
-    // make a choice 1-9
-    // wins
-    // losses
-    // CAT
-    internal Player(XO xo)
-    {
-        Mark = xo;
-    }
+    private int Move { get; set; }
+    internal Player(XO xo) => Mark = xo;
 
     internal int MakeMove()
     {
+        var move = 0;
         Console.WriteLine("select an available tile from 1 - 9");
-        Move = Int32.Parse(Console.ReadLine());
-        Move--;
-        if (Move > 8) MakeMove();
+        if (!int.TryParse(Console.ReadLine(), out move)) MakeMove();
+        Move = move - 1;
+        if (move is > 9 or < 1) MakeMove();
         return Move;
     }
 }
