@@ -40,6 +40,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Level24_Game04_TicTacToe", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Level25_Inheritance_InventoryGame", "Level25_Inheritance_InventoryGame\Level25_Inheritance_InventoryGame.csproj", "{7134B083-7288-4345-900E-AD86BE7155E0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Level26_Polymorphism_LabelInventory", "Level26_Polymorphism_LabelInventory\Level26_Polymorphism_LabelInventory.csproj", "{4B37E34C-E5E9-4964-8341-6A4F1F554452}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -126,5 +128,9 @@ Global
 		{7134B083-7288-4345-900E-AD86BE7155E0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7134B083-7288-4345-900E-AD86BE7155E0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7134B083-7288-4345-900E-AD86BE7155E0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4B37E34C-E5E9-4964-8341-6A4F1F554452}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4B37E34C-E5E9-4964-8341-6A4F1F554452}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4B37E34C-E5E9-4964-8341-6A4F1F554452}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4B37E34C-E5E9-4964-8341-6A4F1F554452}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
