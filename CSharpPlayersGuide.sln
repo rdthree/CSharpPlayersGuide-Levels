@@ -48,6 +48,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Level27_Interfaces_RoboticI
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Level28_Structs_RoomCoordinates", "Level28_Structs_RoomCoordinates\Level28_Structs_RoomCoordinates.csproj", "{8632875F-DBF9-4A5A-8CD8-516ACF49DA3D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Level29_Records_WarPrep", "Level29_Records_WarPrep\Level29_Records_WarPrep.csproj", "{8C67905C-0FFD-47A1-BAAD-A03FCA0FC024}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -150,5 +152,9 @@ Global
 		{8632875F-DBF9-4A5A-8CD8-516ACF49DA3D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8632875F-DBF9-4A5A-8CD8-516ACF49DA3D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8632875F-DBF9-4A5A-8CD8-516ACF49DA3D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8C67905C-0FFD-47A1-BAAD-A03FCA0FC024}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8C67905C-0FFD-47A1-BAAD-A03FCA0FC024}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8C67905C-0FFD-47A1-BAAD-A03FCA0FC024}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8C67905C-0FFD-47A1-BAAD-A03FCA0FC024}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
