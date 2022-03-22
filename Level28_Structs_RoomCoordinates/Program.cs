@@ -16,6 +16,42 @@ Coordinate.CheckAdjacent(pt1, pt2);
 Coordinate.CheckAdjacent(pt1, pt3);
 Coordinate.CheckAdjacent(pt3, pt2);
 
+var pt = new ImmutableStructPoint(2, 3);
+Console.WriteLine($"{pt.X},{pt.Y}");
+Console.WriteLine(pt.ToString());
+//pt.Y = 4;
+//pt.X = 6;
+pt = pt with { X = 4 };
+Console.WriteLine($"{pt.X},{pt.Y}");
+Console.WriteLine(pt.ToString());
+
+var iPt = new ImmutableRecordStructPoint(3, 4);
+Console.WriteLine(iPt.ToString());
+//iPt.X = 5;
+iPt = iPt with { X = 4 };
+Console.WriteLine(iPt.ToString());
+
+var rPt = new RecordPoint(4, 5);
+Console.WriteLine(rPt.ToString());
+rPt.X = 6;
+rPt.Y = 8;
+Console.WriteLine(rPt.ToString());
+
+public record struct RecordPoint(float X, float Y);
+
+public readonly record struct ImmutableRecordStructPoint(float X, float Y);
+
+public struct ImmutableStructPoint
+{
+    public float X { get; init; }
+    public float Y { get; init; }
+
+    public ImmutableStructPoint(float x, float y)
+    {
+        X = x;
+        Y = y;
+    }
+}
 internal readonly struct Coordinate
 {
     public Coordinate(int row, int column)
