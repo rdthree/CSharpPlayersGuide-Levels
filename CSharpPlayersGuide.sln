@@ -50,6 +50,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Level28_Structs_RoomCoordin
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Level29_Records_WarPrep", "Level29_Records_WarPrep\Level29_Records_WarPrep.csproj", "{8C67905C-0FFD-47A1-BAAD-A03FCA0FC024}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Level30_Generics_ColoredItems", "Level30_Generics_ColoredItems\Level30_Generics_ColoredItems.csproj", "{45FC5F09-43EE-42CE-B8BA-1520ECB9C97B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -156,5 +158,9 @@ Global
 		{8C67905C-0FFD-47A1-BAAD-A03FCA0FC024}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8C67905C-0FFD-47A1-BAAD-A03FCA0FC024}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8C67905C-0FFD-47A1-BAAD-A03FCA0FC024}.Release|Any CPU.Build.0 = Release|Any CPU
+		{45FC5F09-43EE-42CE-B8BA-1520ECB9C97B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{45FC5F09-43EE-42CE-B8BA-1520ECB9C97B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{45FC5F09-43EE-42CE-B8BA-1520ECB9C97B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{45FC5F09-43EE-42CE-B8BA-1520ECB9C97B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
