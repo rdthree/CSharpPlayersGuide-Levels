@@ -44,6 +44,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Level26_Polymorphism_LabelI
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Level26_Polymorphism_TheOldRobot", "Level26_Polymorphism_TheOldRobot\Level26_Polymorphism_TheOldRobot.csproj", "{C340E381-4ACD-4901-B836-4553C8D26C91}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Level27_Interfaces_RoboticInterface", "Level27_Interfaces_RoboticInterface\Level27_Interfaces_RoboticInterface.csproj", "{4F0BBD04-A2CD-4113-865A-E5D8F5897897}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -138,5 +140,9 @@ Global
 		{C340E381-4ACD-4901-B836-4553C8D26C91}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C340E381-4ACD-4901-B836-4553C8D26C91}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C340E381-4ACD-4901-B836-4553C8D26C91}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4F0BBD04-A2CD-4113-865A-E5D8F5897897}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4F0BBD04-A2CD-4113-865A-E5D8F5897897}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4F0BBD04-A2CD-4113-865A-E5D8F5897897}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4F0BBD04-A2CD-4113-865A-E5D8F5897897}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
