@@ -52,6 +52,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Level29_Records_WarPrep", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Level30_Generics_ColoredItems", "Level30_Generics_ColoredItems\Level30_Generics_ColoredItems.csproj", "{45FC5F09-43EE-42CE-B8BA-1520ECB9C97B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Level31_FountainOfObjects", "Level31_FountainOfObjects\Level31_FountainOfObjects.csproj", "{B2FA536C-4E7D-4176-9586-E77105D88E8D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -162,5 +164,9 @@ Global
 		{45FC5F09-43EE-42CE-B8BA-1520ECB9C97B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{45FC5F09-43EE-42CE-B8BA-1520ECB9C97B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{45FC5F09-43EE-42CE-B8BA-1520ECB9C97B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B2FA536C-4E7D-4176-9586-E77105D88E8D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B2FA536C-4E7D-4176-9586-E77105D88E8D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B2FA536C-4E7D-4176-9586-E77105D88E8D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B2FA536C-4E7D-4176-9586-E77105D88E8D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
