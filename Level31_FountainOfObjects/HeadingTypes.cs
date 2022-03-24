@@ -1,6 +1,6 @@
 ﻿namespace Level31_FountainOfObjects;
 
-internal enum Go
+internal enum HeadingTypes
 {
     North,
     South,

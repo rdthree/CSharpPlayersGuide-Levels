@@ -2,13 +2,13 @@
 
 internal interface IPlayer
 {
-    string Name { get; }
+    string? Name { get; }
     int ColumnPosition { get; }
     int RowPosition { get; }
 
     void Move();
 
-    Sense Position();
+    SenseTypes Position();
 
     void Score();
 }

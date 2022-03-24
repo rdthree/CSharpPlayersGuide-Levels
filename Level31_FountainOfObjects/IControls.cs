@@ -2,5 +2,5 @@
 
 internal interface IControls
 {
-    Go Direction { get; }
+    HeadingTypes Direction { get; }
 }

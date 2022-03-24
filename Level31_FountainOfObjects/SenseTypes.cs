@@ -1,9 +1,10 @@
 ﻿namespace Level31_FountainOfObjects;
 
-internal enum Sense
+internal enum SenseTypes
 {
     Nothing,
     See,
     Hear,
-    Smell
+    Smell,
+    Fountain
 }

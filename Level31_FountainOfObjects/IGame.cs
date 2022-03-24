@@ -2,7 +2,5 @@
 
 internal interface IGame
 {
-    // UI stuff
-    // Room
-    // Smells
+    void Run();
 }

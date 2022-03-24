@@ -2,9 +2,9 @@
 
 internal class Controls : IControls
 {
-    public Go Direction { get; private set; } = Level31_FountainOfObjects.Go.None;
+    public HeadingTypes Direction { get; private set; } = HeadingTypes.None;
 
-    public Go Go()
+    public HeadingTypes Go()
     {
         Console.Write("Input Direction (WASD): ");
         var k = Console.ReadKey().KeyChar;
@@ -20,33 +20,33 @@ internal class Controls : IControls
         return Direction;
     }
 
-    private Go North()
+    private HeadingTypes North()
     {
         Console.WriteLine("You have moved North");
-        return Direction = Level31_FountainOfObjects.Go.North;
+        return Direction = HeadingTypes.North;
     }
 
-    private Go South()
+    private HeadingTypes South()
     {
         Console.WriteLine("You have moved South");
-        return Direction = Level31_FountainOfObjects.Go.South;
+        return Direction = HeadingTypes.South;
     }
 
-    private Go West()
+    private HeadingTypes West()
     {
         Console.WriteLine("You have moved West");
-        return Direction = Level31_FountainOfObjects.Go.West;
+        return Direction = HeadingTypes.West;
     }
 
-    private Go East()
+    private HeadingTypes East()
     {
         Console.WriteLine("You have moved East");
-        return Direction = Level31_FountainOfObjects.Go.East;
+        return Direction = HeadingTypes.East;
     }
 
-    private Go None()
+    private HeadingTypes None()
     {
         Console.WriteLine("You remain motionless");
-        return Direction = Level31_FountainOfObjects.Go.None;
+        return Direction = HeadingTypes.None;
     }
 }

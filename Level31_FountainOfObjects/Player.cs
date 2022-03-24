@@ -2,13 +2,13 @@
 
 internal class Player : IPlayer
 {
-    public string Name { get; }
+    public string? Name { get; }
     public int ColumnPosition { get; private set; }
     public int RowPosition { get; private set; }
     private Room Room { get; }
     private readonly Controls _control;
 
-    internal Player(string name, Room room)
+    internal Player(string? name, Room room)
     {
         _control = new Controls();
         Name = name;
@@ -23,22 +23,22 @@ internal class Player : IPlayer
         var direction = _control.Go();
         switch (direction)
         {
-            case Go.North when RowPosition > 0:
+            case HeadingTypes.North when RowPosition > 0:
                 RowPosition--;
                 break;
-            case Go.South when RowPosition < Room.Rows - 1:
+            case HeadingTypes.South when RowPosition < Room.Rows - 1:
                 RowPosition++;
                 break;
-            case Go.West when ColumnPosition > 0:
+            case HeadingTypes.West when ColumnPosition > 0:
                 ColumnPosition--;
                 break;
-            case Go.East when ColumnPosition < Room.Columns - 1:
+            case HeadingTypes.East when ColumnPosition < Room.Columns - 1:
                 ColumnPosition++;
                 break;
         }
     }
 
-    public Sense Position()
+    public SenseTypes Position()
     {
         var position = Room.Places[RowPosition, ColumnPosition];
         return position;
