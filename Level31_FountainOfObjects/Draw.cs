@@ -2,20 +2,20 @@
 
 internal class Draw : IDraw
 {
-    private readonly Room _room;
+    private readonly MainRoom _mainRoom;
     private readonly Player _player;
 
-    internal Draw(Room room, Player player)
+    internal Draw(MainRoom mainRoom, Player player)
     {
-        _room = room;
+        _mainRoom = mainRoom;
         _player = player;
     }
 
     public void DrawRoom()
     {
-        for (var i = 0; i < _room.Rows; i++)
+        for (var i = 0; i < _mainRoom.Rows; i++)
         {
-            for (var j = 0; j < _room.Columns; j++)
+            for (var j = 0; j < _mainRoom.Columns; j++)
                 SpriteDrawOrder(i, j);
 
             Console.WriteLine();
@@ -31,16 +31,16 @@ internal class Draw : IDraw
     /// <param name="j">int j in a nested i,j for loop</param>
     private void SpriteDrawOrder(int i, int j)
     {
-        var coord = new IRoom.Coordinate(i, j);
+        var coord = new IMainRoom.Coordinate(i, j);
         if (DrawPlayerColor(_player.RowPosition, _player.ColumnPosition, i, j, '@')) return;
         if (DrawFountainLocation(coord, ConsoleColor.Red, '#')) return;
-        if (DrawSense(coord, _room.Seeing, ConsoleColor.Blue, '!')) return;
-        if (DrawSense(coord, _room.Smelling, ConsoleColor.Black, '~')) return;
-        if (DrawSense(coord, _room.Hearing, ConsoleColor.Green, '?')) return;
+        if (DrawSense(coord, _mainRoom.SeeingCoords, ConsoleColor.Blue, '!')) return;
+        if (DrawSense(coord, _mainRoom.SmellingCoords, ConsoleColor.Black, '~')) return;
+        if (DrawSense(coord, _mainRoom.HearingCoords, ConsoleColor.Green, '?')) return;
         DrawRoomGrid(ConsoleColor.Yellow, ':');
     }
 
-    private bool DrawSense(IRoom.Coordinate coord, List<IRoom.Coordinate> listSense, ConsoleColor color, char c = '+')
+    private bool DrawSense(IMainRoom.Coordinate coord, List<IMainRoom.Coordinate> listSense, ConsoleColor color, char c = '+')
     {
         if (listSense.All(coordinate => coord != coordinate)) return false;
         writeResetChar(c, color);
@@ -56,9 +56,9 @@ internal class Draw : IDraw
 
     private void DrawRoomGrid(ConsoleColor color, char c = '+') => writeResetChar(c, color);
 
-    private bool DrawFountainLocation(IRoom.Coordinate coord, ConsoleColor color, char c = '+')
+    private bool DrawFountainLocation(IMainRoom.Coordinate coord, ConsoleColor color, char c = '+')
     {
-        if (coord != _room.Fountain) return false;
+        if (coord != _mainRoom.Fountain) return false;
         writeResetChar(c, color);
         return true;
     }

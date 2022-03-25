@@ -5,17 +5,17 @@ internal class Player : IPlayer
     public string? Name { get; }
     public int ColumnPosition { get; private set; }
     public int RowPosition { get; private set; }
-    private Room Room { get; }
+    private MainRoom MainRoom { get; }
     private readonly Controls _control;
 
-    internal Player(string? name, Room room)
+    internal Player(string? name, MainRoom mainRoom)
     {
         _control = new Controls();
         Name = name;
-        Room = room;
+        MainRoom = mainRoom;
         RowPosition = 0;
         ColumnPosition = 0;
-        Room.SenseRoom();
+        MainRoom.LocateSenses();
     }
 
     public void Move()
@@ -26,13 +26,13 @@ internal class Player : IPlayer
             case HeadingTypes.North when RowPosition > 0:
                 RowPosition--;
                 break;
-            case HeadingTypes.South when RowPosition < Room.Rows - 1:
+            case HeadingTypes.South when RowPosition < MainRoom.Rows - 1:
                 RowPosition++;
                 break;
             case HeadingTypes.West when ColumnPosition > 0:
                 ColumnPosition--;
                 break;
-            case HeadingTypes.East when ColumnPosition < Room.Columns - 1:
+            case HeadingTypes.East when ColumnPosition < MainRoom.Columns - 1:
                 ColumnPosition++;
                 break;
         }
@@ -40,7 +40,7 @@ internal class Player : IPlayer
 
     public SenseTypes Position()
     {
-        var position = Room.Places[RowPosition, ColumnPosition];
+        var position = MainRoom.SenseCoords[RowPosition, ColumnPosition];
         return position;
     }
 

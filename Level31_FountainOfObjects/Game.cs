@@ -7,7 +7,7 @@ internal class Game : global::Level31_FountainOfObjects.IGame
 
     public Game(int rows, int columns)
     {
-        var dasRoom = new Room(rows, columns);
+        var dasRoom = new MainRoom(rows, columns);
         Console.WriteLine("what is your name?");
         var name = Console.ReadLine();
         _dasPlayer = new Player(name, dasRoom);
