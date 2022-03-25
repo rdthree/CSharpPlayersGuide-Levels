@@ -22,9 +22,15 @@ internal class Draw : IDraw
         }
     }
 
+    /// <summary>
+    /// Draw console text sprites in order of appearance on a list of `if` `bool` methods.
+    /// `true` methods higher up the list will overwrite methods with overlapping coordinates lower down the list.  
+    /// Designed to be inserted into a nested i,j for loop.
+    /// </summary>
+    /// <param name="i">int i in a nested i,j for loop</param>
+    /// <param name="j">int j in a nested i,j for loop</param>
     private void SpriteDrawOrder(int i, int j)
     {
-        // the upper methods will overwrite the lower methods graphically. it works like a typewriter
         var coord = new IRoom.Coordinate(i, j);
         if (DrawPlayerColor(_player.RowPosition, _player.ColumnPosition, i, j, '@')) return;
         if (DrawFountainLocation(coord, ConsoleColor.Red, '#')) return;
