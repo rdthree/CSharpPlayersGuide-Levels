@@ -10,6 +10,7 @@ internal interface IRoom
     List<Coordinate> Hearing { get; }
     List<Coordinate> Smelling { get; }
     List<Coordinate> Seeing { get; }
+    List<Coordinate> Nothing { get; }
     Coordinate Fountain { get; }
     void Entrance();
     void FountainRoom();

@@ -23,6 +23,7 @@ internal class Room : IRoom
     public List<IRoom.Coordinate> Hearing { get; } = new();
     public List<IRoom.Coordinate> Smelling { get; } = new();
     public List<IRoom.Coordinate> Seeing { get; } = new();
+    public List<IRoom.Coordinate> Nothing { get; } = new();
 
     public IRoom.Coordinate Fountain { get; }
 
@@ -43,9 +44,9 @@ internal class Room : IRoom
         {
             for (var j = 0; j < Columns; j++)
             {
-                Coordinates.Add(new IRoom.Coordinate(i,j));
-                Places[i, j] = SenseTypes.Nothing;
-                
+                Coordinates.Add(new IRoom.Coordinate(i, j));
+                //Places[i, j] = SenseTypes.Nothing;
+
                 var checkI = Math.Abs(Fountain.Row - i);
                 var checkJ = Math.Abs(Fountain.Column - j);
                 if (checkI <= 5 && checkJ <= 5)
@@ -66,13 +67,19 @@ internal class Room : IRoom
                     (i == Fountain.Row && j == Fountain.Column - 1))
                 {
                     Places[i, j] = SenseTypes.See;
-                    Seeing.Add(new IRoom.Coordinate(i,j));
+                    Seeing.Add(new IRoom.Coordinate(i, j));
                 }
 
                 if (i == Fountain.Row && j == Fountain.Column)
                 {
                     Places[i, j] = SenseTypes.Fountain;
                 }
+
+                // else
+                // {
+                //     Places[i, j] = SenseTypes.Nothing;
+                //     Nothing.Add(new IRoom.Coordinate(i, j));
+                // }
             }
         }
     }
