@@ -9,7 +9,7 @@ internal interface IMainRoom
     
 }
 
-internal interface IInnerRoom : IMainRoom
+internal interface ISubRoom : IMainRoom
 {
-    SenseTypes[,] SenseCoords { get; }
+    SenseTypes[,]? SenseCoords { get; }
 }

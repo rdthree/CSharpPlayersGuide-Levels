@@ -4,11 +4,13 @@ internal class Draw : IDraw
 {
     private readonly MainRoom _mainRoom;
     private readonly Player _player;
+    private readonly FountainRoom _fountainRoom;
 
-    internal Draw(MainRoom mainRoom, Player player)
+    internal Draw(MainRoom mainRoom, Player player, FountainRoom fountainRoom)
     {
         _mainRoom = mainRoom;
         _player = player;
+        _fountainRoom = fountainRoom;
     }
 
     public void DrawRoom()
@@ -34,9 +36,9 @@ internal class Draw : IDraw
         var coord = new IMainRoom.Coordinate(i, j);
         if (DrawPlayerColor(_player.RowPosition, _player.ColumnPosition, i, j, '@')) return;
         if (DrawFountainLocation(coord, ConsoleColor.Red, '#')) return;
-        if (DrawSense(coord, _mainRoom.SeeingCoords, ConsoleColor.Blue, '!')) return;
-        if (DrawSense(coord, _mainRoom.SmellingCoords, ConsoleColor.Black, '~')) return;
-        if (DrawSense(coord, _mainRoom.HearingCoords, ConsoleColor.Green, '?')) return;
+        if (DrawSense(coord, _fountainRoom.SeeingCoords, ConsoleColor.Blue, '!')) return;
+        if (DrawSense(coord, _fountainRoom.SmellingCoords, ConsoleColor.Black, '~')) return;
+        if (DrawSense(coord, _fountainRoom.HearingCoords, ConsoleColor.Green, '?')) return;
         DrawRoomGrid(ConsoleColor.Yellow, ':');
     }
 
@@ -58,7 +60,7 @@ internal class Draw : IDraw
 
     private bool DrawFountainLocation(IMainRoom.Coordinate coord, ConsoleColor color, char c = '+')
     {
-        if (coord != _mainRoom.Fountain) return false;
+        if (coord != _fountainRoom.Fountain) return false;
         writeResetChar(c, color);
         return true;
     }

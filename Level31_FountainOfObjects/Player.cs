@@ -6,16 +6,18 @@ internal class Player : IPlayer
     public int ColumnPosition { get; private set; }
     public int RowPosition { get; private set; }
     private MainRoom MainRoom { get; }
+    private FountainRoom FountainRoom { get; }
     private readonly Controls _control;
 
-    internal Player(string? name, MainRoom mainRoom)
+    internal Player(string? name, MainRoom mainRoom, FountainRoom fountainRoom)
     {
         _control = new Controls();
         Name = name;
         MainRoom = mainRoom;
+        FountainRoom = fountainRoom;
         RowPosition = 0;
         ColumnPosition = 0;
-        MainRoom.LocateSenses();
+        FountainRoom.LocateSenses();
     }
 
     public void Move()
@@ -40,7 +42,7 @@ internal class Player : IPlayer
 
     public SenseTypes Position()
     {
-        var position = MainRoom.SenseCoords[RowPosition, ColumnPosition];
+        var position = FountainRoom.SenseCoords[RowPosition, ColumnPosition];
         return position;
     }
 
