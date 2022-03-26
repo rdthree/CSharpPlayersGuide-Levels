@@ -5,12 +5,19 @@ internal class Draw : IDraw
     private readonly MainRoom _mainRoom;
     private readonly Player _player;
     private readonly FountainRoom _fountainRoom;
+    private IMainRoom.Coordinate? _drawRowColumn;
 
     internal Draw(MainRoom mainRoom, Player player, FountainRoom fountainRoom)
     {
         _mainRoom = mainRoom;
         _player = player;
         _fountainRoom = fountainRoom;
+    }
+
+    IMainRoom.Coordinate? IDraw.DrawRowColumn
+    {
+        get => _drawRowColumn;
+        set => _drawRowColumn = value;
     }
 
     public void DrawRoom()
@@ -33,39 +40,43 @@ internal class Draw : IDraw
     /// <param name="j">int j in a nested i,j for loop</param>
     private void SpriteDrawOrder(int i, int j)
     {
-        var coord = new IMainRoom.Coordinate(i, j);
-        if (DrawPlayerColor(_player.RowPosition, _player.ColumnPosition, i, j, '@')) return;
-        if (DrawFountainLocation(coord, ConsoleColor.Red, '#')) return;
-        if (DrawSense(coord, _fountainRoom.SeeingCoords, ConsoleColor.Blue, '!')) return;
-        if (DrawSense(coord, _fountainRoom.SmellingCoords, ConsoleColor.Black, '~')) return;
-        if (DrawSense(coord, _fountainRoom.HearingCoords, ConsoleColor.Green, '?')) return;
+        _drawRowColumn = new IMainRoom.Coordinate(i, j);
+        if (DrawPlayerColor('@')) return;
+        if (DrawFountainLocation(ConsoleColor.Red, '#')) return;
+        if (DrawSense(_fountainRoom.SeeingCoords, ConsoleColor.Blue, '!')) return;
+        if (DrawSense(_fountainRoom.SmellingCoords, ConsoleColor.Black, '~')) return;
+        if (DrawSense(_fountainRoom.HearingCoords, ConsoleColor.Green, '?')) return;
         DrawRoomGrid(ConsoleColor.Yellow, ':');
     }
 
-    private bool DrawSense(IMainRoom.Coordinate coord, List<IMainRoom.Coordinate> listSense, ConsoleColor color, char c = '+')
+    private bool DrawSense(List<IMainRoom.Coordinate> listSense,
+        ConsoleColor color, char c = '+')
     {
-        if (listSense.All(coordinate => coord != coordinate)) return false;
-        writeResetChar(c, color);
+        if (listSense.All(coordinate => _drawRowColumn != coordinate)) return false;
+        WriteResetChar(c, color);
         return true;
     }
 
-    private bool DrawPlayerColor(int rowPos, int colPos, int i, int j, char c = '+')
+    private bool DrawPlayerColor(char c = '+')
     {
-        if (rowPos != i || colPos != j) return false;
-        writeResetChar(c, ConsoleColor.Red);
+        if (_drawRowColumn != null && (_player.RowPosition != _drawRowColumn.Row ||
+                                       _player.ColumnPosition != _drawRowColumn.Column))
+            return false;
+
+        WriteResetChar(c, ConsoleColor.Red);
         return true;
     }
 
-    private void DrawRoomGrid(ConsoleColor color, char c = '+') => writeResetChar(c, color);
+    private static void DrawRoomGrid(ConsoleColor color, char c = '+') => WriteResetChar(c, color);
 
-    private bool DrawFountainLocation(IMainRoom.Coordinate coord, ConsoleColor color, char c = '+')
+    private bool DrawFountainLocation(ConsoleColor color, char c = '+')
     {
-        if (coord != _fountainRoom.Fountain) return false;
-        writeResetChar(c, color);
+        if (_drawRowColumn != _fountainRoom.Fountain) return false;
+        WriteResetChar(c, color);
         return true;
     }
 
-    private void writeResetChar(char c = '+', ConsoleColor color = ConsoleColor.Black)
+    private static void WriteResetChar(char c = '+', ConsoleColor color = ConsoleColor.Black)
     {
         Console.ForegroundColor = color;
         Console.Write(c.ToString());

@@ -1,17 +1,15 @@
 ﻿namespace Level31_FountainOfObjects;
 
-internal class FountainRoom : MainRoom, ISubRoom
+internal class FountainRoom : ISubRoom
 {
-    public FountainRoom(int rows, int columns) : base(rows, columns)
+    public FountainRoom(IMainRoom mainRoom)
     {
-        Rows = rows;
-        Columns = columns;
-        Fountain = new IMainRoom.Coordinate(Rows - 2, Columns - 1);
-        SenseCoords = new SenseTypes[Rows, Columns];
+        _mainRoom = mainRoom;
+        Fountain = new IMainRoom.Coordinate(_mainRoom.Rows - 2, _mainRoom.Columns - 1);
+        SenseCoords = new SenseTypes[_mainRoom.Rows, _mainRoom.Columns];
     }
 
-    public new int Rows { get; }
-    public new int Columns { get; }
+    private readonly IMainRoom _mainRoom;
     public SenseTypes[,] SenseCoords { get; }
     public List<IMainRoom.Coordinate> HearingCoords { get; } = new();
     public List<IMainRoom.Coordinate> SmellingCoords { get; } = new();
@@ -20,52 +18,49 @@ internal class FountainRoom : MainRoom, ISubRoom
     public IMainRoom.Coordinate Fountain { get; }
     private static List<IMainRoom.Coordinate> RoomCoords => new();
 
-    #region fountain
-
     public void LocateSenses()
     {
-        for (var i = 0; i < Rows; i++)
-        for (var j = 0; j < Columns; j++)
+        for (var i = 0; i < _mainRoom.Rows; i++)
+        for (var j = 0; j < _mainRoom.Columns; j++)
         {
-            RoomCoords.Add(new(Row: i, j));
-            var (row, column) = FromCenter(i: i, j: j);
-            AllSenseCoordinates(i, j, row, column);
+            var ijCoord = new IMainRoom.Coordinate(i, j);
+            var ijCoordTarget = FromCenter(ijCoord);
+            RoomCoords.Add(ijCoord);
+            AllSenseCoordinates(ijCoord, ijCoordTarget);
         }
     }
 
-    private void AllSenseCoordinates(int i, int j, int row, int column)
+    private void AllSenseCoordinates(IMainRoom.Coordinate ijCoord, IMainRoom.Coordinate ijCoordTarget)
     {
-        SenseCoordinate(i, j, row, column, 5, 5, SenseCoords, SenseTypes.Hear, HearingCoords);
-        SenseCoordinate(i, j, row, column, 3, 3, SenseCoords, SenseTypes.Smell, SmellingCoords);
-        SenseCoordinateAdjacent(i, j, Fountain.Row, Fountain.Column, SenseCoords, SenseTypes.See, SeeingCoords);
-        SenseCoordinate(i, j, row, column, 1, 1, SenseCoords, SenseTypes.Fountain, FountainCoords);
+        SenseCoordinate(ijCoord, ijCoordTarget, 5, 5, SenseTypes.Hear, HearingCoords);
+        SenseCoordinate(ijCoord, ijCoordTarget, 3, 3, SenseTypes.Smell, SmellingCoords);
+        SenseCoordinateAdjacent(ijCoord, Fountain, SenseTypes.See, SeeingCoords);
+        SenseCoordinate(ijCoord, ijCoordTarget, 1, 1, SenseTypes.Fountain, FountainCoords);
     }
 
-    private IMainRoom.Coordinate FromCenter(int i, int j)
+    private IMainRoom.Coordinate FromCenter(IMainRoom.Coordinate ijCoordinate)
     {
-        var checkI = Math.Abs(Fountain.Row - i);
-        var checkJ = Math.Abs(Fountain.Column - j);
+        var checkI = Math.Abs(Fountain.Row - ijCoordinate.Row);
+        var checkJ = Math.Abs(Fountain.Column - ijCoordinate.Column);
         return new IMainRoom.Coordinate(checkI, checkJ);
     }
 
-    private void SenseCoordinate(int i, int j, int row, int column, int rowDist, int colDist,
-        SenseTypes[,] senseCoordinates, SenseTypes senseType, List<IMainRoom.Coordinate> sense)
-    {
-        if (row > rowDist || column > colDist) return;
-        senseCoordinates[i, j] = senseType;
-        sense.Add(item: new(i, j));
-    }
-
-    private void SenseCoordinateAdjacent(int i, int j, int row, int column, SenseTypes[,] senseCoordinates,
+    private void SenseCoordinate(IMainRoom.Coordinate coord, IMainRoom.Coordinate coordTarget, int rowDist, int colDist,
         SenseTypes senseType, List<IMainRoom.Coordinate> sense)
     {
-        if ((i == row + 1 && j == column || i == row - 1 && j == column ||
-             i == row && j == column + 1 || i == row && j == column - 1))
-        {
-            senseCoordinates[i, j] = senseType;
-            sense.Add(item: new(i, j));
-        }
+        if (coordTarget.Row > rowDist || coordTarget.Column > colDist) return;
+        SenseCoords[coord.Row, coord.Column] = senseType;
+        sense.Add(item: new(coord.Row, coord.Column));
     }
 
-    #endregion
+    private void SenseCoordinateAdjacent(IMainRoom.Coordinate ijCoord, IMainRoom.Coordinate ijCoordTarget,
+        SenseTypes senseType, List<IMainRoom.Coordinate> sense)
+    {
+        if (((ijCoord.Row != ijCoordTarget.Row + 1 || ijCoord.Column != ijCoordTarget.Column) &&
+             (ijCoord.Row != ijCoordTarget.Row - 1 || ijCoord.Column != ijCoordTarget.Column) &&
+             (ijCoord.Row != ijCoordTarget.Row || ijCoord.Column != ijCoordTarget.Column + 1) &&
+             (ijCoord.Row != ijCoordTarget.Row || ijCoord.Column != ijCoordTarget.Column - 1))) return;
+        SenseCoords[ijCoord.Row, ijCoord.Column] = senseType;
+        sense.Add(item: new(ijCoord.Row, ijCoord.Column));
+    }
 }

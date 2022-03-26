@@ -19,5 +19,5 @@ internal class MainRoom : IMainRoom
     public int Rows { get; }
     public int Columns { get; }
 
-    public SenseTypes[,] SenseCoords { get; }
+    private SenseTypes[,] SenseCoords { get; }
 }
