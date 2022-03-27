@@ -18,6 +18,5 @@ internal class MainRoom : IMainRoom
 
     public int Rows { get; }
     public int Columns { get; }
-
     private SenseTypes[,] SenseCoords { get; }
 }

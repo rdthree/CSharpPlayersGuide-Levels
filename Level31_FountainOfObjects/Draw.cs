@@ -4,14 +4,15 @@ internal class Draw : IDraw
 {
     private readonly MainRoom _mainRoom;
     private readonly Player _player;
-    private readonly FountainRoom _fountainRoom;
     private IMainRoom.Coordinate? _drawRowColumn;
+    private readonly List<SubRoom> _subRooms;
 
-    internal Draw(MainRoom mainRoom, Player player, FountainRoom fountainRoom)
+    internal Draw(MainRoom mainRoom, Player player)
     {
         _mainRoom = mainRoom;
         _player = player;
-        _fountainRoom = fountainRoom;
+        _subRooms.Add(new FountainRoom(_mainRoom));
+        var seeingCoords = _subRooms[0].SeeingCoords;
     }
 
     IMainRoom.Coordinate? IDraw.DrawRowColumn
@@ -43,9 +44,9 @@ internal class Draw : IDraw
         _drawRowColumn = new IMainRoom.Coordinate(i, j);
         if (DrawPlayerColor('@')) return;
         if (DrawFountainLocation(ConsoleColor.Red, '#')) return;
-        if (DrawSense(_fountainRoom.SeeingCoords, ConsoleColor.Blue, '!')) return;
-        if (DrawSense(_fountainRoom.SmellingCoords, ConsoleColor.Black, '~')) return;
-        if (DrawSense(_fountainRoom.HearingCoords, ConsoleColor.Green, '?')) return;
+        if (DrawSense(_subRooms[0].SeeingCoords, ConsoleColor.Blue, '!')) return;
+        if (DrawSense(_subRooms[0].SmellingCoords, ConsoleColor.Black, '~')) return;
+        if (DrawSense(_subRooms[0].HearingCoords, ConsoleColor.Green, '?')) return;
         DrawRoomGrid(ConsoleColor.Yellow, ':');
     }
 
@@ -59,8 +60,8 @@ internal class Draw : IDraw
 
     private bool DrawPlayerColor(char c = '+')
     {
-        if (_drawRowColumn != null && (_player.RowPosition != _drawRowColumn.Row ||
-                                       _player.ColumnPosition != _drawRowColumn.Column))
+        if (_drawRowColumn != null && (_player.Position.Row != _drawRowColumn.Row ||
+                                       _player.Position.Column != _drawRowColumn.Column))
             return false;
 
         WriteResetChar(c, ConsoleColor.Red);
@@ -71,7 +72,7 @@ internal class Draw : IDraw
 
     private bool DrawFountainLocation(ConsoleColor color, char c = '+')
     {
-        if (_drawRowColumn != _fountainRoom.Fountain) return false;
+        if (_drawRowColumn != _subRooms[0]. _fountainRoom.Fountain) return false;
         WriteResetChar(c, color);
         return true;
     }

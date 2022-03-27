@@ -3,12 +3,9 @@
 internal interface IPlayer
 {
     string? Name { get; }
-    int ColumnPosition { get; }
-    int RowPosition { get; }
+    IMainRoom.Coordinate? Position { get; }
 
     void Move();
-
-    SenseTypes Position();
 
     void Score();
 }

@@ -3,21 +3,18 @@
 internal class Player : IPlayer
 {
     public string? Name { get; }
-    public int ColumnPosition { get; private set; }
-    public int RowPosition { get; private set; }
+    public IMainRoom.Coordinate? Position { get; private set; }
     private MainRoom MainRoom { get; }
-    private FountainRoom FountainRoom { get; }
     private readonly Controls _control;
+    private int _row;
+    private int _column;
 
-    internal Player(string? name, MainRoom mainRoom, FountainRoom fountainRoom)
+    internal Player(string? name, MainRoom mainRoom)
     {
         _control = new Controls();
         Name = name;
         MainRoom = mainRoom;
-        FountainRoom = fountainRoom;
-        RowPosition = 0;
-        ColumnPosition = 0;
-        FountainRoom.LocateSenses();
+        UpdatePosition();
     }
 
     public void Move()
@@ -25,26 +22,24 @@ internal class Player : IPlayer
         var direction = _control.Go();
         switch (direction)
         {
-            case HeadingTypes.North when RowPosition > 0:
-                RowPosition--;
+            case HeadingTypes.North when _row > 0:
+                _row--;
                 break;
-            case HeadingTypes.South when RowPosition < MainRoom.Rows - 1:
-                RowPosition++;
+            case HeadingTypes.South when _row < MainRoom.Rows - 1:
+                _row++;
                 break;
-            case HeadingTypes.West when ColumnPosition > 0:
-                ColumnPosition--;
+            case HeadingTypes.West when _column > 0:
+                _column--;
                 break;
-            case HeadingTypes.East when ColumnPosition < MainRoom.Columns - 1:
-                ColumnPosition++;
+            case HeadingTypes.East when _column < MainRoom.Columns - 1:
+                _column++;
                 break;
         }
+
+        UpdatePosition();
     }
 
-    public SenseTypes Position()
-    {
-        var position = FountainRoom.SenseCoords[RowPosition, ColumnPosition];
-        return position;
-    }
+    private void UpdatePosition() => Position = Position with {Row = _row, Column = _column};
 
     public void Score()
     {

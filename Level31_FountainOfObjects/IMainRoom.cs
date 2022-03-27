@@ -5,11 +5,14 @@ internal interface IMainRoom
     int Rows { get; }
     int Columns { get; }
 
-    record Coordinate(int Row, int Column);
+    internal record Coordinate(int Row, int Column);
     
 }
 
 internal interface ISubRoom
 {
     SenseTypes[,]? SenseCoords { get; }
+
+    abstract IMainRoom.Coordinate Location { get; }
+    void SubRoomCoordinates(IMainRoom.Coordinate ijCoord, IMainRoom.Coordinate ijCoordTarget);
 }
