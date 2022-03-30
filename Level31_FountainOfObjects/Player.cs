@@ -17,7 +17,7 @@ internal class Player : IPlayer
         FountainRoom = fountainRoom;
         RowPosition = 0;
         ColumnPosition = 0;
-        FountainRoom.LocateSenses();
+        //FountainRoom.LocateSenses();
     }
 
     public void Move()
@@ -40,7 +40,7 @@ internal class Player : IPlayer
         }
     }
 
-    public SenseTypes Position()
+    public SenseTypesCoordinates Position()
     {
         var position = FountainRoom.SenseCoords[RowPosition, ColumnPosition];
         return position;

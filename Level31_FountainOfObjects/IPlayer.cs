@@ -8,7 +8,7 @@ internal interface IPlayer
 
     void Move();
 
-    SenseTypes Position();
+    SenseTypesCoordinates Position();
 
     void Score();
 }

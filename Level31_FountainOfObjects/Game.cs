@@ -9,7 +9,7 @@ internal class Game : IGame
     public Game(int rows, int columns)
     {
         _mainRoom = new MainRoom(rows, columns);
-        var fountainRoom = new FountainRoom(rows, columns);
+        var fountainRoom = new FountainRoom(_mainRoom.Rows, _mainRoom.Columns);
         Console.WriteLine("what is your name?");
         var name = Console.ReadLine();
         _dasPlayer = new Player(name, _mainRoom, fountainRoom);
