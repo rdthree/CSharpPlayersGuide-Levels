@@ -7,17 +7,20 @@ internal class MainRoom : IMainRoom
         Rows = rows;
         Columns = columns;
         SenseCoords = new SenseTypes[Rows, Columns];
+        SetupRoom();
+    }
 
-        // pre-populate entire board with 'nothing'
+    public int Rows { get; }
+    public int Columns { get; }
+
+    private SenseTypes[,] SenseCoords { get; }
+
+    private void SetupRoom()
+    {
         for (var i = 0; i < Rows; i++)
         {
             for (var j = 0; j < Columns; j++)
                 SenseCoords[i, j] = SenseTypes.Nothing;
         }
     }
-
-    public int Rows { get; }
-    public int Columns { get; }
-
-    public SenseTypes[,] SenseCoords { get; }
 }

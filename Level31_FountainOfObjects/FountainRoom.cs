@@ -12,15 +12,13 @@ internal class FountainRoom : MainRoom, ISubRoom
 
     public new int Rows { get; }
     public new int Columns { get; }
-    public SenseTypes[,] SenseCoords { get; }
+    public new SenseTypes[,] SenseCoords { get; }
     public List<IMainRoom.Coordinate> HearingCoords { get; } = new();
     public List<IMainRoom.Coordinate> SmellingCoords { get; } = new();
     public List<IMainRoom.Coordinate> SeeingCoords { get; } = new();
     private List<IMainRoom.Coordinate> FountainCoords { get; } = new();
     public IMainRoom.Coordinate Fountain { get; }
     private static List<IMainRoom.Coordinate> RoomCoords => new();
-
-    #region fountain
 
     public void LocateSenses()
     {
@@ -66,6 +64,4 @@ internal class FountainRoom : MainRoom, ISubRoom
             sense.Add(item: new(i, j));
         }
     }
-
-    #endregion
 }
