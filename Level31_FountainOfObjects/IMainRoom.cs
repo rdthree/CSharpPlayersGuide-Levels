@@ -13,6 +13,6 @@ internal interface ISubRoom
 {
     SenseTypes[,]? SenseCoords { get; }
 
-    abstract IMainRoom.Coordinate Location { get; }
-    void SubRoomCoordinates(IMainRoom.Coordinate ijCoord, IMainRoom.Coordinate ijCoordTarget);
+    abstract IMainRoom.Coordinate? Location { get; }
+    void SubRoomCoordinates(IMainRoom.Coordinate ijCoord, IMainRoom.Coordinate? ijCoordTarget);
 }
