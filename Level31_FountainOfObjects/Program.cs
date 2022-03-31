@@ -5,5 +5,5 @@
 // TODO: track wins, limit number of moves, give better messages
 // TODO: cheat code to turn map on and off
 
-var game = new Game(10, 30);
+var game = new Game(15, 50);
 game.Run();

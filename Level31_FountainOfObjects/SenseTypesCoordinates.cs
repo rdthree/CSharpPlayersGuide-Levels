@@ -8,5 +8,6 @@ internal enum SenseTypesCoordinates
     Smell,
     Fountain,
     Death,
-    Fear
+    Fear,
+    Blown
 }

@@ -1,4 +1,6 @@
-﻿namespace Level31_FountainOfObjects;
+﻿using Level31_FountainOfObjects.RoomsEnemies;
+
+namespace Level31_FountainOfObjects;
 
 internal class Draw : IDraw
 {
@@ -6,13 +8,18 @@ internal class Draw : IDraw
     private readonly Player _player;
     private readonly FountainRoom _fountainRoom;
     private readonly PitRoom _pitRoom;
+    private readonly Maelstrom _maelstrom;
+    private readonly Amarok _amarok;
 
-    internal Draw(MainRoom mainRoom, Player player, FountainRoom fountainRoom, PitRoom pitRoom)
+    internal Draw(MainRoom mainRoom, Player player, FountainRoom fountainRoom, PitRoom pitRoom, Maelstrom maelstrom,
+        Amarok amarok)
     {
         _mainRoom = mainRoom;
         _player = player;
         _fountainRoom = fountainRoom;
         _pitRoom = pitRoom;
+        _maelstrom = maelstrom;
+        _amarok = amarok;
     }
 
     public void DrawRoom()
@@ -38,16 +45,23 @@ internal class Draw : IDraw
         var coord = new IMainRoom.Coordinate(i, j);
         if (DrawPlayerColor(_player.RowPosition, _player.ColumnPosition, i, j, '@')) return;
         if (DrawItemLocation(coord, _fountainRoom.Fountain, ConsoleColor.Red, '#')) return;
+        if (DrawItemLocation(coord, _maelstrom.MaelstromCoord, ConsoleColor.Gray, 'W')) return;
         if (DrawItemLocation(coord, _pitRoom.Pit, ConsoleColor.Magenta, 'P')) return;
+        if (DrawItemLocation(coord, _amarok.AmarokLocation, ConsoleColor.White, 'O')) return;
+        if (DrawSense(coord, _amarok.AmarokCoords, ConsoleColor.White, 'x')) return;
+        if (DrawSense(coord, _amarok.AmarokSmellCoords, ConsoleColor.White, 's')) return;
         if (DrawSense(coord, _pitRoom.PitCoords, ConsoleColor.Cyan, '%')) return;
         if (DrawSense(coord, _pitRoom.PitEdgeCoords, ConsoleColor.DarkGray, '%')) return;
+        if (DrawSense(coord, _maelstrom.MaelstromCoords, ConsoleColor.Gray, '>')) return;
+        if (DrawSense(coord, _maelstrom.MaelstromWinds, ConsoleColor.DarkYellow, '/')) return;
         if (DrawSense(coord, _fountainRoom.SeeingCoords, ConsoleColor.Blue, '!')) return;
         if (DrawSense(coord, _fountainRoom.SmellingCoords, ConsoleColor.Black, '~')) return;
         if (DrawSense(coord, _fountainRoom.HearingCoords, ConsoleColor.Green, '?')) return;
         DrawRoomGrid(ConsoleColor.Yellow, ':');
     }
 
-    private bool DrawSense(IMainRoom.Coordinate coord, List<IMainRoom.Coordinate> listSense, ConsoleColor color, char c = '+')
+    private bool DrawSense(IMainRoom.Coordinate coord, List<IMainRoom.Coordinate> listSense, ConsoleColor color,
+        char c = '+')
     {
         if (listSense.All(coordinate => coord != coordinate)) return false;
         writeResetChar(c, color);
@@ -63,7 +77,8 @@ internal class Draw : IDraw
 
     private void DrawRoomGrid(ConsoleColor color, char c = '+') => writeResetChar(c, color);
 
-    private bool DrawItemLocation(IMainRoom.Coordinate coord, IMainRoom.Coordinate place, ConsoleColor color, char c = '+')
+    private bool DrawItemLocation(IMainRoom.Coordinate coord, IMainRoom.Coordinate place, ConsoleColor color,
+        char c = '+')
     {
         //if (coord != _fountainRoom.Fountain) return false;
         if (coord != place) return false;

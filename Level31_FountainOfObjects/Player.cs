@@ -1,4 +1,6 @@
-﻿namespace Level31_FountainOfObjects;
+﻿using Level31_FountainOfObjects.RoomsEnemies;
+
+namespace Level31_FountainOfObjects;
 
 internal class Player : IPlayer
 {
@@ -8,15 +10,20 @@ internal class Player : IPlayer
     private MainRoom MainRoom { get; }
     private FountainRoom FountainRoom { get; }
     private PitRoom PitRoom { get; }
+    private Maelstrom Maelstrom { get; }
+    private Amarok Amarok { get; }
     private readonly Controls _control;
 
-    internal Player(string? name, MainRoom mainRoom, FountainRoom fountainRoom, PitRoom pitroom)
+    internal Player(string? name, MainRoom mainRoom, FountainRoom fountainRoom, PitRoom pitRoom, Maelstrom maelstrom,
+        Amarok amarok)
     {
         _control = new Controls();
         Name = name;
         MainRoom = mainRoom;
         FountainRoom = fountainRoom;
-        PitRoom = pitroom;
+        PitRoom = pitRoom;
+        Maelstrom = maelstrom;
+        Amarok = amarok;
         RowPosition = 0;
         ColumnPosition = 0;
     }
@@ -41,11 +48,24 @@ internal class Player : IPlayer
         }
     }
 
-    public SenseTypesCoordinates Position()
+    public SenseTypesCoordinates PositionItems()
     {
         var mainPos = MainRoom.SenseCoords[RowPosition, ColumnPosition];
+        var amarokPos = Amarok.SenseCoords[RowPosition, ColumnPosition];
         var fountainPos = FountainRoom.SenseCoords[RowPosition, ColumnPosition];
         var pitPos = PitRoom.SenseCoords[RowPosition, ColumnPosition];
+        var maelstromPos = Maelstrom.SenseCoords[RowPosition, ColumnPosition];
+        if (amarokPos != SenseTypesCoordinates.Nothing) return amarokPos;
+        if (maelstromPos != SenseTypesCoordinates.Nothing)
+        {
+            if (maelstromPos == SenseTypesCoordinates.Blown)
+            {
+                RowPosition = 10;
+                ColumnPosition = 5;
+            } //move that fool
+            else return maelstromPos;
+        }
+
         if (pitPos != SenseTypesCoordinates.Nothing) return pitPos;
         if (fountainPos != SenseTypesCoordinates.Nothing) return fountainPos;
         return mainPos;

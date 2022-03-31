@@ -1,4 +1,4 @@
-﻿namespace Level31_FountainOfObjects;
+﻿namespace Level31_FountainOfObjects.RoomsEnemies;
 
 internal class FountainRoom : MainRoom, ISubRoom
 {
