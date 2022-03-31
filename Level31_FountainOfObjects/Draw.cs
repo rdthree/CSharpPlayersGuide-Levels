@@ -5,12 +5,14 @@ internal class Draw : IDraw
     private readonly MainRoom _mainRoom;
     private readonly Player _player;
     private readonly FountainRoom _fountainRoom;
+    private readonly PitRoom _pitRoom;
 
-    internal Draw(MainRoom mainRoom, Player player, FountainRoom fountainRoom)
+    internal Draw(MainRoom mainRoom, Player player, FountainRoom fountainRoom, PitRoom pitRoom)
     {
         _mainRoom = mainRoom;
         _player = player;
         _fountainRoom = fountainRoom;
+        _pitRoom = pitRoom;
     }
 
     public void DrawRoom()
@@ -35,7 +37,10 @@ internal class Draw : IDraw
     {
         var coord = new IMainRoom.Coordinate(i, j);
         if (DrawPlayerColor(_player.RowPosition, _player.ColumnPosition, i, j, '@')) return;
-        if (DrawFountainLocation(coord, ConsoleColor.Red, '#')) return;
+        if (DrawItemLocation(coord, _fountainRoom.Fountain, ConsoleColor.Red, '#')) return;
+        if (DrawItemLocation(coord, _pitRoom.Pit, ConsoleColor.Magenta, 'P')) return;
+        if (DrawSense(coord, _pitRoom.PitCoords, ConsoleColor.Cyan, '%')) return;
+        if (DrawSense(coord, _pitRoom.PitEdgeCoords, ConsoleColor.DarkGray, '%')) return;
         if (DrawSense(coord, _fountainRoom.SeeingCoords, ConsoleColor.Blue, '!')) return;
         if (DrawSense(coord, _fountainRoom.SmellingCoords, ConsoleColor.Black, '~')) return;
         if (DrawSense(coord, _fountainRoom.HearingCoords, ConsoleColor.Green, '?')) return;
@@ -58,9 +63,10 @@ internal class Draw : IDraw
 
     private void DrawRoomGrid(ConsoleColor color, char c = '+') => writeResetChar(c, color);
 
-    private bool DrawFountainLocation(IMainRoom.Coordinate coord, ConsoleColor color, char c = '+')
+    private bool DrawItemLocation(IMainRoom.Coordinate coord, IMainRoom.Coordinate place, ConsoleColor color, char c = '+')
     {
-        if (coord != _fountainRoom.Fountain) return false;
+        //if (coord != _fountainRoom.Fountain) return false;
+        if (coord != place) return false;
         writeResetChar(c, color);
         return true;
     }

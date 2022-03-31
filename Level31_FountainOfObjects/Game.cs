@@ -10,10 +10,11 @@ internal class Game : IGame
     {
         _mainRoom = new MainRoom(rows, columns);
         var fountainRoom = new FountainRoom(_mainRoom.Rows, _mainRoom.Columns);
+        var pitRoom = new PitRoom(_mainRoom.Rows, _mainRoom.Columns);
         Console.WriteLine("what is your name?");
         var name = Console.ReadLine();
-        _dasPlayer = new Player(name, _mainRoom, fountainRoom);
-        _dasDraw = new Draw(_mainRoom, _dasPlayer, fountainRoom);
+        _dasPlayer = new Player(name, _mainRoom, fountainRoom, pitRoom);
+        _dasDraw = new Draw(_mainRoom, _dasPlayer, fountainRoom, pitRoom);
     }
 
 

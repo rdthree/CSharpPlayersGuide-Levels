@@ -7,17 +7,18 @@ internal class Player : IPlayer
     public int RowPosition { get; private set; }
     private MainRoom MainRoom { get; }
     private FountainRoom FountainRoom { get; }
+    private PitRoom PitRoom { get; }
     private readonly Controls _control;
 
-    internal Player(string? name, MainRoom mainRoom, FountainRoom fountainRoom)
+    internal Player(string? name, MainRoom mainRoom, FountainRoom fountainRoom, PitRoom pitroom)
     {
         _control = new Controls();
         Name = name;
         MainRoom = mainRoom;
         FountainRoom = fountainRoom;
+        PitRoom = pitroom;
         RowPosition = 0;
         ColumnPosition = 0;
-        //FountainRoom.LocateSenses();
     }
 
     public void Move()
@@ -42,8 +43,12 @@ internal class Player : IPlayer
 
     public SenseTypesCoordinates Position()
     {
-        var position = FountainRoom.SenseCoords[RowPosition, ColumnPosition];
-        return position;
+        var mainPos = MainRoom.SenseCoords[RowPosition, ColumnPosition];
+        var fountainPos = FountainRoom.SenseCoords[RowPosition, ColumnPosition];
+        var pitPos = PitRoom.SenseCoords[RowPosition, ColumnPosition];
+        if (pitPos != SenseTypesCoordinates.Nothing) return pitPos;
+        if (fountainPos != SenseTypesCoordinates.Nothing) return fountainPos;
+        return mainPos;
     }
 
     public void Score()

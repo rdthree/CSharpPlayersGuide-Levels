@@ -6,5 +6,7 @@ internal enum SenseTypesCoordinates
     See,
     Hear,
     Smell,
-    Fountain
+    Fountain,
+    Death,
+    Fear
 }
