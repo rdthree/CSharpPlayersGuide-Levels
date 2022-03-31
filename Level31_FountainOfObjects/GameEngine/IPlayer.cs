@@ -1,4 +1,4 @@
-﻿namespace Level31_FountainOfObjects;
+﻿namespace Level31_FountainOfObjects.GameEngine;
 
 internal interface IPlayer
 {
@@ -8,7 +8,7 @@ internal interface IPlayer
 
     void Move();
 
-    SenseTypesCoordinates PositionItems();
+    SenseTypes PositionItems();
 
     void Score();
 }

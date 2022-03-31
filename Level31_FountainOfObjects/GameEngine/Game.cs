@@ -1,6 +1,6 @@
 ﻿using Level31_FountainOfObjects.RoomsEnemies;
 
-namespace Level31_FountainOfObjects;
+namespace Level31_FountainOfObjects.GameEngine;
 
 internal class Game : IGame
 {

@@ -1,4 +1,6 @@
-﻿namespace Level31_FountainOfObjects;
+﻿using Level31_FountainOfObjects.GameEngine;
+
+namespace Level31_FountainOfObjects.RoomsEnemies;
 
 internal interface IMainRoom
 {
@@ -11,5 +13,5 @@ internal interface IMainRoom
 
 internal interface ISubRoom : IMainRoom
 {
-    SenseTypesCoordinates[,]? SenseCoords { get; }
+    SenseTypes[,]? SenseCoords { get; }
 }

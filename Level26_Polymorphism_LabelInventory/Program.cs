@@ -12,10 +12,11 @@ pack.Add(new Rope());
 
 internal class Pack
 {
+    // ReSharper disable once NotAccessedField.Local
     private readonly int _maxItems;
-    public int EmptySlots { get; private set; }
-    public double CurrentWeight { get; private set; }
-    public double CurrentVolume { get; private set; }
+    private int EmptySlots { get; set; }
+    private double CurrentWeight { get; set; }
+    private double CurrentVolume { get; set; }
     private readonly double _maxWeight;
     private readonly double _maxVolume;
     private readonly InventoryItem[] _items;
@@ -34,8 +35,10 @@ internal class Pack
         // general pack status, available slots, weight, volume
         foreach (var packItem in _items)
         {
+            // ReSharper disable once ConditionIsAlwaysTrueOrFalse
             if (packItem == null)
                 EmptySlots++;
+            // ReSharper disable once ConditionIsAlwaysTrueOrFalse
             else if (packItem != null)
             {
                 CurrentWeight += packItem.Weight();
@@ -45,24 +48,25 @@ internal class Pack
 
         if (EmptySlots == 0)
         {
-            Console.WriteLine($"pack full, no room for {item.ToString()}");
+            Console.WriteLine($"pack full, no room for {item}");
             Console.WriteLine(ToString());
             return false;
         }
 
         for (int i = 0; i < _items.Length; i++)
         {
+            // ReSharper disable once ConditionIsAlwaysTrueOrFalse
             if (_items[i] == null)
             {
                 if (item.Weight() + CurrentWeight > _maxWeight)
                 {
-                    Console.WriteLine($"too heavy, can't carry {item.ToString()}");
+                    Console.WriteLine($"too heavy, can't carry {item}");
                     return false;
                 }
 
                 if (item.Volume() + CurrentVolume > _maxVolume)
                 {
-                    Console.WriteLine($"too large, can't fit {item.ToString()}");
+                    Console.WriteLine($"too large, can't fit {item}");
                     return false;
                 }
 

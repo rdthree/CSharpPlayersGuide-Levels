@@ -1,16 +1,14 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
-using MonchoUtils;
-
-var caca = Rectangle.Square(3);
-Console.WriteLine(caca);
+var cacaRectangle = Rectangle.Square(3);
+Console.WriteLine(cacaRectangle);
 internal class Rectangle
 {
-    private double Width { get; } = 0;
-    private double Height { get; } = 0;
+    private double Width { get; }
+    private double Height { get; }
     internal double Area => Width * Height;
 
-    internal Rectangle(double width, double height)
+    private Rectangle(double width, double height)
     {
         Width = width;
         Height = height;

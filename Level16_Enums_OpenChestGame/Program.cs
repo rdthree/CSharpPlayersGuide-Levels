@@ -1,7 +1,6 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
-using System.Net;
-using MonchoUtils;
+
 
 /*
  * using enums
@@ -12,7 +11,9 @@ using MonchoUtils;
  */
 
 BoxState box = BoxState.Closed;
+#pragma warning disable CS0168
 BoxAction boxMove;
+#pragma warning restore CS0168
 
 
 while (true)
@@ -35,10 +36,7 @@ while (true)
     else if (boxInput == "lock" && box == BoxState.Closed) box = BoxState.Locked;
     else if (boxInput == "unlock" && box == BoxState.Locked) box = BoxState.Closed;
     else
-    {
         Console.WriteLine("");
-        continue;
-    }
     
 }
 

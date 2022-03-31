@@ -1,7 +1,5 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
-using MonchoUtils;
-
 Console.WriteLine($"factorial of 5 = {Factorial(5)}");
 Factorial(5);
 Console.WriteLine("");

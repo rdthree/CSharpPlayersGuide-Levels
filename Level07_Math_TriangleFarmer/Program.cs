@@ -5,19 +5,27 @@
  * https://gist.github.com/ZacharyPatten/798ed612d692a560bdd529367b6a7dbd#example-6-optional-code-style-changes-over-example-5
  */
 
-Console.Beep(440, 100);
-Console.Beep(840, 50);
-Console.Beep(1240, 100);
+using static System.Console;
 
-Console.Title = "Level 7";
-Console.BackgroundColor = ConsoleColor.DarkBlue;
-Console.ForegroundColor = ConsoleColor.White;
+#pragma warning disable CA1416
+Beep(440, 100);
+#pragma warning restore CA1416
+#pragma warning disable CA1416
+Beep(840, 50);
+#pragma warning restore CA1416
+#pragma warning disable CA1416
+Beep(1240, 100);
+#pragma warning restore CA1416
+
+Title = "Level 7";
+BackgroundColor = ConsoleColor.DarkBlue;
+ForegroundColor = ConsoleColor.White;
 
 CalcTriArea();
 EggDivider();
 PassTheDuchy();
 
-Console.ReadKey();
+ReadKey();
 
 /*
  * users enter how many provinces, duchies, estates they have.  the program returns the total value
@@ -28,14 +36,14 @@ Console.ReadKey();
 
 void PassTheDuchy()
 {
-    Console.WriteLine("What is your new worth?");
-    Console.Write("Total Estates: ");
+    WriteLine("What is your new worth?");
+    Write("Total Estates: ");
     var estates = InputToUint();
-    Console.Write("Total Duchies: ");
+    Write("Total Duchies: ");
     var duchies = InputToUint() * 3;
-    Console.Write("Total Provinces: ");
+    Write("Total Provinces: ");
     var provinces = InputToUint() * 6;
-    Console.WriteLine($"You own:\n" +
+    WriteLine($"You own:\n" +
                       $"{duchies} \tin duchies\n" +
                       $"{estates} \tin estates\n" +
                       $"{provinces} \tin provinces\n" +
@@ -49,18 +57,18 @@ void PassTheDuchy()
  */
 void EggDivider()
 {
-    Console.Write($"Please input quantity of eggs (max {uint.MaxValue}): ");
+    Write($"Please input quantity of eggs (max {uint.MaxValue}): ");
     var eggs = InputToUint();
     var eggsDivided = eggs / 4;
     var eggsRemainder = eggs % 4;
-    Console.WriteLine($"Each sister gets {eggsDivided, 30}.\nThe duckbear gets {eggsRemainder, 30}.");
+    WriteLine($"Each sister gets {eggsDivided, 30}.\nThe duckbear gets {eggsRemainder, 30}.");
 
 
-    Console.WriteLine("\nFYI");
-    Console.WriteLine("These egg quantities result in the duckbear getting more eggs than each sister:");
+    WriteLine("\nFYI");
+    WriteLine("These egg quantities result in the duckbear getting more eggs than each sister:");
     for (var i = 0; i < 100; i++)
-        if (i / 4 < i % 4) Console.Write($"\n\t\t(({i})) ");
-    Console.WriteLine("\n");
+        if (i / 4 < i % 4) Write($"\n\t\t(({i})) ");
+    WriteLine("\n");
 }
 
 /*
@@ -69,48 +77,53 @@ void EggDivider()
  */
 void CalcTriArea()
 {
-    double triBase, triHeight, triArea;
+#pragma warning disable CS0168
+    double triArea;
+#pragma warning restore CS0168
 
     // welcome intro
-    Console.WriteLine("input the base and height of a triangle.  this program will return the area");
+    WriteLine("input the base and height of a triangle.  this program will return the area");
 
     // get input
-    Console.Write("triangle base: ");
+    Write("triangle base: ");
     //handleInputRef(ref triBase);
     //triBase = handleInput(triBase);
-    triBase = InputToDouble();
+    var triBase = InputToDouble();
 
-    Console.Write("triangle height: ");
+    Write("triangle height: ");
     //handleInputRef(ref triHeight);
     //triHeight = handleInput(triHeight);
-    triHeight = InputToDouble();
+    var triHeight = InputToDouble();
 
     // return result
-    Console.WriteLine($"{triBase} x {triHeight} = Area: {triBase * triHeight}");
+    WriteLine($"{triBase} x {triHeight} = Area: {triBase * triHeight}");
 }
 
 // function for returning result
 // validate input, error handling
 // this version uses ref to mutate the var directly
+#pragma warning disable CS8321
 void HandleInputRef(ref double input)
+#pragma warning restore CS8321
 {
-    while (!double.TryParse(Console.ReadLine(), out input))
-        Console.Write("please try again: ");
+    if (input <= 0) throw new ArgumentOutOfRangeException(nameof(input));
+    while (!double.TryParse(ReadLine(), out input))
+        Write("please try again: ");
 }
 
 // this version just returns a double
 double InputToDouble()
 {
     double newInput;
-    while (!double.TryParse(Console.ReadLine(), out newInput))
-        Console.Write("please try again: ");
+    while (!double.TryParse(ReadLine(), out newInput))
+        Write("please try again: ");
     return newInput;
 }
 
 uint InputToUint()
 {
     uint newInput;
-    while (!uint.TryParse(Console.ReadLine(), out newInput))
-        Console.Write("please try again: ");
+    while (!uint.TryParse(ReadLine(), out newInput))
+        Write("please try again: ");
     return newInput;
 }

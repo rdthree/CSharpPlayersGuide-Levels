@@ -20,6 +20,8 @@
  * https://stackoverflow.com/questions/37354142/c-sharp-console-how-to-readline-without-the-need-of-pressing-enter
 */
 
+using System.ComponentModel;
+
 (FoodType foodType, FoodIngredient foodIngredient, FoodSeasoning foodSeasoning) aFood;
 var foodType = FoodType.Soup;
 var foodIngredientType = FoodIngredient.Mushrooms;
@@ -77,6 +79,10 @@ FoodSeasoning FoodSeasoningSwitcher(FoodSeasoning foodSeasoningTypeSwitch)
 
 void CanIHitItAndQuit(FoodType foodTypeParam, FoodIngredient foodIngredient, FoodSeasoning foodSeasoning)
 {
+    if (!Enum.IsDefined(typeof(FoodIngredient), foodIngredient))
+        throw new InvalidEnumArgumentException(nameof(foodIngredient), (int)foodIngredient, typeof(FoodIngredient));
+    if (!Enum.IsDefined(typeof(FoodSeasoning), foodSeasoning))
+        throw new InvalidEnumArgumentException(nameof(foodSeasoning), (int)foodSeasoning, typeof(FoodSeasoning));
     aFood = (foodTypeParam, foodIngredientType, foodSeasoningType);
     Console.Clear();
     Console.ResetColor();

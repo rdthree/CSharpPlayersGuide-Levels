@@ -4,8 +4,6 @@
 // record for Sword, basic setting is iron and no gemstone
 // create two variations using with expressions
 
-using System.ComponentModel;
-
 var basic = new Sword(Material.Iron, Gemstone.None, 12.0f);
 
 var badBoy = basic with { SwordMaterial = Material.Binarium, SwordGemstone = Gemstone.Bitstone };

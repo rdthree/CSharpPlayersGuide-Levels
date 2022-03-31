@@ -4,10 +4,10 @@
  */
 Console.WriteLine("what kind of thing are you talking about");
 // input the thing in question
-string a = Console.ReadLine();
+string? a = Console.ReadLine();
 Console.WriteLine("desribe it");
 // input a description
-string b = Console.ReadLine();
+string? b = Console.ReadLine();
 // built-in descriptions
 string c = "of doom";
 string d = "3000";

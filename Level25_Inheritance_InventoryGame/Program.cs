@@ -1,8 +1,5 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
-using System.Runtime.InteropServices;
-using System.Security.Cryptography;
-
 Console.WriteLine("Hello, World!");
 
 Arrow arrow = new Arrow();
@@ -12,6 +9,7 @@ arrow.Weight();
 InventoryItem[] packItem = new InventoryItem[3];
 foreach (var item in packItem)
 {
+    // ReSharper disable once ConditionIsAlwaysTrueOrFalse
     if (item == null)
         Console.WriteLine("null");
 }
@@ -30,66 +28,74 @@ pack.Add(new Water());
 
 internal class Pack
 {
+    // ReSharper disable once NotAccessedField.Local
     private readonly int _maxItems;
-    public int _emptySlots { get; private set; }
-    public double _currentWeight { get; private set; }
-    public double _currentVolume { get; private set; }
+    public static int EmptySlots => 0;
+
+    private double CurrentWeight { get; set; }
+    private double CurrentVolume { get; set; }
     private readonly double _maxWeight;
     private readonly double _maxVolume;
-    private readonly InventoryItem[] Items;
+    private readonly InventoryItem[] _items;
 
     internal Pack(int items = 5, double maxWeight = 10.0, double maxVolume = 20.0)
     {
         _maxItems = items;
         _maxWeight = maxWeight;
         _maxVolume = maxVolume;
-        Items = new InventoryItem[items];
+        _items = new InventoryItem[items];
     }
 
     public bool Add(InventoryItem item)
     {
-        int _emptySlots = 0;
+        int emptySlots = 0;
         // general pack status, available slots, weight, volume
-        foreach (var packItem in Items)
+        foreach (var packItem in _items)
         {
+            // ReSharper disable once ConditionIsAlwaysTrueOrFalse
             if (packItem == null)
-                _emptySlots++;
-            else if (packItem != null)
+                emptySlots++;
+            else
             {
-                _currentWeight += packItem.Weight();
-                _currentVolume += packItem.Volume();
+                // ReSharper disable once ConditionIsAlwaysTrueOrFalse
+                if (packItem != null)
+                {
+                    CurrentWeight += packItem.Weight();
+                    CurrentVolume += packItem.Volume();
+                }
             }
         }
 
-        if (_emptySlots == 0)
+        if (emptySlots == 0)
         {
             Console.WriteLine($"pack full, no room for {item.GetType()}");
             return false;
         }
 
-        for (int i = 0; i < Items.Length; i++)
+        for (int i = 0; i < _items.Length; i++)
         {
-            if (Items[i] == null)
+            // ReSharper disable once ConditionIsAlwaysTrueOrFalse
+            if (_items[i] == null)
             {
-                if (item.Weight() + _currentWeight > _maxWeight)
+                if (item.Weight() + CurrentWeight > _maxWeight)
                 {
                     Console.WriteLine($"too heavy, can't carry {item.GetType()}");
                     return false;
                 }
 
-                if (item.Volume() + _currentVolume > _maxVolume)
+                if (item.Volume() + CurrentVolume > _maxVolume)
                 {
                     Console.WriteLine($"too large, can't fit {item.GetType()}");
                     return false;
                 }
 
-                Items[i] = item;
+                _items[i] = item;
                 Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine($"added {item.GetType()}");
                 Console.ResetColor();
-                Console.WriteLine($"remaining slots: {_emptySlots} " +
-                                  $"| available weight: {_maxWeight - _currentWeight} " +
-                                  $"| available space: {_maxVolume - _currentVolume}");
+                Console.WriteLine($"remaining slots: {emptySlots} " +
+                                  $"| available weight: {_maxWeight - CurrentWeight} " +
+                                  $"| available space: {_maxVolume - CurrentVolume}");
                 return true;
             }
         }

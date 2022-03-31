@@ -1,6 +1,6 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
-var game = new Game();
+var unused = new Game();
 
 // TODO: TRACK WINS
 // TODO: THERE IS A WEIRD GLITCH AT STARTUP WITH THE EMPTY TILE, HAPPENED WHEN MOVING LOGIC TO PLAYER FROM BOARDUI
@@ -10,8 +10,11 @@ var game = new Game();
 
 internal class Game
 {
+    public int Size { get; }
+
     internal Game(int size = 4)
     {
+        Size = size;
         var board = new Board();
         var player = new Player(board);
         var bui = new BoardUI(board);

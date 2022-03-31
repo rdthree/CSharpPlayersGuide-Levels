@@ -131,7 +131,9 @@ internal class GameRecordTracker
         }
         else if (_playerTwo is { WinRound: true })
         {
+#pragma warning disable CS8602
             Console.WriteLine($"{_playerTwo?.Name} wins round, {_playerTwo.Choice} beats {_playerOne.Choice}!");
+#pragma warning restore CS8602
             _playerTwo.Wins++;
             _playerOne.WinRound = false;
             _playerOne.Losses++;

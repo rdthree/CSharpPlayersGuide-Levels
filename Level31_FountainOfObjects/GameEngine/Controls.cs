@@ -1,8 +1,9 @@
-﻿namespace Level31_FountainOfObjects;
+﻿namespace Level31_FountainOfObjects.GameEngine;
 
 internal class Controls : IControls
 {
     public HeadingTypes Direction { get; private set; } = HeadingTypes.None;
+    public bool IsShoot { get; private set; }
 
     public HeadingTypes Go()
     {
@@ -19,6 +20,20 @@ internal class Controls : IControls
         };
         return Direction;
     }
+
+    public bool Shoot()
+    {
+         Console.Write("x to Shoot");
+         var k = Console.ReadKey().KeyChar;
+         Console.WriteLine();
+         IsShoot = k switch
+         {
+             'x' => IsShoot = true,
+             _ => IsShoot = false 
+         };
+         return IsShoot;       
+    }
+    
 
     private HeadingTypes North()
     {

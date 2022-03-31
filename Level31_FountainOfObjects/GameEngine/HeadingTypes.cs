@@ -1,4 +1,4 @@
-﻿namespace Level31_FountainOfObjects;
+﻿namespace Level31_FountainOfObjects.GameEngine;
 
 internal enum HeadingTypes
 {

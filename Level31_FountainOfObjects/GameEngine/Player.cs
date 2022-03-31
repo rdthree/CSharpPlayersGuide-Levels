@@ -1,6 +1,6 @@
 ﻿using Level31_FountainOfObjects.RoomsEnemies;
 
-namespace Level31_FountainOfObjects;
+namespace Level31_FountainOfObjects.GameEngine;
 
 internal class Player : IPlayer
 {
@@ -48,17 +48,17 @@ internal class Player : IPlayer
         }
     }
 
-    public SenseTypesCoordinates PositionItems()
+    public SenseTypes PositionItems()
     {
         var mainPos = MainRoom.SenseCoords[RowPosition, ColumnPosition];
         var amarokPos = Amarok.SenseCoords[RowPosition, ColumnPosition];
         var fountainPos = FountainRoom.SenseCoords[RowPosition, ColumnPosition];
         var pitPos = PitRoom.SenseCoords[RowPosition, ColumnPosition];
         var maelstromPos = Maelstrom.SenseCoords[RowPosition, ColumnPosition];
-        if (amarokPos != SenseTypesCoordinates.Nothing) return amarokPos;
-        if (maelstromPos != SenseTypesCoordinates.Nothing)
+        if (amarokPos != SenseTypes.Nothing) return amarokPos;
+        if (maelstromPos != SenseTypes.Nothing)
         {
-            if (maelstromPos == SenseTypesCoordinates.Blown)
+            if (maelstromPos == SenseTypes.Blown)
             {
                 RowPosition = 10;
                 ColumnPosition = 5;
@@ -66,8 +66,8 @@ internal class Player : IPlayer
             else return maelstromPos;
         }
 
-        if (pitPos != SenseTypesCoordinates.Nothing) return pitPos;
-        if (fountainPos != SenseTypesCoordinates.Nothing) return fountainPos;
+        if (pitPos != SenseTypes.Nothing) return pitPos;
+        if (fountainPos != SenseTypes.Nothing) return fountainPos;
         return mainPos;
     }
 

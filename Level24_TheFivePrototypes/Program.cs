@@ -1,12 +1,10 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
-using System.ComponentModel.Design;
-using System.Data;
-using MonchoUtils;
+
 
 // point class tests
 var point1 = new Point(2.0, 3.0);
-var point2 = new Point(-4.0, 0.0);
+var unused = new Point(-4.0, 0.0);
 var origin = Point.Origin();
 Console.WriteLine($"x = {point1.X}, y = {point1.Y}");
 Console.WriteLine($"origin = ({origin.X},{origin.Y})");
@@ -21,7 +19,6 @@ Console.WriteLine($"color3: R{color3.R}, G{color3.G}, B{color3.B}");
 
 // card class tests
 List<Card> deck = new List<Card>();
-var cardNumber = 0;
 foreach (var color in Enum.GetValues<CardColor>())
 {
     foreach (var rank in Enum.GetValues<CardRank>())
@@ -58,7 +55,7 @@ while (goDoor)
     Console.Write($"door is: {door.State}, what would you like to do? ");
     Console.ResetColor();
     var command = Console.ReadLine();
-    bool userInput = command switch
+    bool unused1 = command switch
     {
         "o" => door.Open(),
         "c" => door.Close(),
@@ -217,7 +214,11 @@ internal class LockingDoor
     public DoorStates State { get; set; } = DoorStates.Open;
 
     internal LockingDoor(string? password) => _password = password;
-    internal LockingDoor(string? password, DoorStates state) => _password = password;
+    internal LockingDoor(string? password, DoorStates state)
+    {
+        State = state;
+        _password = password;
+    }
 
     public bool Open()
     {
@@ -330,6 +331,7 @@ internal class LockingDoor
         internal static void Locked() => Console.WriteLine("door is locked");
         internal static void AlreadyLocked() => Console.WriteLine("door is already locked");
 
+        // ReSharper disable once UnusedMember.Local
         internal static void Unlocked() => Console.WriteLine("door is unlocked");
         internal static void AlreadyUnlocked() => Console.WriteLine("door is already unlocked");
     }
@@ -355,9 +357,11 @@ enum DoorStates
 
 internal static class PasswordValidator
 {
+    // ReSharper disable once NotAccessedField.Local
     private static string? _password;
 
     //internal PasswordValidator(string? password)
+    // ReSharper disable once EmptyConstructor
     static PasswordValidator()
     {
     }
@@ -410,7 +414,7 @@ internal static class PasswordValidator
                 }
 
                 if (upperCaseCheck != true || lowerCaseCheck != true || numberCheck != true ||
-                    badChar != false)
+                    badChar)
                 {
                     Console.WriteLine("invalid password, please try again.");
                     continue;

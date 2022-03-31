@@ -1,4 +1,6 @@
-﻿namespace Level31_FountainOfObjects.RoomsEnemies;
+﻿using Level31_FountainOfObjects.GameEngine;
+
+namespace Level31_FountainOfObjects.RoomsEnemies;
 
 internal class MainRoom : IMainRoom
 {
@@ -6,20 +8,20 @@ internal class MainRoom : IMainRoom
     {
         Rows = rows;
         Columns = columns;
-        SenseCoords = new SenseTypesCoordinates[Rows, Columns];
+        SenseCoords = new SenseTypes[Rows, Columns];
         SetupRoom();
     }
 
     public int Rows { get; }
     public int Columns { get; }
-    public SenseTypesCoordinates[,] SenseCoords { get; }
+    public SenseTypes[,] SenseCoords { get; }
 
 
     private void SetupRoom()
     {
         for (var i = 0; i < Rows; i++)
         for (var j = 0; j < Columns; j++)
-            SenseCoords[i, j] = SenseTypesCoordinates.Nothing;
+            SenseCoords[i, j] = SenseTypes.Nothing;
     }
 
     protected void SenseCoordinate(int i, int j, IMainRoom.Coordinate item, int rowDist, int colDist,
@@ -68,8 +70,8 @@ internal class MainRoom : IMainRoom
     {
     }
 
-    protected virtual SenseTypesCoordinates SenseTypeSelector(List<IMainRoom.Coordinate> sense)
+    protected virtual SenseTypes SenseTypeSelector(List<IMainRoom.Coordinate> sense)
     {
-        return SenseTypesCoordinates.Nothing;
+        return SenseTypes.Nothing;
     }
 }

@@ -1,6 +1,6 @@
-﻿namespace Level31_FountainOfObjects;
+﻿namespace Level31_FountainOfObjects.GameEngine;
 
-internal enum SenseTypesCoordinates
+internal enum SenseTypes
 {
     Nothing,
     See,

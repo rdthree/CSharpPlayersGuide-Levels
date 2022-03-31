@@ -59,7 +59,9 @@ internal class Rectangle
 {
     private double _width;
     private double _height;
+#pragma warning disable CS0169
     private double _area;
+#pragma warning restore CS0169
     
     Rectangle(double width, double height)
     {

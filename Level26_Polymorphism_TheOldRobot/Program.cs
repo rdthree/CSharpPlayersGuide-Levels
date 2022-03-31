@@ -1,6 +1,4 @@
-﻿using System.Runtime.InteropServices.ComTypes;
-
-Game game = new Game(9);
+﻿var game = new Game(9);
 game.Play();
 
 public class Game

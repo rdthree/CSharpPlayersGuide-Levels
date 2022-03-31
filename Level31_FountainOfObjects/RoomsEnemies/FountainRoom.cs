@@ -1,4 +1,6 @@
-﻿namespace Level31_FountainOfObjects.RoomsEnemies;
+﻿using Level31_FountainOfObjects.GameEngine;
+
+namespace Level31_FountainOfObjects.RoomsEnemies;
 
 internal class FountainRoom : MainRoom, ISubRoom
 {
@@ -27,14 +29,14 @@ internal class FountainRoom : MainRoom, ISubRoom
         SenseCoordinate(i, j, Fountain, 0, 0, FountainCoords);
     }
 
-    protected override SenseTypesCoordinates SenseTypeSelector(List<IMainRoom.Coordinate> sense)
+    protected override SenseTypes SenseTypeSelector(List<IMainRoom.Coordinate> sense)
     {
-        SenseTypesCoordinates senseTypeCoordinates;
-        if (sense == HearingCoords) senseTypeCoordinates = SenseTypesCoordinates.Hear;
-        else if (sense == SeeingCoords) senseTypeCoordinates = SenseTypesCoordinates.See;
-        else if (sense == SmellingCoords) senseTypeCoordinates = SenseTypesCoordinates.Smell;
-        else if (sense == FountainCoords) senseTypeCoordinates = SenseTypesCoordinates.Fountain;
-        else senseTypeCoordinates = SenseTypesCoordinates.Nothing;
-        return senseTypeCoordinates;
+        SenseTypes senseType;
+        if (sense == HearingCoords) senseType = SenseTypes.Hear;
+        else if (sense == SeeingCoords) senseType = SenseTypes.See;
+        else if (sense == SmellingCoords) senseType = SenseTypes.Smell;
+        else if (sense == FountainCoords) senseType = SenseTypes.Fountain;
+        else senseType = SenseTypes.Nothing;
+        return senseType;
     }
 }

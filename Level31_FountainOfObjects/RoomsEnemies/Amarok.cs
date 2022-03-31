@@ -1,4 +1,6 @@
-﻿namespace Level31_FountainOfObjects.RoomsEnemies;
+﻿using Level31_FountainOfObjects.GameEngine;
+
+namespace Level31_FountainOfObjects.RoomsEnemies;
 
 internal class Amarok : MainRoom, ISubRoom
 {
@@ -22,12 +24,12 @@ internal class Amarok : MainRoom, ISubRoom
         SenseCoordinate(i, j, AmarokLocation, 1, 1, AmarokSmellCoords);
     }
 
-    protected override SenseTypesCoordinates SenseTypeSelector(List<IMainRoom.Coordinate> sense)
+    protected override SenseTypes SenseTypeSelector(List<IMainRoom.Coordinate> sense)
     {
-        SenseTypesCoordinates senseTypeCoordinates;
-        if (sense == AmarokCoords) senseTypeCoordinates = SenseTypesCoordinates.Death;
-        else if (sense == AmarokSmellCoords) senseTypeCoordinates = SenseTypesCoordinates.Fear;
-        else senseTypeCoordinates = SenseTypesCoordinates.Nothing;
-        return senseTypeCoordinates;
+        SenseTypes senseType;
+        if (sense == AmarokCoords) senseType = SenseTypes.Death;
+        else if (sense == AmarokSmellCoords) senseType = SenseTypes.Fear;
+        else senseType = SenseTypes.Nothing;
+        return senseType;
     }
 }

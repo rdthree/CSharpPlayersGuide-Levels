@@ -49,7 +49,7 @@ while (manticoreHealth > 0 || cityHealth > 0)
     else if (round % 3 == 0 || round % 5 == 0) damage = damageMed;
 
     // stats should update each round
-    GameStats(damage, round, cityHealth, manticoreHealth, manticoreDist, padding);
+    GameStats(damage, round, cityHealth, manticoreHealth, padding);
 
     // input next cannon shot at end of stats
     Console.Write("Input Range: ");
@@ -69,11 +69,11 @@ while (manticoreHealth > 0 || cityHealth > 0)
 
 Console.ReadKey();
 
-void GameStats(int damage, int currentRound, int playerHealth, int enemyHealth, int enemyLocation, int paddings)
+void GameStats(int damage, int currentRound, int playerHealth, int enemyHealth, int paddings)
 {
     // for some reason i can't pass this as a const parameter...caca!
     const int whitespace = 20;
-    
+
     Console.WriteLine(("").PadRight(paddings, '-'));
     Console.WriteLine($"Round:              {currentRound,whitespace}");
     Console.WriteLine($"Possible Damage:    {damage,whitespace}");
@@ -105,6 +105,7 @@ bool Hit(int shot, int badDist, int damage, int damagePowerMin, int damagePowerM
             Console.ForegroundColor = ConsoleColor.Black;
             Console.WriteLine("HIT");
         }
+
         Console.ResetColor();
         return true;
     }
@@ -120,6 +121,7 @@ bool Hit(int shot, int badDist, int damage, int damagePowerMin, int damagePowerM
             Console.ForegroundColor = ConsoleColor.Red;
             Console.WriteLine($"UNDERSHOT by {badDist - shot}");
         }
+
         Console.ResetColor();
         return false;
     }
@@ -129,14 +131,18 @@ bool EndGame(int playerHealth, int enemyHealth)
 {
     if (enemyHealth <= 0)
     {
+#pragma warning disable CA1416
         Console.Beep(500, 150);
+#pragma warning restore CA1416
         Console.ForegroundColor = ConsoleColor.Cyan;
         Console.WriteLine($"WIN");
         return true;
     }
     else if (playerHealth <= 0)
     {
+#pragma warning disable CA1416
         Console.Beep(250, 150);
+#pragma warning restore CA1416
         Console.ForegroundColor = ConsoleColor.DarkGreen;
         Console.WriteLine($"LOSE");
         return true;

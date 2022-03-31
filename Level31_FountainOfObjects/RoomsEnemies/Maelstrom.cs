@@ -1,4 +1,6 @@
-﻿namespace Level31_FountainOfObjects.RoomsEnemies;
+﻿using Level31_FountainOfObjects.GameEngine;
+
+namespace Level31_FountainOfObjects.RoomsEnemies;
 
 internal class Maelstrom : MainRoom, ISubRoom
 {
@@ -22,12 +24,12 @@ internal class Maelstrom : MainRoom, ISubRoom
         SenseCoordinate(i, j, MaelstromCoord, 4, 4, MaelstromWinds);
     }
 
-    protected override SenseTypesCoordinates SenseTypeSelector(List<IMainRoom.Coordinate> sense)
+    protected override SenseTypes SenseTypeSelector(List<IMainRoom.Coordinate> sense)
     {
-        SenseTypesCoordinates senseTypeCoordinates;
-        if (sense == MaelstromCoords) senseTypeCoordinates = SenseTypesCoordinates.Blown;
-        else if (sense == MaelstromWinds) senseTypeCoordinates = SenseTypesCoordinates.Fear;
-        else senseTypeCoordinates = SenseTypesCoordinates.Nothing;
-        return senseTypeCoordinates;
+        SenseTypes senseType;
+        if (sense == MaelstromCoords) senseType = SenseTypes.Blown;
+        else if (sense == MaelstromWinds) senseType = SenseTypes.Fear;
+        else senseType = SenseTypes.Nothing;
+        return senseType;
     }
 }

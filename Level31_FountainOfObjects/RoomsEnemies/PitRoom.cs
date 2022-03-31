@@ -1,4 +1,6 @@
-﻿namespace Level31_FountainOfObjects.RoomsEnemies;
+﻿using Level31_FountainOfObjects.GameEngine;
+
+namespace Level31_FountainOfObjects.RoomsEnemies;
 
 internal class PitRoom : MainRoom, ISubRoom
 {
@@ -22,12 +24,12 @@ internal class PitRoom : MainRoom, ISubRoom
         SenseCoordinate(i, j, Pit, 2, 2, PitEdgeCoords);
     }
 
-    protected override SenseTypesCoordinates SenseTypeSelector(List<IMainRoom.Coordinate> sense)
+    protected override SenseTypes SenseTypeSelector(List<IMainRoom.Coordinate> sense)
     {
-        SenseTypesCoordinates senseTypeCoordinates;
-        if (sense == PitCoords) senseTypeCoordinates = SenseTypesCoordinates.Death;
-        else if (sense == PitEdgeCoords) senseTypeCoordinates = SenseTypesCoordinates.Fear;
-        else senseTypeCoordinates = SenseTypesCoordinates.Nothing;
-        return senseTypeCoordinates;
+        SenseTypes senseType;
+        if (sense == PitCoords) senseType = SenseTypes.Death;
+        else if (sense == PitEdgeCoords) senseType = SenseTypes.Fear;
+        else senseType = SenseTypes.Nothing;
+        return senseType;
     }
 }
