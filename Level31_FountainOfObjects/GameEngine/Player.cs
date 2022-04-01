@@ -7,23 +7,15 @@ internal class Player : IPlayer
     public string? Name { get; }
     public int ColumnPosition { get; private set; }
     public int RowPosition { get; private set; }
-    private MainRoom MainRoom { get; }
-    private FountainRoom FountainRoom { get; }
-    private PitRoom PitRoom { get; }
-    private Maelstrom Maelstrom { get; }
-    private Amarok Amarok { get; }
-    private readonly Controls _control;
 
-    internal Player(string? name, MainRoom mainRoom, FountainRoom fountainRoom, PitRoom pitRoom, Maelstrom maelstrom,
-        Amarok amarok)
+    private readonly Controls _control;
+    private readonly Game _game;
+
+    internal Player(string? name, Game game)
     {
         _control = new Controls();
         Name = name;
-        MainRoom = mainRoom;
-        FountainRoom = fountainRoom;
-        PitRoom = pitRoom;
-        Maelstrom = maelstrom;
-        Amarok = amarok;
+        _game = game;
         RowPosition = 0;
         ColumnPosition = 0;
     }
@@ -36,25 +28,25 @@ internal class Player : IPlayer
             case HeadingTypes.North when RowPosition > 0:
                 RowPosition--;
                 break;
-            case HeadingTypes.South when RowPosition < MainRoom.Rows - 1:
+            case HeadingTypes.South when RowPosition < _game.MainRoom.Rows - 1:
                 RowPosition++;
                 break;
             case HeadingTypes.West when ColumnPosition > 0:
                 ColumnPosition--;
                 break;
-            case HeadingTypes.East when ColumnPosition < MainRoom.Columns - 1:
+            case HeadingTypes.East when ColumnPosition < _game.MainRoom.Columns - 1:
                 ColumnPosition++;
                 break;
         }
     }
 
-    public SenseTypes PositionItems()
+    public SenseTypes PlayerInteractions()
     {
-        var mainPos = MainRoom.SenseCoords[RowPosition, ColumnPosition];
-        var amarokPos = Amarok.SenseCoords[RowPosition, ColumnPosition];
-        var fountainPos = FountainRoom.SenseCoords[RowPosition, ColumnPosition];
-        var pitPos = PitRoom.SenseCoords[RowPosition, ColumnPosition];
-        var maelstromPos = Maelstrom.SenseCoords[RowPosition, ColumnPosition];
+        var mainPos = _game.MainRoom.SenseCoords[RowPosition, ColumnPosition];
+        var amarokPos = _game.Amarok.SenseCoords[RowPosition, ColumnPosition];
+        var fountainPos = _game.FountainRoom.SenseCoords[RowPosition, ColumnPosition];
+        var pitPos = _game.PitRoom.SenseCoords[RowPosition, ColumnPosition];
+        var maelstromPos = _game.Maelstrom.SenseCoords[RowPosition, ColumnPosition];
         if (amarokPos != SenseTypes.Nothing) return amarokPos;
         if (maelstromPos != SenseTypes.Nothing)
         {

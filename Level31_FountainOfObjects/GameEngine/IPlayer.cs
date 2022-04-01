@@ -8,7 +8,7 @@ internal interface IPlayer
 
     void Move();
 
-    SenseTypes PositionItems();
+    SenseTypes PlayerInteractions();
 
     void Score();
 }

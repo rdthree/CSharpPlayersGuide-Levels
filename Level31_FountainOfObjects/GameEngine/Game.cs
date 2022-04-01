@@ -4,21 +4,29 @@ namespace Level31_FountainOfObjects.GameEngine;
 
 internal class Game : IGame
 {
+    // player and ui
     private readonly Player _dasPlayer;
     private readonly Draw _dasDraw;
-    private readonly MainRoom _mainRoom;
+    
+    // places and things
+    internal MainRoom MainRoom { get; }
+    internal FountainRoom FountainRoom { get; }
+    internal PitRoom PitRoom { get; }
+    internal Maelstrom Maelstrom { get; }
+    internal Amarok Amarok { get; }
 
     public Game(int rows, int columns)
     {
-        _mainRoom = new MainRoom(rows, columns);
-        var fountainRoom = new FountainRoom(_mainRoom.Rows, _mainRoom.Columns);
-        var pitRoom = new PitRoom(_mainRoom.Rows, _mainRoom.Columns);
-        var maelstrom = new Maelstrom(_mainRoom.Rows, _mainRoom.Columns);
-        var amarok = new Amarok(_mainRoom.Rows, _mainRoom.Columns);
+        MainRoom = new MainRoom(rows, columns);
+        FountainRoom = new FountainRoom(rows, columns);
+        PitRoom = new PitRoom(rows, columns);
+        Maelstrom = new Maelstrom(rows, columns);
+        Amarok = new Amarok(rows, columns);
+        
         Console.WriteLine("what is your name?");
         var name = Console.ReadLine();
-        _dasPlayer = new Player(name, _mainRoom, fountainRoom, pitRoom, maelstrom, amarok);
-        _dasDraw = new Draw(_mainRoom, _dasPlayer, fountainRoom, pitRoom, maelstrom, amarok);
+        _dasPlayer = new Player(name, this);
+        _dasDraw = new Draw(_dasPlayer, this);
     }
 
 
@@ -26,11 +34,11 @@ internal class Game : IGame
     {
         Console.WriteLine(_dasPlayer.Name);
         var counter = 0;
-        while (counter < _mainRoom.Rows * _mainRoom.Columns)
+        while (counter < MainRoom.Rows * MainRoom.Columns)
         {
             _dasDraw.DrawRoom();
             Console.WriteLine($"Currently at ({_dasPlayer.RowPosition}, {_dasPlayer.ColumnPosition})");
-            Console.WriteLine($"{_dasPlayer.PositionItems()}");
+            Console.WriteLine($"{_dasPlayer.PlayerInteractions()}");
             _dasPlayer.Move();
             counter++;
         }

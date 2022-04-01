@@ -4,29 +4,20 @@ namespace Level31_FountainOfObjects.GameEngine;
 
 internal class Draw : IDraw
 {
-    private readonly MainRoom _mainRoom;
+    private readonly Game _game;
     private readonly Player _player;
-    private readonly FountainRoom _fountainRoom;
-    private readonly PitRoom _pitRoom;
-    private readonly Maelstrom _maelstrom;
-    private readonly Amarok _amarok;
-
-    internal Draw(MainRoom mainRoom, Player player, FountainRoom fountainRoom, PitRoom pitRoom, Maelstrom maelstrom,
-        Amarok amarok)
+    
+    internal Draw(Player player, Game game)
     {
-        _mainRoom = mainRoom;
+        _game = game;
         _player = player;
-        _fountainRoom = fountainRoom;
-        _pitRoom = pitRoom;
-        _maelstrom = maelstrom;
-        _amarok = amarok;
     }
 
     public void DrawRoom()
     {
-        for (var i = 0; i < _mainRoom.Rows; i++)
+        for (var i = 0; i < _game.MainRoom.Rows; i++)
         {
-            for (var j = 0; j < _mainRoom.Columns; j++)
+            for (var j = 0; j < _game.MainRoom.Columns; j++)
                 SpriteDrawOrder(i, j);
 
             Console.WriteLine();
@@ -44,19 +35,19 @@ internal class Draw : IDraw
     {
         var coord = new IMainRoom.Coordinate(i, j);
         if (DrawPlayerColor(_player.RowPosition, _player.ColumnPosition, i, j, '@')) return;
-        if (DrawItemLocation(coord, _fountainRoom.Fountain, ConsoleColor.Red, '#')) return;
-        if (DrawItemLocation(coord, _maelstrom.MaelstromCoord, ConsoleColor.Gray, 'W')) return;
-        if (DrawItemLocation(coord, _pitRoom.Pit, ConsoleColor.Magenta, 'P')) return;
-        if (DrawItemLocation(coord, _amarok.AmarokLocation, ConsoleColor.White, 'O')) return;
-        if (DrawSense(coord, _amarok.AmarokCoords, ConsoleColor.White, 'x')) return;
-        if (DrawSense(coord, _amarok.AmarokSmellCoords, ConsoleColor.White, 's')) return;
-        if (DrawSense(coord, _pitRoom.PitCoords, ConsoleColor.Cyan, '%')) return;
-        if (DrawSense(coord, _pitRoom.PitEdgeCoords, ConsoleColor.DarkGray, '%')) return;
-        if (DrawSense(coord, _maelstrom.MaelstromCoords, ConsoleColor.Gray, '>')) return;
-        if (DrawSense(coord, _maelstrom.MaelstromWinds, ConsoleColor.DarkYellow, '/')) return;
-        if (DrawSense(coord, _fountainRoom.SeeingCoords, ConsoleColor.Blue, '!')) return;
-        if (DrawSense(coord, _fountainRoom.SmellingCoords, ConsoleColor.Black, '~')) return;
-        if (DrawSense(coord, _fountainRoom.HearingCoords, ConsoleColor.Green, '?')) return;
+        if (DrawItemLocation(coord, _game.FountainRoom.Fountain, ConsoleColor.Red, '#')) return;
+        if (DrawItemLocation(coord, _game.Maelstrom.MaelstromCoord, ConsoleColor.Gray, 'W')) return;
+        if (DrawItemLocation(coord, _game.PitRoom.Pit, ConsoleColor.Magenta, 'P')) return;
+        if (DrawItemLocation(coord, _game.Amarok.AmarokLocation, ConsoleColor.White, 'O')) return;
+        if (DrawSense(coord, _game.Amarok.AmarokCoords, ConsoleColor.White, 'x')) return;
+        if (DrawSense(coord, _game.Amarok.AmarokSmellCoords, ConsoleColor.White, 's')) return;
+        if (DrawSense(coord, _game.PitRoom.PitCoords, ConsoleColor.Cyan, '%')) return;
+        if (DrawSense(coord, _game.PitRoom.PitEdgeCoords, ConsoleColor.DarkGray, '%')) return;
+        if (DrawSense(coord, _game.Maelstrom.MaelstromCoords, ConsoleColor.Gray, '>')) return;
+        if (DrawSense(coord, _game.Maelstrom.MaelstromWinds, ConsoleColor.DarkYellow, '/')) return;
+        if (DrawSense(coord, _game.FountainRoom.SeeingCoords, ConsoleColor.Blue, '!')) return;
+        if (DrawSense(coord, _game.FountainRoom.SmellingCoords, ConsoleColor.Black, '~')) return;
+        if (DrawSense(coord, _game.FountainRoom.HearingCoords, ConsoleColor.Green, '?')) return;
         DrawRoomGrid(ConsoleColor.Yellow, ':');
     }
 
