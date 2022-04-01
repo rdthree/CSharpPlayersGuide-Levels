@@ -1,6 +1,7 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
 using MonchoUtils;
+// ReSharper disable RedundantAssignment
 
 // rectangle class with getter and setter for width/height
 // methods for area
