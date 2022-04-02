@@ -14,4 +14,5 @@ internal interface IMainRoom
 internal interface ISubRoom : IMainRoom
 {
     SenseTypes[,]? SenseCoords { get; }
+    Coordinate Location { get; }
 }

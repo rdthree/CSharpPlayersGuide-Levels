@@ -6,28 +6,28 @@ internal class Amarok : MainRoom, ISubRoom
 {
     public Amarok(int rows, int columns) : base(rows, columns)
     {
-        AmarokLocation = new IMainRoom.Coordinate(Rows - 12, Columns - 46);
+        Location = new IMainRoom.Coordinate(Rows - 12, Columns - 46);
         LocateSenses();
     }
 
-    internal IMainRoom.Coordinate AmarokLocation { get; }
-    internal List<IMainRoom.Coordinate> AmarokCoords { get; } = new();
+    public IMainRoom.Coordinate Location { get; }
+    internal List<IMainRoom.Coordinate> AmarokEdges { get; } = new();
     internal List<IMainRoom.Coordinate> AmarokSmellCoords { get; } = new();
 
-    protected override void ItemSenseCoordinates(int i, int j)
+    protected override void AdjacentSenseCoordinates(int i, int j)
     {
-        SenseCoordinateAdjacent(i, j, AmarokLocation, AmarokCoords);
+        SenseCoordinateAdjacent(i, j, Location, AmarokEdges);
     }
 
     protected override void AllSenseCoordinates(int i, int j)
     {
-        SenseCoordinate(i, j, AmarokLocation, 1, 1, AmarokSmellCoords);
+        SenseCoordinate(i, j, Location, 1, 1, AmarokSmellCoords);
     }
 
     protected override SenseTypes SenseTypeSelector(List<IMainRoom.Coordinate> sense)
     {
         SenseTypes senseType;
-        if (sense == AmarokCoords) senseType = SenseTypes.Death;
+        if (sense == AmarokEdges) senseType = SenseTypes.Death;
         else if (sense == AmarokSmellCoords) senseType = SenseTypes.Fear;
         else senseType = SenseTypes.Nothing;
         return senseType;

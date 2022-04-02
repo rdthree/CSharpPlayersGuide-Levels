@@ -6,7 +6,7 @@ internal class Draw : IDraw
 {
     private readonly Game _game;
     private readonly Player _player;
-    
+
     internal Draw(Player player, Game game)
     {
         _game = game;
@@ -35,15 +35,15 @@ internal class Draw : IDraw
     {
         var coord = new IMainRoom.Coordinate(i, j);
         if (DrawPlayerColor(_player.RowPosition, _player.ColumnPosition, i, j, '@')) return;
-        if (DrawItemLocation(coord, _game.FountainRoom.Fountain, ConsoleColor.Red, '#')) return;
-        if (DrawItemLocation(coord, _game.Maelstrom.MaelstromCoord, ConsoleColor.Gray, 'W')) return;
-        if (DrawItemLocation(coord, _game.PitRoom.Pit, ConsoleColor.Magenta, 'P')) return;
-        if (DrawItemLocation(coord, _game.Amarok.AmarokLocation, ConsoleColor.White, 'O')) return;
-        if (DrawSense(coord, _game.Amarok.AmarokCoords, ConsoleColor.White, 'x')) return;
+        if (DrawItemLocation(coord, _game.FountainRoom, ConsoleColor.Red, '#')) return;
+        if (DrawItemLocation(coord, _game.Maelstrom, ConsoleColor.Gray, 'W')) return;
+        if (DrawItemLocation(coord, _game.PitRoom, ConsoleColor.Magenta, 'P')) return;
+        if (DrawItemLocation(coord, _game.Amarok, ConsoleColor.White, 'O')) return;
+        if (DrawSense(coord, _game.Amarok.AmarokEdges, ConsoleColor.White, 'x')) return;
         if (DrawSense(coord, _game.Amarok.AmarokSmellCoords, ConsoleColor.White, 's')) return;
-        if (DrawSense(coord, _game.PitRoom.PitCoords, ConsoleColor.Cyan, '%')) return;
+        //if (DrawSense(coord, _game.PitRoom.PitCoords, ConsoleColor.Cyan, '%')) return;
         if (DrawSense(coord, _game.PitRoom.PitEdgeCoords, ConsoleColor.DarkGray, '%')) return;
-        if (DrawSense(coord, _game.Maelstrom.MaelstromCoords, ConsoleColor.Gray, '>')) return;
+        if (DrawSense(coord, _game.Maelstrom.MaelstromEdges, ConsoleColor.Gray, '>')) return;
         if (DrawSense(coord, _game.Maelstrom.MaelstromWinds, ConsoleColor.DarkYellow, '/')) return;
         if (DrawSense(coord, _game.FountainRoom.SeeingCoords, ConsoleColor.Blue, '!')) return;
         if (DrawSense(coord, _game.FountainRoom.SmellingCoords, ConsoleColor.Black, '~')) return;
@@ -51,33 +51,36 @@ internal class Draw : IDraw
         DrawRoomGrid(ConsoleColor.Yellow, ':');
     }
 
-    private bool DrawSense(IMainRoom.Coordinate coord, List<IMainRoom.Coordinate> listSense, ConsoleColor color,
+
+    private static bool DrawPlayerColor(int rowPos, int colPos, int i, int j, char c = '+')
+    {
+        if (rowPos != i || colPos != j) return false;
+        WriteResetChar(c, ConsoleColor.Red);
+        return true;
+    }
+
+    private static void DrawRoomGrid(ConsoleColor color, char c = '+') => WriteResetChar(c, color);
+
+    private static bool DrawItemLocation(IMainRoom.Coordinate coord, ISubRoom place, ConsoleColor color,
+        char c = '+')
+    {
+        // fix these so all info is derived from the SubRoom class...then include bool to show that it is alive or dead based on if it got shots
+        //if (coord != _fountainRoom.Fountain) return false;
+        if (coord != place.Location) return false;
+        WriteResetChar(c, color);
+        return true;
+    }
+
+    private static bool DrawSense(IMainRoom.Coordinate coord, IEnumerable<IMainRoom.Coordinate> listSense,
+        ConsoleColor color,
         char c = '+')
     {
         if (listSense.All(coordinate => coord != coordinate)) return false;
-        writeResetChar(c, color);
+        WriteResetChar(c, color);
         return true;
     }
 
-    private bool DrawPlayerColor(int rowPos, int colPos, int i, int j, char c = '+')
-    {
-        if (rowPos != i || colPos != j) return false;
-        writeResetChar(c, ConsoleColor.Red);
-        return true;
-    }
-
-    private void DrawRoomGrid(ConsoleColor color, char c = '+') => writeResetChar(c, color);
-
-    private bool DrawItemLocation(IMainRoom.Coordinate coord, IMainRoom.Coordinate place, ConsoleColor color,
-        char c = '+')
-    {
-        //if (coord != _fountainRoom.Fountain) return false;
-        if (coord != place) return false;
-        writeResetChar(c, color);
-        return true;
-    }
-
-    private void writeResetChar(char c = '+', ConsoleColor color = ConsoleColor.Black)
+    private static void WriteResetChar(char c = '+', ConsoleColor color = ConsoleColor.Black)
     {
         Console.ForegroundColor = color;
         Console.Write(c.ToString());

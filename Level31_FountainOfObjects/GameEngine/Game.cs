@@ -17,12 +17,14 @@ internal class Game : IGame
 
     public Game(int rows, int columns)
     {
+        // places and things
         MainRoom = new MainRoom(rows, columns);
         FountainRoom = new FountainRoom(rows, columns);
         PitRoom = new PitRoom(rows, columns);
         Maelstrom = new Maelstrom(rows, columns);
         Amarok = new Amarok(rows, columns);
         
+        // start game
         Console.WriteLine("what is your name?");
         var name = Console.ReadLine();
         _dasPlayer = new Player(name, this);

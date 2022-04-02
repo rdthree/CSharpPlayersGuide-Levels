@@ -52,13 +52,12 @@ internal class Player : IPlayer
             {
                 RowPosition = 10;
                 ColumnPosition = 5;
-            } //move that fool
+            } 
             else return maelstromPos;
         }
 
         if (pitPos != SenseTypes.Nothing) return pitPos;
-        if (fountainPos != SenseTypes.Nothing) return fountainPos;
-        return mainPos;
+        return fountainPos != SenseTypes.Nothing ? fountainPos : mainPos;
     }
 
     public void Score()
