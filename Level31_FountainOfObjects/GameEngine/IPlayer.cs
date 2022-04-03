@@ -5,10 +5,6 @@ internal interface IPlayer
     string? Name { get; }
     int ColumnPosition { get; }
     int RowPosition { get; }
-
-    void Move();
-
+    int Moves { get; }
     SenseTypes PlayerInteractions();
-
-    void Score();
 }

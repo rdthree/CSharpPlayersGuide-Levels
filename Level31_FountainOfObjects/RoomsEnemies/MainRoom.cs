@@ -40,7 +40,7 @@ internal class MainRoom : IMainRoom
     protected void SenseCoordinateAdjacent(int i, int j, IMainRoom.Coordinate itemCoord,
         List<IMainRoom.Coordinate> coordList)
     {
-        var (row, column) = (Row: itemCoord.Row, Column: itemCoord.Column);
+        var (row, column) = (itemCoord.Row, itemCoord.Column);
         if (((i != row + 1 || j != column) && (i != row - 1 || j != column) &&
              (i != row || j != column + 1) && (i != row || j != column - 1))) return;
         var senseTypeCoordinates = SenseTypeSelector(coordList);

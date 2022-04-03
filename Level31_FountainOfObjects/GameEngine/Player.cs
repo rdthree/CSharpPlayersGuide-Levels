@@ -5,22 +5,24 @@ internal class Player : IPlayer
     public string? Name { get; }
     public int ColumnPosition { get; private set; }
     public int RowPosition { get; private set; }
+    public int Moves { get; private set; }
 
-    private readonly Controls _control;
+    public Controls Control { get; }
     private readonly Game _game;
 
     internal Player(string? name, Game game)
     {
-        _control = new Controls();
         Name = name;
+        Control = new Controls();
         _game = game;
         RowPosition = 0;
         ColumnPosition = 0;
+        Moves = 0;
     }
 
     public void Move()
     {
-        var direction = _control.Go();
+        var direction = Control.Go();
         switch (direction)
         {
             case HeadingTypes.North when RowPosition > 0:
@@ -35,7 +37,12 @@ internal class Player : IPlayer
             case HeadingTypes.East when ColumnPosition < _game.MainRoom.Columns - 1:
                 ColumnPosition++;
                 break;
+            case HeadingTypes.None:
+            default:
+                break;
         }
+
+        Moves++;
     }
 
     public SenseTypes PlayerInteractions()
@@ -58,9 +65,5 @@ internal class Player : IPlayer
 
         if (pitPos != SenseTypes.Nothing) return pitPos;
         return fountainPos != SenseTypes.Nothing ? fountainPos : mainPos;
-    }
-
-    public void Score()
-    {
     }
 }

@@ -2,5 +2,5 @@
 
 internal interface IDraw
 {
-    void DrawRoom();
+    void DrawRoom(bool drawRoom);
 }

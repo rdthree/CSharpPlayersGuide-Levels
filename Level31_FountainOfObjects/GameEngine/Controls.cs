@@ -4,11 +4,15 @@ internal class Controls : IControls
 {
     public HeadingTypes Direction { get; private set; } = HeadingTypes.None;
     public bool IsShoot { get; private set; }
+    public bool ShowMap { get; private set; }
 
     public HeadingTypes Go()
     {
+        Shoot(false);
+        Console.WriteLine("Direction (WASD) | Shoot (X) | Map (M)");
         Console.Write("Input Direction (WASD): ");
         var k = Console.ReadKey().KeyChar;
+        k = char.ToLower(k);
         Console.WriteLine();
         Direction = k switch
         {
@@ -16,52 +20,28 @@ internal class Controls : IControls
             's' => South(),
             'a' => West(),
             'd' => East(),
-            _ => None()
+            'x' => Shoot(true),
+            'm' => Map(!ShowMap),
+                _ => None()
         };
         return Direction;
     }
 
-    public bool Shoot()
+    public HeadingTypes Shoot(bool isShoot)
     {
-         Console.Write("x to Shoot");
-         var k = Console.ReadKey().KeyChar;
-         Console.WriteLine();
-         IsShoot = k switch
-         {
-             'x' => IsShoot = true,
-             _ => IsShoot = false 
-         };
-         return IsShoot;       
-    }
-    
-
-    private HeadingTypes North()
-    {
-        Console.WriteLine("You have moved North");
-        return Direction = HeadingTypes.North;
-    }
-
-    private HeadingTypes South()
-    {
-        Console.WriteLine("You have moved South");
-        return Direction = HeadingTypes.South;
-    }
-
-    private HeadingTypes West()
-    {
-        Console.WriteLine("You have moved West");
-        return Direction = HeadingTypes.West;
-    }
-
-    private HeadingTypes East()
-    {
-        Console.WriteLine("You have moved East");
-        return Direction = HeadingTypes.East;
-    }
-
-    private HeadingTypes None()
-    {
-        Console.WriteLine("You remain motionless");
+        IsShoot = isShoot;
         return Direction = HeadingTypes.None;
     }
+
+    public HeadingTypes Map(bool showMap)
+    {
+        ShowMap = showMap;
+        return Direction = HeadingTypes.None;
+    }
+
+    private HeadingTypes North() => Direction = HeadingTypes.North;
+    private HeadingTypes South() => Direction = HeadingTypes.South;
+    private HeadingTypes West() => Direction = HeadingTypes.West;
+    private HeadingTypes East() => Direction = HeadingTypes.East;
+    private HeadingTypes None() => Direction = HeadingTypes.None;
 }
