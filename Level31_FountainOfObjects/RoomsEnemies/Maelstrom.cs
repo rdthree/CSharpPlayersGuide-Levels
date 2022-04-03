@@ -13,22 +13,25 @@ internal class Maelstrom : MainRoom, ISubRoom
     public IMainRoom.Coordinate Location { get; }
     internal List<IMainRoom.Coordinate> MaelstromEdges { get; } = new();
     internal List<IMainRoom.Coordinate> MaelstromWinds { get; } = new();
+    internal List<IMainRoom.Coordinate> MaelstromBlown { get; } = new();
 
-    protected override void AdjacentSenseCoordinates(int i, int j)
+    protected override void BuildAdjSenseCoordinates(int i, int j)
     {
         SenseCoordinateAdjacent(i, j, Location, MaelstromEdges);
     }
 
-    protected override void AllSenseCoordinates(int i, int j)
+    protected override void BuildSenseCoordinates(int i, int j)
     {
         SenseCoordinate(i, j, Location, 4, 4, MaelstromWinds);
+        SenseCoordinate(i, j, Location, 0, 0, MaelstromBlown);
     }
 
-    protected override SenseTypes SenseTypeSelector(List<IMainRoom.Coordinate> sense)
+    protected override SenseTypes SenseTypeSelector(List<IMainRoom.Coordinate> coordList)
     {
         SenseTypes senseType;
-        if (sense == MaelstromEdges) senseType = SenseTypes.Blown;
-        else if (sense == MaelstromWinds) senseType = SenseTypes.Fear;
+        if (coordList == MaelstromBlown) senseType = SenseTypes.Blown;
+        else if (coordList == MaelstromEdges) senseType = SenseTypes.Chill;
+        else if (coordList == MaelstromWinds) senseType = SenseTypes.Alert;
         else senseType = SenseTypes.Nothing;
         return senseType;
     }

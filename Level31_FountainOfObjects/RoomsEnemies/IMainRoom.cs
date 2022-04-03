@@ -1,6 +1,4 @@
-﻿using Level31_FountainOfObjects.GameEngine;
-
-namespace Level31_FountainOfObjects.RoomsEnemies;
+﻿namespace Level31_FountainOfObjects.RoomsEnemies;
 
 internal interface IMainRoom
 {
@@ -9,10 +7,4 @@ internal interface IMainRoom
 
     record Coordinate(int Row, int Column);
     
-}
-
-internal interface ISubRoom : IMainRoom
-{
-    SenseTypes[,]? SenseCoords { get; }
-    Coordinate Location { get; }
 }

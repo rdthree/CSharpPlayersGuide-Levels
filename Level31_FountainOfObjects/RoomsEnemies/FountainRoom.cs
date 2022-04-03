@@ -18,25 +18,25 @@ internal class FountainRoom : MainRoom, ISubRoom
     public List<IMainRoom.Coordinate> SeeingCoords { get; } = new();
 
 
-    protected override void AdjacentSenseCoordinates(int i, int j)
+    protected override void BuildAdjSenseCoordinates(int i, int j)
     {
         SenseCoordinateAdjacent(i, j, Location, SeeingCoords);
     }
 
-    protected override void AllSenseCoordinates(int i, int j)
+    protected override void BuildSenseCoordinates(int i, int j)
     {
         SenseCoordinate(i, j, Location, 5, 5, HearingCoords);
         SenseCoordinate(i, j, Location, 3, 3, SmellingCoords);
         SenseCoordinate(i, j, Location, 0, 0, FountainCoords);
     }
 
-    protected override SenseTypes SenseTypeSelector(List<IMainRoom.Coordinate> sense)
+    protected override SenseTypes SenseTypeSelector(List<IMainRoom.Coordinate> coordList)
     {
         SenseTypes senseType;
-        if (sense == HearingCoords) senseType = SenseTypes.Hear;
-        else if (sense == SeeingCoords) senseType = SenseTypes.See;
-        else if (sense == SmellingCoords) senseType = SenseTypes.Smell;
-        else if (sense == FountainCoords) senseType = SenseTypes.Fountain;
+        if (coordList == HearingCoords) senseType = SenseTypes.Hear;
+        else if (coordList == SeeingCoords) senseType = SenseTypes.See;
+        else if (coordList == SmellingCoords) senseType = SenseTypes.Smell;
+        else if (coordList == FountainCoords) senseType = SenseTypes.Fountain;
         else senseType = SenseTypes.Nothing;
         return senseType;
     }

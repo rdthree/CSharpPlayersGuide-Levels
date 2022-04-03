@@ -7,7 +7,11 @@ internal enum SenseTypes
     Hear,
     Smell,
     Fountain,
-    Death,
-    Fear,
+    Maelstrom,
+    Pit,
+    Amarok,
+    End,
+    Chill,
+    Alert,
     Blown
 }
