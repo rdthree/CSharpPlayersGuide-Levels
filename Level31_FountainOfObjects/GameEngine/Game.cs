@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using Level31_FountainOfObjects.RoomsEnemies;
+﻿using Level31_FountainOfObjects.RoomsEnemies;
 
 namespace Level31_FountainOfObjects.GameEngine;
 
@@ -49,12 +48,18 @@ internal class Game : IGame
             var messages = Messages.Senses(_dasPlayer.PlayerInteractions());
             Console.ForegroundColor = ConsoleColor.Yellow;
             Console.WriteLine($"you have made {_dasPlayer.Moves} moves, {maxMoves - _dasPlayer.Moves} remaining.");
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine($"shoot status: {_dasPlayer.Control.IsShoot}");
+            Console.WriteLine($"{PitRoom.GetType().Name} is: {PitRoom.IsOn}");
+            Console.WriteLine($"{Amarok.GetType().Name} room is: {Amarok.IsOn}");
+            Console.WriteLine($"{Maelstrom.GetType().Name} room is: {Maelstrom.IsOn}");
+            Console.WriteLine($"{FountainRoom.GetType().Name} room is: {FountainRoom.IsOn}");
             Console.ForegroundColor = ConsoleColor.Cyan;
             Console.WriteLine(messages);
             Console.ResetColor();
 
             _dasPlayer.Move();
-            Console.Clear();
+            //Console.Clear();
             counter++;
         }
     }

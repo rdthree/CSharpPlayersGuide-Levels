@@ -13,9 +13,8 @@ internal class Draw : IDraw
         _player = player;
     }
 
-    public void DrawRoom(bool drawRoom = false)
+    public void DrawRoom()
     {
-        if (false) return;
         for (var i = 0; i < _game.MainRoom.Rows; i++)
         {
             for (var j = 0; j < _game.MainRoom.Columns; j++)
@@ -35,39 +34,51 @@ internal class Draw : IDraw
     private void SpriteDrawOrder(int i, int j)
     {
         var coord = new IMainRoom.Coordinate(i, j);
-        if (DrawPlayerColor(_player.RowPosition, _player.ColumnPosition, i, j, '@')) return;
-        if (DrawItemLocation(coord, _game.FountainRoom, ConsoleColor.Red, '#')) return;
-        if (DrawItemLocation(coord, _game.Maelstrom, ConsoleColor.Gray, 'W')) return;
-        if (DrawItemLocation(coord, _game.PitRoom, ConsoleColor.Magenta, 'P')) return;
-        if (DrawItemLocation(coord, _game.Amarok, ConsoleColor.White, 'O')) return;
-        if (DrawSense(coord, _game.Amarok.AmarokEdges, ConsoleColor.White, 'x')) return;
-        if (DrawSense(coord, _game.Amarok.AmarokSmellCoords, ConsoleColor.White, 's')) return;
-        //if (DrawSense(coord, _game.PitRoom.PitCoords, ConsoleColor.Cyan, '%')) return;
-        if (DrawSense(coord, _game.PitRoom.PitEdgeCoords, ConsoleColor.DarkGray, '%')) return;
-        if (DrawSense(coord, _game.Maelstrom.MaelstromEdges, ConsoleColor.Gray, '>')) return;
-        if (DrawSense(coord, _game.Maelstrom.MaelstromWinds, ConsoleColor.DarkYellow, '/')) return;
-        if (DrawSense(coord, _game.FountainRoom.SeeingCoords, ConsoleColor.Blue, '!')) return;
-        if (DrawSense(coord, _game.FountainRoom.SmellingCoords, ConsoleColor.Black, '~')) return;
-        if (DrawSense(coord, _game.FountainRoom.HearingCoords, ConsoleColor.Green, '?')) return;
+        if (DrawPlayer(coord, _player.Location, '@')) return;
+        if (DrawItemLocation(coord, _game.FountainRoom)) return;
+
+        _game.Amarok.IsOn = SubRoomOnOff(_player, _game.Amarok);
+        if (_game.Amarok.IsOn)
+        {
+            if (DrawItemLocation(coord, _game.Amarok)) return;
+            if (DrawSense(coord, _game.Amarok.EdgeCoords, ConsoleColor.White, 'x')) return;
+            if (DrawSense(coord, _game.Amarok.FieldCoords, ConsoleColor.White, 's')) return;
+        }
+
+        _game.PitRoom.IsOn = SubRoomOnOff(_player, _game.PitRoom);
+        if (_game.PitRoom.IsOn)
+        {
+            if (DrawItemLocation(coord, _game.PitRoom)) return;
+            if (DrawSense(coord, _game.PitRoom.ItemCoords, ConsoleColor.Cyan, '%')) return;
+            if (DrawSense(coord, _game.PitRoom.EdgeCoords, ConsoleColor.DarkGray, '%')) return;
+        }
+
+        _game.Maelstrom.IsOn = SubRoomOnOff(_player, _game.Maelstrom);
+        if (_game.Maelstrom.IsOn)
+        {
+            if (DrawItemLocation(coord, _game.Maelstrom)) return;
+            if (DrawSense(coord, _game.Maelstrom.FieldCoords, ConsoleColor.Gray, '>')) return;
+            if (DrawSense(coord, _game.Maelstrom.EdgeCoords, ConsoleColor.DarkYellow, '/')) return;
+        }
+
+        if (DrawSense(coord, _game.FountainRoom.EdgeCoords, ConsoleColor.Blue, '!')) return;
+        if (DrawSense(coord, _game.FountainRoom.FieldCoords, ConsoleColor.Black, '~')) return;
+        if (DrawSense(coord, _game.FountainRoom.OuterFieldCoords, ConsoleColor.Green, '?')) return;
         DrawRoomGrid(ConsoleColor.Yellow, ':');
     }
 
 
-    private static bool DrawPlayerColor(int rowPos, int colPos, int i, int j, char c = '+')
+    private static bool DrawPlayer(IMainRoom.Coordinate coord, IMainRoom.Coordinate playerCoord, char c = '+')
     {
-        if (rowPos != i || colPos != j) return false;
+        if (coord != playerCoord) return false;
         WriteResetChar(c, ConsoleColor.Red);
         return true;
     }
 
-
-    private static bool DrawItemLocation(IMainRoom.Coordinate coord, ISubRoom place, ConsoleColor color,
-        char c = '+')
+    private static bool DrawItemLocation(IMainRoom.Coordinate coord, ISubRoom place)
     {
-        // fix these so all info is derived from the SubRoom class...then include bool to show that it is alive or dead based on if it got shots
-        //if (coord != _fountainRoom.Fountain) return false;
         if (coord != place.Location) return false;
-        WriteResetChar(c, color);
+        WriteResetChar(place.ItemSymbol, place.ItemColor);
         return true;
     }
 
@@ -87,5 +98,23 @@ internal class Draw : IDraw
         Console.ForegroundColor = color;
         Console.Write(c.ToString());
         Console.ResetColor();
+    }
+
+    private static bool SubRoomOnOff(Player player, ISubRoom subRoom)
+    {
+        if (!player.Control.IsShoot) return subRoom.IsOn();
+        
+        var subRoomRow = subRoom.Location.Row;
+        var subRoomCol = subRoom.Location.Column;
+        var playerRow = player.Location.Row;
+        var playerCol = player.Location.Column;
+        var playerDir = player.Control.Direction;
+
+        if (playerDir == HeadingTypes.North && subRoomRow < playerRow && subRoomCol == playerCol) return false;
+        if (playerDir == HeadingTypes.South && subRoomRow > playerRow && subRoomCol == playerCol) return false;
+        if (playerDir == HeadingTypes.West && subRoomCol < playerCol && subRoomRow == playerRow) return false;
+        if (playerDir == HeadingTypes.East && subRoomCol > playerCol && subRoomRow == playerRow) return false;
+
+        return subRoom.IsOn();
     }
 }

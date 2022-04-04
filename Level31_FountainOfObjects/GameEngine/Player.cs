@@ -1,10 +1,13 @@
-﻿namespace Level31_FountainOfObjects.GameEngine;
+﻿using Level31_FountainOfObjects.RoomsEnemies;
+
+namespace Level31_FountainOfObjects.GameEngine;
 
 internal class Player : IPlayer
 {
     public string? Name { get; }
     public int ColumnPosition { get; private set; }
     public int RowPosition { get; private set; }
+    public IMainRoom.Coordinate Location { get; private set; }
     public int Moves { get; private set; }
 
     public Controls Control { get; }
@@ -17,6 +20,7 @@ internal class Player : IPlayer
         _game = game;
         RowPosition = 0;
         ColumnPosition = 0;
+        Location = new IMainRoom.Coordinate(RowPosition, ColumnPosition);
         Moves = 0;
     }
 
@@ -43,6 +47,7 @@ internal class Player : IPlayer
         }
 
         Moves++;
+        Location = new IMainRoom.Coordinate(RowPosition, ColumnPosition);
     }
 
     public SenseTypes PlayerInteractions()

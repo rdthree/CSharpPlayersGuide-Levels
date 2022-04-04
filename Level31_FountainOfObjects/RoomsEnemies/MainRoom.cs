@@ -14,10 +14,12 @@ internal class MainRoom : IMainRoom
 
     public int Rows { get; }
     public int Columns { get; }
+
     /// <summary>
     /// The list of "senses" as part of a 2D array representing locations on a game board
     /// </summary>
     public SenseTypes[,] SenseCoords { get; }
+
     protected bool IsAlive { get; set; } = true;
 
     private void SetupRoom()
@@ -47,7 +49,7 @@ internal class MainRoom : IMainRoom
         SenseCoords[i, j] = senseTypeCoordinates;
         coordList.Add(item: new IMainRoom.Coordinate(i, j));
     }
-    
+
 
     /// <summary>
     /// Get an items distance based on the center coordinates of another item.  Used to locate "senses"
@@ -80,7 +82,7 @@ internal class MainRoom : IMainRoom
         }
     }
 
-    
+
     /// <summary>
     /// Locate "sense" enums based on the item location.  Uses other methods as input and is part of a
     /// finalizing method that locates all "senses" using an i, j loop.
@@ -107,8 +109,5 @@ internal class MainRoom : IMainRoom
     /// </summary>
     /// <param name="coordList"></param>
     /// <returns></returns>
-    protected virtual SenseTypes SenseTypeSelector(List<IMainRoom.Coordinate> coordList)
-    {
-        return SenseTypes.Nothing;
-    }
+    protected virtual SenseTypes SenseTypeSelector(List<IMainRoom.Coordinate> coordList) => SenseTypes.Nothing;
 }

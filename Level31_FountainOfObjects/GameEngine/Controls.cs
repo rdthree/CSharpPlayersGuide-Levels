@@ -3,7 +3,7 @@
 internal class Controls : IControls
 {
     public HeadingTypes Direction { get; private set; } = HeadingTypes.None;
-    public bool IsShoot { get; private set; }
+    public bool IsShoot { get; set; }
     public bool ShowMap { get; private set; }
 
     public HeadingTypes Go()
@@ -20,7 +20,8 @@ internal class Controls : IControls
             's' => South(),
             'a' => West(),
             'd' => East(),
-            'x' => Shoot(true),
+            //'x' => Shoot(true),
+            'x' => Shoot(!IsShoot),
             'm' => Map(!ShowMap),
                 _ => None()
         };
@@ -30,13 +31,13 @@ internal class Controls : IControls
     public HeadingTypes Shoot(bool isShoot)
     {
         IsShoot = isShoot;
-        return Direction = HeadingTypes.None;
+        return Direction;
     }
 
-    public HeadingTypes Map(bool showMap)
+    private HeadingTypes Map(bool showMap)
     {
         ShowMap = showMap;
-        return Direction = HeadingTypes.None;
+        return Direction;
     }
 
     private HeadingTypes North() => Direction = HeadingTypes.North;
