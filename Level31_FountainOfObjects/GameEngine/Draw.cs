@@ -27,16 +27,13 @@ internal class Draw : IDraw
     private void SpriteDrawOrder(int i, int j)
     {
         var coord = new IMainRoom.Coordinate(i, j);
-
-        if (DrawPlayer(coord, _player.Location, '@')) return;
+        if (DrawPlayer(coord, _player.PlayerLocation, '@')) return;
         if (DrawItem(_player, _game.FountainRoom, coord)) return;
-        if (DrawItem(_player, _game.Amarok, coord)) return;
-        if (DrawItem(_player, _game.PitRoom, coord)) return;
-        if (DrawItem(_player, _game.Maelstrom, coord)) return;
-
+        if (_game.Amaroks.Any(amarok => DrawItem(_player, amarok, coord))) return;
+        if (_game.PitRooms.Any(pitRoom => DrawItem(_player, pitRoom, coord))) return;
+        if (_game.Maelstroms.Any(maelstrom => DrawItem(_player, maelstrom, coord))) return;
         DrawRoomGrid(ConsoleColor.Yellow, ':');
     }
-
 
     private static bool DrawPlayer(IMainRoom.Coordinate coord, IMainRoom.Coordinate playerCoord, char c = '+')
     {
@@ -49,20 +46,24 @@ internal class Draw : IDraw
     {
         place.IsOn = SubRoomOnOff(player, place);
         if (!place.IsOn) return false;
-
-        // this needs to be checked twice, once overall and once again for each item
-        if (place.ItemCoords.All(coordinate => coord != coordinate) &&
-            place.EdgeCoords.All(coordinate => coord != coordinate) &&
-            place.FieldCoords.All(coordinate => coord != coordinate) &&
-            place.OuterFieldCoords.All(coordinate => coord != coordinate)) return false;
+        if (CheckIfCoordinateIsUsed(place, coord)) return false;
 
         if (DrawItemLocation(coord, place)) return true;
         if (DrawSense(coord, place.ItemCoords, place.ItemColor, place.ItemSymbol)) return true;
         if (DrawSense(coord, place.EdgeCoords, place.EdgeColor, place.EdgeSymbol)) return true;
         if (DrawSense(coord, place.FieldCoords, place.FieldColor, place.FieldSymbol)) return true;
         if (DrawSense(coord, place.OuterFieldCoords, place.OuterFieldColor, place.OuterFieldSymbol)) return true;
-
         return true;
+    }
+
+    private static bool CheckIfCoordinateIsUsed(SubRoom place, IMainRoom.Coordinate coord)
+    {
+        if (place.ItemCoords.All(coordinate => coord != coordinate) &&
+            place.EdgeCoords.All(coordinate => coord != coordinate) &&
+            place.FieldCoords.All(coordinate => coord != coordinate) &&
+            place.OuterFieldCoords.All(coordinate => coord != coordinate)) return true;
+
+        return false;
     }
 
     private static bool DrawItemLocation(IMainRoom.Coordinate coord, ISubRoom place)
@@ -96,8 +97,8 @@ internal class Draw : IDraw
         {
             var subRoomRow = subRoom.Location.Row;
             var subRoomCol = subRoom.Location.Column;
-            var playerRow = player.Location.Row;
-            var playerCol = player.Location.Column;
+            var playerRow = player.PlayerLocation.Row;
+            var playerCol = player.PlayerLocation.Column;
             var playerDir = player.Control.Direction;
 
             if (playerDir == HeadingTypes.North && subRoomRow < playerRow && subRoomCol == playerCol) return false;

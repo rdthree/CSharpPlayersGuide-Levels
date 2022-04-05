@@ -13,7 +13,7 @@ internal class Amarok : SubRoom
         EdgeColor = ConsoleColor.DarkRed;
         FieldColor = ConsoleColor.Magenta;
         ItemSymbol = 'A';
-        EdgeSymbol = 'S';
+        EdgeSymbol = '!';
         FieldSymbol = 'x';
     }
 

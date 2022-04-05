@@ -3,8 +3,8 @@
 internal interface IPlayer
 {
     string? Name { get; }
-    int ColumnPosition { get; }
-    int RowPosition { get; }
+    int PlayerColumn { get; }
+    int PlayerRow { get; }
     int Moves { get; }
     SenseTypes PlayerInteractions();
 }
