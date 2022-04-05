@@ -24,49 +24,15 @@ internal class Draw : IDraw
         }
     }
 
-    /// <summary>
-    /// Draw console text sprites in order of appearance on a list of `if` `bool` methods.
-    /// `true` methods higher up the list will overwrite methods with overlapping coordinates lower down the list.  
-    /// Designed to be inserted into a nested i,j for loop.
-    /// </summary>
-    /// <param name="i">int i in a nested i,j for loop</param>
-    /// <param name="j">int j in a nested i,j for loop</param>
     private void SpriteDrawOrder(int i, int j)
     {
         var coord = new IMainRoom.Coordinate(i, j);
+
         if (DrawPlayer(coord, _player.Location, '@')) return;
-
-        if (_game.FountainRoom.IsOn)
-        {
-            if (DrawItemLocation(coord, _game.FountainRoom)) return;
-            if (DrawSense(coord, _game.FountainRoom.EdgeCoords, ConsoleColor.Blue, '!')) return;
-            if (DrawSense(coord, _game.FountainRoom.FieldCoords, ConsoleColor.Black, '~')) return;
-            if (DrawSense(coord, _game.FountainRoom.OuterFieldCoords, ConsoleColor.Green, '?')) return;
-        }
-
-        _game.Amarok.IsOn = SubRoomOnOff(_player, _game.Amarok);
-        if (_game.Amarok.IsOn)
-        {
-            if (DrawItemLocation(coord, _game.Amarok)) return;
-            if (DrawSense(coord, _game.Amarok.EdgeCoords, ConsoleColor.White, 'x')) return;
-            if (DrawSense(coord, _game.Amarok.FieldCoords, ConsoleColor.White, 's')) return;
-        }
-
-        _game.PitRoom.IsOn = SubRoomOnOff(_player, _game.PitRoom);
-        if (_game.PitRoom.IsOn)
-        {
-            if (DrawItemLocation(coord, _game.PitRoom)) return;
-            if (DrawSense(coord, _game.PitRoom.ItemCoords, ConsoleColor.Cyan, '%')) return;
-            if (DrawSense(coord, _game.PitRoom.EdgeCoords, ConsoleColor.DarkGray, '%')) return;
-        }
-
-        _game.Maelstrom.IsOn = SubRoomOnOff(_player, _game.Maelstrom);
-        if (_game.Maelstrom.IsOn)
-        {
-            if (DrawItemLocation(coord, _game.Maelstrom)) return;
-            if (DrawSense(coord, _game.Maelstrom.FieldCoords, ConsoleColor.Gray, '>')) return;
-            if (DrawSense(coord, _game.Maelstrom.EdgeCoords, ConsoleColor.DarkYellow, '/')) return;
-        }
+        if (DrawItem(_player, _game.FountainRoom, coord)) return;
+        if (DrawItem(_player, _game.Amarok, coord)) return;
+        if (DrawItem(_player, _game.PitRoom, coord)) return;
+        if (DrawItem(_player, _game.Maelstrom, coord)) return;
 
         DrawRoomGrid(ConsoleColor.Yellow, ':');
     }
@@ -79,6 +45,26 @@ internal class Draw : IDraw
         return true;
     }
 
+    private static bool DrawItem(Player player, SubRoom place, IMainRoom.Coordinate coord)
+    {
+        place.IsOn = SubRoomOnOff(player, place);
+        if (!place.IsOn) return false;
+
+        // this needs to be checked twice, once overall and once again for each item
+        if (place.ItemCoords.All(coordinate => coord != coordinate) &&
+            place.EdgeCoords.All(coordinate => coord != coordinate) &&
+            place.FieldCoords.All(coordinate => coord != coordinate) &&
+            place.OuterFieldCoords.All(coordinate => coord != coordinate)) return false;
+
+        if (DrawItemLocation(coord, place)) return true;
+        if (DrawSense(coord, place.ItemCoords, place.ItemColor, place.ItemSymbol)) return true;
+        if (DrawSense(coord, place.EdgeCoords, place.EdgeColor, place.EdgeSymbol)) return true;
+        if (DrawSense(coord, place.FieldCoords, place.FieldColor, place.FieldSymbol)) return true;
+        if (DrawSense(coord, place.OuterFieldCoords, place.OuterFieldColor, place.OuterFieldSymbol)) return true;
+
+        return true;
+    }
+
     private static bool DrawItemLocation(IMainRoom.Coordinate coord, ISubRoom place)
     {
         if (coord != place.Location) return false;
@@ -86,11 +72,11 @@ internal class Draw : IDraw
         return true;
     }
 
-    private static bool DrawSense(IMainRoom.Coordinate coord, IEnumerable<IMainRoom.Coordinate>? listSense,
+    private static bool DrawSense(IMainRoom.Coordinate coord, IEnumerable<IMainRoom.Coordinate> listSense,
         ConsoleColor color,
         char c = '+')
     {
-        if (listSense != null && listSense.All(coordinate => coord != coordinate)) return false;
+        if (listSense.All(coordinate => coord != coordinate)) return false;
         WriteResetChar(c, color);
         return true;
     }
