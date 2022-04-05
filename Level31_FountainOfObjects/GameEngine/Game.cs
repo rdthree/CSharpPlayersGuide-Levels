@@ -17,12 +17,18 @@ internal class Game : IGame
 
     public Game(int rows, int columns)
     {
+        if (rows < 10 && columns < 10)
+        {
+            rows = 15;
+            columns = 30;
+        }
+        
         // places and things
         MainRoom = new MainRoom(rows, columns);
-        FountainRoom = new FountainRoom(rows, columns);
-        PitRoom = new PitRoom(rows, columns);
-        Maelstrom = new Maelstrom(rows, columns);
-        Amarok = new Amarok(rows, columns);
+        FountainRoom = new FountainRoom(rows, columns, 5, 4);
+        PitRoom = new PitRoom(rows, columns, 5, 12);
+        Maelstrom = new Maelstrom(rows, columns, 9, 22);
+        Amarok = new Amarok(rows, columns, rows - 2, columns - 5);
 
         // start game
         Console.WriteLine("what is your name?");

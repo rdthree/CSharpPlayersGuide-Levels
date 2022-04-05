@@ -35,7 +35,14 @@ internal class Draw : IDraw
     {
         var coord = new IMainRoom.Coordinate(i, j);
         if (DrawPlayer(coord, _player.Location, '@')) return;
-        if (DrawItemLocation(coord, _game.FountainRoom)) return;
+
+        if (_game.FountainRoom.IsOn)
+        {
+            if (DrawItemLocation(coord, _game.FountainRoom)) return;
+            if (DrawSense(coord, _game.FountainRoom.EdgeCoords, ConsoleColor.Blue, '!')) return;
+            if (DrawSense(coord, _game.FountainRoom.FieldCoords, ConsoleColor.Black, '~')) return;
+            if (DrawSense(coord, _game.FountainRoom.OuterFieldCoords, ConsoleColor.Green, '?')) return;
+        }
 
         _game.Amarok.IsOn = SubRoomOnOff(_player, _game.Amarok);
         if (_game.Amarok.IsOn)
@@ -61,9 +68,6 @@ internal class Draw : IDraw
             if (DrawSense(coord, _game.Maelstrom.EdgeCoords, ConsoleColor.DarkYellow, '/')) return;
         }
 
-        if (DrawSense(coord, _game.FountainRoom.EdgeCoords, ConsoleColor.Blue, '!')) return;
-        if (DrawSense(coord, _game.FountainRoom.FieldCoords, ConsoleColor.Black, '~')) return;
-        if (DrawSense(coord, _game.FountainRoom.OuterFieldCoords, ConsoleColor.Green, '?')) return;
         DrawRoomGrid(ConsoleColor.Yellow, ':');
     }
 
@@ -82,11 +86,11 @@ internal class Draw : IDraw
         return true;
     }
 
-    private static bool DrawSense(IMainRoom.Coordinate coord, IEnumerable<IMainRoom.Coordinate> listSense,
+    private static bool DrawSense(IMainRoom.Coordinate coord, IEnumerable<IMainRoom.Coordinate>? listSense,
         ConsoleColor color,
         char c = '+')
     {
-        if (listSense.All(coordinate => coord != coordinate)) return false;
+        if (listSense != null && listSense.All(coordinate => coord != coordinate)) return false;
         WriteResetChar(c, color);
         return true;
     }
@@ -103,17 +107,18 @@ internal class Draw : IDraw
     private static bool SubRoomOnOff(Player player, ISubRoom subRoom)
     {
         if (!player.Control.IsShoot) return subRoom.IsOn();
-        
-        var subRoomRow = subRoom.Location.Row;
-        var subRoomCol = subRoom.Location.Column;
-        var playerRow = player.Location.Row;
-        var playerCol = player.Location.Column;
-        var playerDir = player.Control.Direction;
+        {
+            var subRoomRow = subRoom.Location.Row;
+            var subRoomCol = subRoom.Location.Column;
+            var playerRow = player.Location.Row;
+            var playerCol = player.Location.Column;
+            var playerDir = player.Control.Direction;
 
-        if (playerDir == HeadingTypes.North && subRoomRow < playerRow && subRoomCol == playerCol) return false;
-        if (playerDir == HeadingTypes.South && subRoomRow > playerRow && subRoomCol == playerCol) return false;
-        if (playerDir == HeadingTypes.West && subRoomCol < playerCol && subRoomRow == playerRow) return false;
-        if (playerDir == HeadingTypes.East && subRoomCol > playerCol && subRoomRow == playerRow) return false;
+            if (playerDir == HeadingTypes.North && subRoomRow < playerRow && subRoomCol == playerCol) return false;
+            if (playerDir == HeadingTypes.South && subRoomRow > playerRow && subRoomCol == playerCol) return false;
+            if (playerDir == HeadingTypes.West && subRoomCol < playerCol && subRoomRow == playerRow) return false;
+            if (playerDir == HeadingTypes.East && subRoomCol > playerCol && subRoomRow == playerRow) return false;
+        }
 
         return subRoom.IsOn();
     }
