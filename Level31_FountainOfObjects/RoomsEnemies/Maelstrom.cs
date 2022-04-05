@@ -7,28 +7,28 @@ internal class Maelstrom : SubRoom
     public Maelstrom(int rows, int columns, int rowOffset, int colOffset) : base(rows, columns, rowOffset, colOffset)
     {
         Location = new IMainRoom.Coordinate(Rows - rowOffset, Columns - colOffset);
-        LocateSenses();
-        IsOn = true;
-        ItemColor = ConsoleColor.Gray;
-        EdgeColor = ConsoleColor.DarkGray;
+        CenterColor = ConsoleColor.White;
+        EdgeColor = ConsoleColor.Gray;
         FieldColor = ConsoleColor.DarkGray;
-        ItemSymbol = 'M';
+        OuterFieldColor = ConsoleColor.DarkYellow;
+        CenterSymbol = 'M';
         EdgeSymbol = '>';
         FieldSymbol = '/';
+        OuterFieldSymbol = '\\';
     }
 
     protected override void BuildSenseCoordinates(int i, int j)
     {
-        SenseCoordinate(i, j, Location, 4, 4, FieldCoords);
+        SenseCoordinate(i, j, 4, 4, OuterFieldCoordList);
+        SenseCoordinate(i, j, 3, 3, FieldCoordList);
+        base.BuildSenseCoordinates(i,j);
     }
 
-    protected override SenseTypes SenseTypeSelector(List<IMainRoom.Coordinate>? coordList)
+    protected override SenseTypes SenseTypeSelector(List<IMainRoom.Coordinate> senseCoordList)
     {
-        SenseTypes senseType;
-        if (coordList == ItemCoords) senseType = SenseTypes.Blown;
-        else if (coordList == FieldCoords) senseType = SenseTypes.Chill;
-        else if (coordList == EdgeCoords) senseType = SenseTypes.Alert;
-        else senseType = SenseTypes.Nothing;
-        return senseType;
+        if (senseCoordList == CenterCoordList) return SenseTypes.Blown;
+        if (senseCoordList == EdgeCoordList) return SenseTypes.Alert;
+        if (senseCoordList == FieldCoordList) return SenseTypes.Chill;
+        return senseCoordList == OuterFieldCoordList ? SenseTypes.ChangedGround : SenseTypes.Nothing;
     }
 }

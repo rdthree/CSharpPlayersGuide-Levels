@@ -3,16 +3,16 @@
 internal interface ISubRoom : IMainRoom
 {
     Coordinate Location { get; }
-    List<Coordinate> ItemCoords { get; }
-    List<Coordinate> EdgeCoords { get; }
-    List<Coordinate> FieldCoords { get; }
-    List<Coordinate> OuterFieldCoords { get; }
+    List<Coordinate> CenterCoordList { get; }
+    List<Coordinate> EdgeCoordList { get; }
+    List<Coordinate> FieldCoordList { get; }
+    List<Coordinate> OuterFieldCoordList { get; }
     bool IsOn();
-    ConsoleColor ItemColor { get; }
+    ConsoleColor CenterColor { get; }
     ConsoleColor EdgeColor { get; }
     ConsoleColor FieldColor { get; }
     ConsoleColor OuterFieldColor { get; }
-    char ItemSymbol { get; }
+    char CenterSymbol { get; }
     char EdgeSymbol { get; }
     char FieldSymbol { get; }
     char OuterFieldSymbol { get; }

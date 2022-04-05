@@ -9,7 +9,6 @@ internal class Player : IPlayer
     public int PlayerRow { get; private set; }
     public IMainRoom.Coordinate PlayerLocation { get; private set; }
     public int Moves { get; private set; }
-
     public Controls Control { get; }
     private readonly Game _game;
 
@@ -50,11 +49,16 @@ internal class Player : IPlayer
         PlayerLocation = new IMainRoom.Coordinate(PlayerRow, PlayerColumn);
     }
 
+    /// <summary>
+    /// This returns "sense" messages and locations on the main playing board, based on the player location.
+    /// Also includes interactions that may change a players location.
+    /// </summary>
+    /// <returns></returns>
     public SenseTypes PlayerInteractions()
     {
         var mainPos = _game.MainRoom.SenseCoords[PlayerRow, PlayerColumn];
         var fountainPos = _game.FountainRoom.SenseCoords[PlayerRow, PlayerColumn];
-        
+
         foreach (var amarok in _game.Amaroks)
         {
             var amarokPos = amarok.SenseCoords[PlayerRow, PlayerColumn];
@@ -76,7 +80,10 @@ internal class Player : IPlayer
                 {
                     PlayerRow -= 5;
                     PlayerColumn -= 5;
+                    return maelstromPos;
                 }
+
+                return maelstromPos;
             }
         }
 

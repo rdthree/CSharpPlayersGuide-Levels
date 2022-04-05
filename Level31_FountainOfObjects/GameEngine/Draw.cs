@@ -49,19 +49,19 @@ internal class Draw : IDraw
         if (CheckIfCoordinateIsUsed(place, coord)) return false;
 
         if (DrawItemLocation(coord, place)) return true;
-        if (DrawSense(coord, place.ItemCoords, place.ItemColor, place.ItemSymbol)) return true;
-        if (DrawSense(coord, place.EdgeCoords, place.EdgeColor, place.EdgeSymbol)) return true;
-        if (DrawSense(coord, place.FieldCoords, place.FieldColor, place.FieldSymbol)) return true;
-        if (DrawSense(coord, place.OuterFieldCoords, place.OuterFieldColor, place.OuterFieldSymbol)) return true;
+        if (DrawSense(coord, place.CenterCoordList, place.CenterColor, place.CenterSymbol)) return true;
+        if (DrawSense(coord, place.EdgeCoordList, place.EdgeColor, place.EdgeSymbol)) return true;
+        if (DrawSense(coord, place.FieldCoordList, place.FieldColor, place.FieldSymbol)) return true;
+        if (DrawSense(coord, place.OuterFieldCoordList, place.OuterFieldColor, place.OuterFieldSymbol)) return true;
         return true;
     }
 
     private static bool CheckIfCoordinateIsUsed(SubRoom place, IMainRoom.Coordinate coord)
     {
-        if (place.ItemCoords.All(coordinate => coord != coordinate) &&
-            place.EdgeCoords.All(coordinate => coord != coordinate) &&
-            place.FieldCoords.All(coordinate => coord != coordinate) &&
-            place.OuterFieldCoords.All(coordinate => coord != coordinate)) return true;
+        if (place.CenterCoordList.All(coordinate => coord != coordinate) &&
+            place.EdgeCoordList.All(coordinate => coord != coordinate) &&
+            place.FieldCoordList.All(coordinate => coord != coordinate) &&
+            place.OuterFieldCoordList.All(coordinate => coord != coordinate)) return true;
 
         return false;
     }
@@ -69,7 +69,7 @@ internal class Draw : IDraw
     private static bool DrawItemLocation(IMainRoom.Coordinate coord, ISubRoom place)
     {
         if (coord != place.Location) return false;
-        WriteResetChar(place.ItemSymbol, place.ItemColor);
+        WriteResetChar(place.CenterSymbol, place.CenterColor);
         return true;
     }
 

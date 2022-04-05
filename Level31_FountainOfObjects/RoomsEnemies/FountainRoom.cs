@@ -7,32 +7,28 @@ internal class FountainRoom : SubRoom
     public FountainRoom(int rows, int columns, int rowOffset, int colOffset) : base(rows, columns, rowOffset, colOffset)
     {
         Location = new IMainRoom.Coordinate(Rows - rowOffset, Columns - colOffset);
-        LocateSenses();
-        IsOn = true;
-        ItemColor = ConsoleColor.Cyan;
+        CenterColor = ConsoleColor.Cyan;
         EdgeColor = ConsoleColor.Blue;
         FieldColor = ConsoleColor.DarkBlue;
         OuterFieldColor = ConsoleColor.DarkCyan;
-        ItemSymbol = 'F';
+        CenterSymbol = 'F';
         EdgeSymbol = '~';
         FieldSymbol = '-';
         OuterFieldSymbol = '*';
     }
-
+    
     protected override void BuildSenseCoordinates(int i, int j)
     {
-        SenseCoordinate(i, j, Location, 3, 3, FieldCoords);
-        SenseCoordinate(i, j, Location, 5, 5, OuterFieldCoords);
+        SenseCoordinate(i, j, 5, 5, OuterFieldCoordList);
+        SenseCoordinate(i, j, 3, 3, FieldCoordList);
+        base.BuildSenseCoordinates(i,j);
     }
 
-    protected override SenseTypes SenseTypeSelector(List<IMainRoom.Coordinate>? coordList)
+    protected override SenseTypes SenseTypeSelector(List<IMainRoom.Coordinate> senseCoordList)
     {
-        SenseTypes senseType;
-        if (coordList == OuterFieldCoords) senseType = SenseTypes.Hear;
-        else if (coordList == EdgeCoords) senseType = SenseTypes.See;
-        else if (coordList == FieldCoords) senseType = SenseTypes.Smell;
-        else if (coordList == ItemCoords) senseType = SenseTypes.Fountain;
-        else senseType = SenseTypes.Nothing;
-        return senseType;
+        if (senseCoordList == CenterCoordList) return SenseTypes.Fountain;
+        if (senseCoordList == EdgeCoordList) return SenseTypes.SeeFountain;
+        if (senseCoordList == FieldCoordList) return SenseTypes.SmellFountain;
+        return senseCoordList == OuterFieldCoordList ? SenseTypes.HearFountain : SenseTypes.Nothing;
     }
 }

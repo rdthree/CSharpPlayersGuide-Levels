@@ -3,9 +3,9 @@
 internal enum SenseTypes
 {
     Nothing,
-    See,
-    Hear,
-    Smell,
+    SeeFountain,
+    HearFountain,
+    SmellFountain,
     Fountain,
     Maelstrom,
     Pit,
@@ -13,5 +13,6 @@ internal enum SenseTypes
     End,
     Chill,
     Alert,
-    Blown
+    Blown,
+    ChangedGround
 }

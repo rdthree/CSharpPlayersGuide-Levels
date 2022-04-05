@@ -7,27 +7,26 @@ internal class PitRoom : SubRoom
     public PitRoom(int rows, int columns, int rowOffset, int colOffset) : base(rows, columns, rowOffset, colOffset)
     {
         Location = new IMainRoom.Coordinate(Rows - rowOffset, Columns - colOffset);
-        LocateSenses();
-        IsOn = true;
-        ItemColor = ConsoleColor.Green;
+        CenterColor = ConsoleColor.Green;
         EdgeColor = ConsoleColor.DarkGreen;
         FieldColor = ConsoleColor.DarkCyan;
-        ItemSymbol = 'P';
+        CenterSymbol = 'P';
         EdgeSymbol = '%';
         FieldSymbol = 's';
     }
 
     protected override void BuildSenseCoordinates(int i, int j)
     {
-        SenseCoordinate(i, j, Location, 2, 2, EdgeCoords);
+        SenseCoordinate(i, j, 2, 2, FieldCoordList);
+        SenseCoordinate(i, j, 1, 1, EdgeCoordList);
+        base.BuildSenseCoordinates(i,j);
     }
 
-    protected override SenseTypes SenseTypeSelector(List<IMainRoom.Coordinate>? coordList)
+    protected override SenseTypes SenseTypeSelector(List<IMainRoom.Coordinate> senseCoordList)
     {
-        SenseTypes senseType;
-        if (coordList == new List<IMainRoom.Coordinate?>() { Location }) senseType = SenseTypes.End;
-        else if (coordList == EdgeCoords) senseType = SenseTypes.Chill;
-        else senseType = SenseTypes.Nothing;
-        return senseType;
+        if (senseCoordList == CenterCoordList) return SenseTypes.Pit;
+        if (senseCoordList == EdgeCoordList) return SenseTypes.Chill;
+        return senseCoordList == FieldCoordList ? SenseTypes.ChangedGround : SenseTypes.Nothing;
     }
+    
 }
