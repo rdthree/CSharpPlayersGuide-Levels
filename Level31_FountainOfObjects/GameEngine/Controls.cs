@@ -3,7 +3,7 @@
 internal class Controls : IControls
 {
     public HeadingTypes Direction { get; private set; } = HeadingTypes.None;
-    public bool IsShoot { get; set; }
+    public bool IsShoot { get; private set; }
     public bool ShowMap { get; private set; }
 
     public HeadingTypes Go()

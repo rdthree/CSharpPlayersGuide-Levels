@@ -1,6 +1,6 @@
 ﻿using Level31_FountainOfObjects.GameEngine;
 
-namespace Level31_FountainOfObjects.RoomsEnemies;
+namespace Level31_FountainOfObjects.Rooms;
 
 internal class Maelstrom : SubRoom
 {

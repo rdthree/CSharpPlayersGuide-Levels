@@ -2,5 +2,4 @@
 
 internal interface IControls
 {
-    HeadingTypes Direction { get; }
 }

@@ -1,4 +1,4 @@
-﻿using Level31_FountainOfObjects.RoomsEnemies;
+﻿using Level31_FountainOfObjects.Rooms;
 
 namespace Level31_FountainOfObjects.GameEngine;
 
@@ -52,18 +52,15 @@ internal class Draw : IDraw
         if (DrawSense(coord, place.CenterCoordList, place.CenterColor, place.CenterSymbol)) return true;
         if (DrawSense(coord, place.EdgeCoordList, place.EdgeColor, place.EdgeSymbol)) return true;
         if (DrawSense(coord, place.FieldCoordList, place.FieldColor, place.FieldSymbol)) return true;
-        if (DrawSense(coord, place.OuterFieldCoordList, place.OuterFieldColor, place.OuterFieldSymbol)) return true;
-        return true;
+        return DrawSense(coord, place.OuterFieldCoordList, place.OuterFieldColor, place.OuterFieldSymbol) || true;
     }
 
     private static bool CheckIfCoordinateIsUsed(SubRoom place, IMainRoom.Coordinate coord)
     {
-        if (place.CenterCoordList.All(coordinate => coord != coordinate) &&
-            place.EdgeCoordList.All(coordinate => coord != coordinate) &&
-            place.FieldCoordList.All(coordinate => coord != coordinate) &&
-            place.OuterFieldCoordList.All(coordinate => coord != coordinate)) return true;
-
-        return false;
+        return place.CenterCoordList.All(coordinate => coord != coordinate) &&
+               place.EdgeCoordList.All(coordinate => coord != coordinate) &&
+               place.FieldCoordList.All(coordinate => coord != coordinate) &&
+               place.OuterFieldCoordList.All(coordinate => coord != coordinate);
     }
 
     private static bool DrawItemLocation(IMainRoom.Coordinate coord, ISubRoom place)
@@ -101,10 +98,19 @@ internal class Draw : IDraw
             var playerCol = player.PlayerLocation.Column;
             var playerDir = player.Control.Direction;
 
-            if (playerDir == HeadingTypes.North && subRoomRow < playerRow && subRoomCol == playerCol) return false;
-            if (playerDir == HeadingTypes.South && subRoomRow > playerRow && subRoomCol == playerCol) return false;
-            if (playerDir == HeadingTypes.West && subRoomCol < playerCol && subRoomRow == playerRow) return false;
-            if (playerDir == HeadingTypes.East && subRoomCol > playerCol && subRoomRow == playerRow) return false;
+            switch (playerDir)
+            {
+                case HeadingTypes.North when subRoomRow < playerRow && subRoomCol == playerCol:
+                case HeadingTypes.South when subRoomRow > playerRow && subRoomCol == playerCol:
+                case HeadingTypes.West when subRoomCol < playerCol && subRoomRow == playerRow:
+                case HeadingTypes.East when subRoomCol > playerCol && subRoomRow == playerRow:
+                    return false;
+                case HeadingTypes.None:
+                    break;
+                default:
+                    Console.WriteLine("something wrong happened with turning SubRooms on and off");
+                    break;
+            }
         }
 
         return subRoom.IsOn();

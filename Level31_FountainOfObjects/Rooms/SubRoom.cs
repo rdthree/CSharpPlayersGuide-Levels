@@ -1,6 +1,5 @@
 ﻿using Level31_FountainOfObjects.GameEngine;
-
-namespace Level31_FountainOfObjects.RoomsEnemies;
+namespace Level31_FountainOfObjects.Rooms;
 
 internal abstract class SubRoom : MainRoom, ISubRoom
 {
@@ -93,10 +92,10 @@ internal abstract class SubRoom : MainRoom, ISubRoom
     protected void SenseCoordinate(int i, int j, int rowDist, int colDist,
         List<IMainRoom.Coordinate> senseCoordList)
     {
-        var (row, column) = RelativeToCoordinate(i: i, j: j, Location);
+        var (row, column) = RelativeToCoordinate(i, j, Location);
         if (row > rowDist || column > colDist) return;
         SenseCoords[i, j] = SenseTypeSelector(senseCoordList);
-        senseCoordList.Add(item: new IMainRoom.Coordinate(i, j));
+        senseCoordList.Add(new IMainRoom.Coordinate(i, j));
     }
 
     /// <summary>
@@ -109,10 +108,10 @@ internal abstract class SubRoom : MainRoom, ISubRoom
         List<IMainRoom.Coordinate> senseCoordList)
     {
         var (row, column) = (Location.Row, Location.Column);
-        if (((i != row + 1 || j != column) && (i != row - 1 || j != column) &&
-             (i != row || j != column + 1) && (i != row || j != column - 1))) return;
+        if ((i != row + 1 || j != column) && (i != row - 1 || j != column) &&
+            (i != row || j != column + 1) && (i != row || j != column - 1)) return;
         SenseCoords[i, j] = SenseTypeSelector(senseCoordList);
-        senseCoordList.Add(item: new IMainRoom.Coordinate(i, j));
+        senseCoordList.Add(new IMainRoom.Coordinate(i, j));
     }
 
     /// <summary>

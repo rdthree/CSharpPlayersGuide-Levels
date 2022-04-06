@@ -1,4 +1,4 @@
-﻿using Level31_FountainOfObjects.RoomsEnemies;
+﻿using Level31_FountainOfObjects.Rooms;
 
 namespace Level31_FountainOfObjects.GameEngine;
 
@@ -43,8 +43,8 @@ internal class Game : IGame
             const int maxAmaroks = 3;
             MainRoom = new MainRoom(gameRows, gameColumns);
             FountainRoom = new FountainRoom(gameRows, gameColumns, 5, 4);
-            PitRooms = new List<PitRoom>() { new PitRoom(gameRows, gameColumns, 5, 12) };
-            Maelstroms = new List<Maelstrom>() { new Maelstrom(gameRows, gameColumns, 10, 23) };
+            PitRooms = new List<PitRoom> { new(gameRows, gameColumns, 5, 12) };
+            Maelstroms = new List<Maelstrom> { new(gameRows, gameColumns, 10, 23) };
             Amaroks = new List<Amarok>();
             for (var i = 0; i < maxAmaroks; i++)
                 Amaroks.Add(new Amarok(gameRows, gameColumns, rndRow.Next(gameRows), rndCol.Next(gameColumns)));
@@ -54,8 +54,8 @@ internal class Game : IGame
             const int maxAmaroks = 6;
             MainRoom = new MainRoom(gameRows, gameColumns);
             FountainRoom = new FountainRoom(gameRows, gameColumns, 5, 4);
-            PitRooms = new List<PitRoom>() { new PitRoom(gameRows, gameColumns, 5, 12) };
-            Maelstroms = new List<Maelstrom>() { new Maelstrom(gameRows, gameColumns, 10, 23) };
+            PitRooms = new List<PitRoom> { new(gameRows, gameColumns, 5, 12) };
+            Maelstroms = new List<Maelstrom> { new(gameRows, gameColumns, 10, 23) };
             Amaroks = new List<Amarok>();
             for (var i = 0; i < maxAmaroks; i++)
                 Amaroks.Add(new Amarok(gameRows, gameColumns, rndRow.Next(gameRows), rndCol.Next(gameColumns)));

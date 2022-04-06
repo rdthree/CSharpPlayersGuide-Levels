@@ -1,4 +1,4 @@
-﻿using Level31_FountainOfObjects.RoomsEnemies;
+﻿using Level31_FountainOfObjects.Rooms;
 
 namespace Level31_FountainOfObjects.GameEngine;
 
@@ -59,32 +59,26 @@ internal class Player : IPlayer
         var mainPos = _game.MainRoom.SenseCoords[PlayerRow, PlayerColumn];
         var fountainPos = _game.FountainRoom.SenseCoords[PlayerRow, PlayerColumn];
 
-        foreach (var amarok in _game.Amaroks)
+        foreach (var amarokPos in _game.Amaroks.Select(amarok => amarok.SenseCoords[PlayerRow, PlayerColumn])
+                     .Where(amarokPos => amarokPos != SenseTypes.Nothing))
         {
-            var amarokPos = amarok.SenseCoords[PlayerRow, PlayerColumn];
-            if (amarokPos != SenseTypes.Nothing) return amarokPos;
+            return amarokPos;
         }
 
-        foreach (var pitRoom in _game.PitRooms)
+        foreach (var pitPos in _game.PitRooms.Select(pitRoom => pitRoom.SenseCoords[PlayerRow, PlayerColumn])
+                     .Where(pitPos => pitPos != SenseTypes.Nothing))
         {
-            var pitPos = pitRoom.SenseCoords[PlayerRow, PlayerColumn];
-            if (pitPos != SenseTypes.Nothing) return pitPos;
+            return pitPos;
         }
 
-        foreach (var maelstrom in _game.Maelstroms)
+        foreach (var maelstromPos in _game.Maelstroms
+                     .Select(maelstrom => maelstrom.SenseCoords[PlayerRow, PlayerColumn])
+                     .Where(maelstromPos => maelstromPos != SenseTypes.Nothing))
         {
-            var maelstromPos = maelstrom.SenseCoords[PlayerRow, PlayerColumn];
-            if (maelstromPos != SenseTypes.Nothing)
-            {
-                if (maelstromPos == SenseTypes.Blown)
-                {
-                    PlayerRow -= 5;
-                    PlayerColumn -= 5;
-                    return maelstromPos;
-                }
-
-                return maelstromPos;
-            }
+            if (maelstromPos != SenseTypes.Blown) return maelstromPos;
+            PlayerRow -= 5;
+            PlayerColumn -= 5;
+            return maelstromPos;
         }
 
         return fountainPos != SenseTypes.Nothing ? fountainPos : mainPos;
