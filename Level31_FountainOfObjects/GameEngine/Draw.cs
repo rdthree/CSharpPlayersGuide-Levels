@@ -63,7 +63,7 @@ internal class Draw : IDraw
                place.OuterFieldCoordList.All(coordinate => coord != coordinate);
     }
 
-    private static bool DrawItemLocation(IMainRoom.Coordinate coord, ISubRoom place)
+    private static bool DrawItemLocation(IMainRoom.Coordinate coord, SubRoom place)
     {
         if (coord != place.Location) return false;
         WriteResetChar(place.CenterSymbol, place.CenterColor);

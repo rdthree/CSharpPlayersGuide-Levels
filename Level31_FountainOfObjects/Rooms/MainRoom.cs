@@ -16,6 +16,8 @@ internal class MainRoom : IMainRoom
     public int Columns { get; }
     public SenseTypes[,] SenseCoords { get; }
 
+    
+
     private void SetupRoom()
     {
         for (var i = 0; i < Rows; i++)

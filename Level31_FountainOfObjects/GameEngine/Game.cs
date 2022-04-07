@@ -52,10 +52,13 @@ internal class Game : IGame
         else
         {
             const int maxAmaroks = 6;
+            const int maxMaelstroms = 4;
             MainRoom = new MainRoom(gameRows, gameColumns);
             FountainRoom = new FountainRoom(gameRows, gameColumns, 5, 4);
             PitRooms = new List<PitRoom> { new(gameRows, gameColumns, 5, 12) };
-            Maelstroms = new List<Maelstrom> { new(gameRows, gameColumns, 10, 23) };
+            Maelstroms = new List<Maelstrom>();
+            for (var i = 0; i < maxMaelstroms; i++)
+                Maelstroms.Add(new Maelstrom(gameRows, gameColumns, rndRow.Next(gameRows), rndCol.Next(gameColumns)));
             Amaroks = new List<Amarok>();
             for (var i = 0; i < maxAmaroks; i++)
                 Amaroks.Add(new Amarok(gameRows, gameColumns, rndRow.Next(gameRows), rndCol.Next(gameColumns)));

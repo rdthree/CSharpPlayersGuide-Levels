@@ -1,4 +1,5 @@
 ﻿using Level31_FountainOfObjects.GameEngine;
+
 namespace Level31_FountainOfObjects.Rooms;
 
 internal abstract class SubRoom : MainRoom, ISubRoom
@@ -29,31 +30,38 @@ internal abstract class SubRoom : MainRoom, ISubRoom
     /// <summary>
     /// Generally, the Location refers the center coordinate of the SubRoom
     /// </summary>
-    public IMainRoom.Coordinate Location { get; protected init; }
+    public IMainRoom.Coordinate Location { get; protected set; }
+
     /// <summary>
     /// Coordinate Lists used to draw sprites and locate "senses"
     /// </summary>
     public List<IMainRoom.Coordinate> CenterCoordList { get; }
+
     public List<IMainRoom.Coordinate> EdgeCoordList { get; }
     public List<IMainRoom.Coordinate> FieldCoordList { get; }
     public List<IMainRoom.Coordinate> OuterFieldCoordList { get; }
+
     /// <summary>
     /// Property and Method to turn SubRooms on and off
     /// </summary>
     internal bool IsOn { get; set; }
+
     bool ISubRoom.IsOn() => IsOn;
 
     /// <summary>
     /// ConsoleColors used for drawing sprites
     /// </summary>
     public ConsoleColor CenterColor { get; protected init; }
+
     public ConsoleColor EdgeColor { get; protected init; }
     public ConsoleColor FieldColor { get; protected init; }
     public ConsoleColor OuterFieldColor { get; protected init; }
+
     /// <summary>
     /// chars used for drawing sprites
     /// </summary>
     public char CenterSymbol { get; protected init; }
+
     public char EdgeSymbol { get; protected init; }
     public char FieldSymbol { get; protected init; }
     public char OuterFieldSymbol { get; protected init; }
@@ -89,8 +97,7 @@ internal abstract class SubRoom : MainRoom, ISubRoom
     /// <param name="rowDist">rows the "sense" will emanate outwards from SubRoom center</param>
     /// <param name="colDist">columns the "sense" will emanate outwards from the SubRoom center</param>
     /// <param name="senseCoordList">corresponding List within the subclass where "sense" locations are added</param>
-    protected void SenseCoordinate(int i, int j, int rowDist, int colDist,
-        List<IMainRoom.Coordinate> senseCoordList)
+    protected void SenseCoordinate(int i, int j, int rowDist, int colDist, List<IMainRoom.Coordinate> senseCoordList)
     {
         var (row, column) = RelativeToCoordinate(i, j, Location);
         if (row > rowDist || column > colDist) return;
@@ -104,8 +111,7 @@ internal abstract class SubRoom : MainRoom, ISubRoom
     /// <param name="i">i in i,j for loop</param>
     /// <param name="j">j in i,j for loop</param>
     /// <param name="senseCoordList">corresponding List within the subclass where "sense" locations are added</param>
-    private void SenseCoordinateAdjacent(int i, int j,
-        List<IMainRoom.Coordinate> senseCoordList)
+    private void SenseCoordinateAdjacent(int i, int j, List<IMainRoom.Coordinate> senseCoordList)
     {
         var (row, column) = (Location.Row, Location.Column);
         if ((i != row + 1 || j != column) && (i != row - 1 || j != column) &&

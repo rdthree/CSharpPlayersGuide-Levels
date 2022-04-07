@@ -76,8 +76,18 @@ internal class Player : IPlayer
                      .Where(maelstromPos => maelstromPos != SenseTypes.Nothing))
         {
             if (maelstromPos != SenseTypes.Blown) return maelstromPos;
-            PlayerRow -= 5;
-            PlayerColumn -= 5;
+            PlayerRow -= 2;
+            PlayerColumn -= 2;
+            //foreach (var maelstrom in _game.Maelstroms)
+
+            for (var i = 0; i < _game.Maelstroms.Count - 1; i++)
+            {
+                var rnd = new Random(DateTime.Now.Millisecond);
+                _game.Maelstroms[i] = new Maelstrom(_game.MainRoom.Rows, _game.MainRoom.Columns,
+                    _game.Maelstroms[i].Location.Row + rnd.Next(2), 
+                    _game.Maelstroms[i].Location.Column + rnd.Next(2));
+            }
+
             return maelstromPos;
         }
 

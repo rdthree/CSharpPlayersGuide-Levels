@@ -4,6 +4,4 @@ internal interface ISubRoom : IMainRoom
 {
     Coordinate Location { get; }
     bool IsOn();
-    ConsoleColor CenterColor { get; }
-    char CenterSymbol { get; }
 }

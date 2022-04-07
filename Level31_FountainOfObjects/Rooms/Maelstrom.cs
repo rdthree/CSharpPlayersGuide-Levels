@@ -21,7 +21,7 @@ internal class Maelstrom : SubRoom
     {
         SenseCoordinate(i, j, 4, 4, OuterFieldCoordList);
         SenseCoordinate(i, j, 3, 3, FieldCoordList);
-        base.BuildSenseCoordinates(i,j);
+        base.BuildSenseCoordinates(i, j);
     }
 
     protected override SenseTypes SenseTypeSelector(List<IMainRoom.Coordinate> senseCoordList)
