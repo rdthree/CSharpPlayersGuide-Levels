@@ -6,9 +6,12 @@ internal class Controls : IControls
     public bool IsShoot { get; private set; }
     public bool ShowMap { get; private set; }
 
+    internal Bow Bow { get; private set; } = new Bow();
+
     public HeadingTypes Go()
     {
-        Shoot(false); // resets the shoot function
+        IsShoot = false;
+        //Shoot(false); // resets the shoot function
         Console.WriteLine("Direction (WASD) | Shoot (X) | Map (M)");
         Console.Write("Input Direction (WASD): ");
         var k = Console.ReadKey().KeyChar;
@@ -20,16 +23,19 @@ internal class Controls : IControls
             's' => South(),
             'a' => West(),
             'd' => East(),
-            'x' => Shoot(!IsShoot),
+            'x' => Shoot(IsShoot = true),
             'm' => Map(!ShowMap),
-                _ => None()
+            _ => None()
         };
+        if (Bow.Ammo <= 0) IsShoot = false;
         return Direction;
     }
 
     private HeadingTypes Shoot(bool isShoot)
     {
+        if (Bow.Ammo <= 0 || !isShoot) return Direction;
         IsShoot = isShoot;
+        Bow.Ammo--;
         return Direction;
     }
 

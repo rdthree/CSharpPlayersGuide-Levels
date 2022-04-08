@@ -107,9 +107,6 @@ internal class Draw : IDraw
                     return false;
                 case HeadingTypes.None:
                     break;
-                default:
-                    Console.WriteLine("something wrong happened with turning SubRooms on and off");
-                    break;
             }
         }
 

@@ -90,7 +90,8 @@ internal class Game : IGame
             Console.ForegroundColor = ConsoleColor.Yellow;
             Console.WriteLine($"you have made {_dasPlayer.Moves} moves, {maxMoves - _dasPlayer.Moves} remaining.");
             Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine($"shoot status: {_dasPlayer.Control.IsShoot}");
+            Console.WriteLine(
+                $"shoot status: {_dasPlayer.Control.IsShoot} and {_dasPlayer.Control.Bow.Ammo} arrows");
             Console.ForegroundColor = ConsoleColor.Cyan;
             Console.WriteLine(messages);
             Console.ResetColor();
