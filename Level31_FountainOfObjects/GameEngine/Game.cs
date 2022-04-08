@@ -9,60 +9,15 @@ internal class Game : IGame
     private readonly Draw _dasDraw;
 
     // places and things
-    internal MainRoom MainRoom { get; }
-    internal FountainRoom FountainRoom { get; }
-    internal List<PitRoom> PitRooms { get; }
-    internal List<Maelstrom> Maelstroms { get; }
-    internal List<Amarok> Amaroks { get; }
+    internal MainRoom MainRoom { get; private set; } = new(0, 0);
+    internal FountainRoom FountainRoom { get; private set; } = new(0, 0, 0, 0);
+    internal List<PitRoom> PitRooms { get; private set; } = new();
+    internal List<Maelstrom> Maelstroms { get; private set; } = new();
+    internal List<Amarok> Amaroks { get; private set; } = new();
 
-    public Game(int rows, int columns)
+    internal Game()
     {
-        int gameRows, gameColumns;
-        switch (rows)
-        {
-            case < 5 when columns < 10:
-                gameRows = 5;
-                gameColumns = 10;
-                break;
-            case > 30 when columns > 80:
-                gameRows = 30;
-                gameColumns = 80;
-                break;
-            default:
-                gameRows = 25;
-                gameColumns = 90;
-                break;
-        }
-
-        var rndRow = new Random(gameRows);
-        var rndCol = new Random(gameColumns);
-
-        // places and things
-        if (gameRows < 20 || gameColumns < 40)
-        {
-            const int maxAmaroks = 3;
-            MainRoom = new MainRoom(gameRows, gameColumns);
-            FountainRoom = new FountainRoom(gameRows, gameColumns, 5, 4);
-            PitRooms = new List<PitRoom> { new(gameRows, gameColumns, 5, 12) };
-            Maelstroms = new List<Maelstrom> { new(gameRows, gameColumns, 10, 23) };
-            Amaroks = new List<Amarok>();
-            for (var i = 0; i < maxAmaroks; i++)
-                Amaroks.Add(new Amarok(gameRows, gameColumns, rndRow.Next(gameRows), rndCol.Next(gameColumns)));
-        }
-        else
-        {
-            const int maxAmaroks = 6;
-            const int maxMaelstroms = 4;
-            MainRoom = new MainRoom(gameRows, gameColumns);
-            FountainRoom = new FountainRoom(gameRows, gameColumns, 5, 4);
-            PitRooms = new List<PitRoom> { new(gameRows, gameColumns, 5, 12) };
-            Maelstroms = new List<Maelstrom>();
-            for (var i = 0; i < maxMaelstroms; i++)
-                Maelstroms.Add(new Maelstrom(gameRows, gameColumns, rndRow.Next(gameRows), rndCol.Next(gameColumns)));
-            Amaroks = new List<Amarok>();
-            for (var i = 0; i < maxAmaroks; i++)
-                Amaroks.Add(new Amarok(gameRows, gameColumns, rndRow.Next(gameRows), rndCol.Next(gameColumns)));
-        }
+        GameType();
 
         // start game
         Console.WriteLine("what is your name?");
@@ -71,8 +26,59 @@ internal class Game : IGame
         _dasDraw = new Draw(_dasPlayer, this);
     }
 
+    private void GameType()
+    {
+        Console.WriteLine("what type of game?\n(1) small\n(2) medium\n(3) large");
+        var gameType = Console.ReadKey(true).KeyChar;
+        var gameTypeConvert = int.TryParse(gameType.ToString(), out var gameTypeNum);
+        if (!gameTypeConvert) gameTypeNum = 1;
+        var gameSize = (GameSize) gameTypeNum;
+        Console.WriteLine($"game size is {gameSize}");
 
-    public void Run()
+        int rows, columns, maxAmaroks, maxMaelstroms, maxPitRooms;
+        var (rndRow, rndCol) = (new Random(), new Random());
+        switch (gameSize)
+        {
+            case GameSize.Small:
+                (rows, columns) = (15, 45);
+                maxAmaroks = 3;
+                maxMaelstroms = 1;
+                maxPitRooms = 1;
+                break;
+            case GameSize.Medium:
+                (rows, columns) = (20, 60);
+                maxAmaroks = 5;
+                maxMaelstroms = 2;
+                maxPitRooms = 6;
+                break;
+            case GameSize.Large:
+                (rows, columns) = (25, 75);
+                maxAmaroks = 8;
+                maxMaelstroms = 3;
+                maxPitRooms = 8;
+                break;
+            default:
+                (rows, columns) = (15, 45);
+                maxAmaroks = 3;
+                maxMaelstroms = 1;
+                maxPitRooms = 1;
+                break;
+        }
+
+        MainRoom = new MainRoom(rows, columns);
+        FountainRoom = new FountainRoom(rows, columns, 5, 4);
+        PitRooms = new List<PitRoom>();
+        for (var i = 0; i < maxPitRooms; i++)
+            PitRooms.Add(new PitRoom(rows, columns, rndRow.Next(rows), rndCol.Next(columns)));
+        Maelstroms = new List<Maelstrom>();
+        for (var i = 0; i < maxMaelstroms; i++)
+            Maelstroms.Add(new Maelstrom(rows, columns, rndRow.Next(rows), rndCol.Next(columns)));
+        Amaroks = new List<Amarok>();
+        for (var i = 0; i < maxAmaroks; i++)
+            Amaroks.Add(new Amarok(rows, columns, rndRow.Next(rows), rndCol.Next(columns)));
+    }
+
+    internal void Run()
     {
         Console.WriteLine(_dasPlayer.Name);
         var counter = 0;
@@ -100,5 +106,13 @@ internal class Game : IGame
             Console.Clear();
             counter++;
         }
+    }
+
+
+    private enum GameSize
+    {
+        Small = 1,
+        Medium = 2,
+        Large = 3
     }
 }
