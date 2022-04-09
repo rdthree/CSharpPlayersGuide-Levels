@@ -3,6 +3,7 @@
 // TODO: improve text messages for map-less gameplay
 // TODO: help (h) feature to give idea of gameplay and messages
 // TODO: using the map takes 25 moves, add a message to indicate this
+// TODO: cleanup use of interfaces and subclasses
 
 //var game = new Game(40, 60);
 var game = new Game();
