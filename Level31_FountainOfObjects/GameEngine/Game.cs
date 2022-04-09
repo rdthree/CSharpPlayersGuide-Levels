@@ -1,4 +1,5 @@
-﻿using Level31_FountainOfObjects.Rooms;
+﻿using System.ComponentModel.Design.Serialization;
+using Level31_FountainOfObjects.Rooms;
 
 namespace Level31_FountainOfObjects.GameEngine;
 
@@ -14,6 +15,9 @@ internal class Game : IGame
     internal List<PitRoom> PitRooms { get; private set; } = new();
     internal List<Maelstrom> Maelstroms { get; private set; } = new();
     internal List<Amarok> Amaroks { get; private set; } = new();
+
+    private bool Win { get; set; }
+    private bool Lose { get; set; }
 
     internal Game()
     {
@@ -83,7 +87,7 @@ internal class Game : IGame
         Console.WriteLine(_dasPlayer.Name);
         var counter = 0;
         const int maxMoves = 100;
-        while (counter < maxMoves)
+        while (counter < maxMoves && !Win && !Lose)
         {
             if (_dasPlayer.Control.ShowMap) _dasDraw.DrawRoom();
             Console.WriteLine($"ShowMap is {_dasPlayer.Control.ShowMap}");
@@ -93,6 +97,8 @@ internal class Game : IGame
                 $"map size: ({MainRoom.Rows},{MainRoom.Columns})");
 
             var messages = Messages.Senses(_dasPlayer.PlayerInteractions());
+            WinLose();
+
             Console.ForegroundColor = ConsoleColor.Yellow;
             Console.WriteLine($"you have made {_dasPlayer.Moves} moves, {maxMoves - _dasPlayer.Moves} remaining.");
             Console.ForegroundColor = ConsoleColor.Red;
@@ -101,7 +107,6 @@ internal class Game : IGame
             Console.ForegroundColor = ConsoleColor.Cyan;
             Console.WriteLine(messages);
             Console.ResetColor();
-
             _dasPlayer.Move();
             Console.Clear();
             counter++;
@@ -114,5 +119,12 @@ internal class Game : IGame
         Small = 1,
         Medium = 2,
         Large = 3
+    }
+
+    private void WinLose()
+    {
+        if (_dasPlayer.PlayerInteractions() == SenseTypes.Amarok) Lose = true;
+        if (_dasPlayer.PlayerInteractions() == SenseTypes.Pit) Lose = true;
+        if (_dasPlayer.PlayerInteractions() == SenseTypes.Fountain) Win = true;
     }
 }

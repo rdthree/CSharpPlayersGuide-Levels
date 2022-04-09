@@ -13,17 +13,18 @@ internal class Amarok : SubRoom
         CenterSymbol = 'A';
         EdgeSymbol = '!';
         FieldSymbol = 'x';
+
+        CanBeShot = true;
     }
 
     protected override void BuildSenseCoordinates(int i, int j)
     {
         SenseCoordinate(i, j, 1, 1, FieldCoordList);
-        base.BuildSenseCoordinates(i,j);
+        base.BuildSenseCoordinates(i, j);
     }
 
     protected override SenseTypes SenseTypeSelector(List<IMainRoom.Coordinate> senseCoordList)
     {
-        
         if (senseCoordList == CenterCoordList) return SenseTypes.Amarok;
         if (senseCoordList == EdgeCoordList) return SenseTypes.Alert;
         return senseCoordList == FieldCoordList ? SenseTypes.Chill : SenseTypes.Nothing;

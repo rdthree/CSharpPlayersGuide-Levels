@@ -1,4 +1,5 @@
-﻿using Level31_FountainOfObjects.GameEngine;
+﻿using System.Diagnostics.SymbolStore;
+using Level31_FountainOfObjects.GameEngine;
 
 namespace Level31_FountainOfObjects.Rooms;
 
@@ -23,6 +24,8 @@ internal abstract class SubRoom : MainRoom, ISubRoom
         FieldSymbol = EdgeSymbol;
         OuterFieldSymbol = EdgeSymbol;
 
+        CanBeShot = false;
+
         IsOn = true;
         LocateSenses();
     }
@@ -40,6 +43,8 @@ internal abstract class SubRoom : MainRoom, ISubRoom
     public List<IMainRoom.Coordinate> EdgeCoordList { get; }
     public List<IMainRoom.Coordinate> FieldCoordList { get; }
     public List<IMainRoom.Coordinate> OuterFieldCoordList { get; }
+    
+    internal bool CanBeShot { get; private protected set; }
 
     /// <summary>
     /// Property and Method to turn SubRooms on and off

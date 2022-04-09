@@ -45,7 +45,7 @@ internal class Draw : IDraw
     private static bool DrawItem(Player player, SubRoom place, IMainRoom.Coordinate coord)
     {
         place.IsOn = SubRoomOnOff(player, place);
-        if (!place.IsOn) return false;
+        if (!place.IsOn && place.CanBeShot) return false;
         if (CheckIfCoordinateIsUsed(place, coord)) return false;
 
         if (DrawItemLocation(coord, place)) return true;

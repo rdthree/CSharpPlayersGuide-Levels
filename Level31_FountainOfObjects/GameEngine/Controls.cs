@@ -10,8 +10,7 @@ internal class Controls : IControls
 
     public HeadingTypes Go()
     {
-        IsShoot = false;
-        //Shoot(false); // resets the shoot function
+        IsShoot = false; // reset shoot function
         Console.WriteLine("Direction (WASD) | Shoot (X) | Map (M)");
         Console.Write("Input Direction (WASD): ");
         var k = Console.ReadKey().KeyChar;

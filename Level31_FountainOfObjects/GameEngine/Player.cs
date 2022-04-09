@@ -61,15 +61,11 @@ internal class Player : IPlayer
 
         foreach (var amarokPos in _game.Amaroks.Select(amarok => amarok.SenseCoords[PlayerRow, PlayerColumn])
                      .Where(amarokPos => amarokPos != SenseTypes.Nothing))
-        {
             return amarokPos;
-        }
 
         foreach (var pitPos in _game.PitRooms.Select(pitRoom => pitRoom.SenseCoords[PlayerRow, PlayerColumn])
                      .Where(pitPos => pitPos != SenseTypes.Nothing))
-        {
             return pitPos;
-        }
 
         foreach (var maelstromPos in _game.Maelstroms
                      .Select(maelstrom => maelstrom.SenseCoords[PlayerRow, PlayerColumn])
@@ -78,13 +74,12 @@ internal class Player : IPlayer
             if (maelstromPos != SenseTypes.Blown) return maelstromPos;
             PlayerRow -= 2;
             PlayerColumn -= 2;
-            //foreach (var maelstrom in _game.Maelstroms)
 
             for (var i = 0; i < _game.Maelstroms.Count - 1; i++)
             {
                 var rnd = new Random(DateTime.Now.Millisecond);
                 _game.Maelstroms[i] = new Maelstrom(_game.MainRoom.Rows, _game.MainRoom.Columns,
-                    _game.Maelstroms[i].Location.Row + rnd.Next(2), 
+                    _game.Maelstroms[i].Location.Row + rnd.Next(2),
                     _game.Maelstroms[i].Location.Column + rnd.Next(2));
             }
 
