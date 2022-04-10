@@ -1,5 +1,4 @@
-﻿using System.ComponentModel.Design.Serialization;
-using Level31_FountainOfObjects.Rooms;
+﻿using Level31_FountainOfObjects.Rooms;
 
 namespace Level31_FountainOfObjects.GameEngine;
 
@@ -18,6 +17,7 @@ internal class Game : IGame
 
     private bool Win { get; set; }
     private bool Lose { get; set; }
+    private int MaxMoves { get; set; }
 
     internal Game()
     {
@@ -36,7 +36,7 @@ internal class Game : IGame
         var gameType = Console.ReadKey(true).KeyChar;
         var gameTypeConvert = int.TryParse(gameType.ToString(), out var gameTypeNum);
         if (!gameTypeConvert) gameTypeNum = 1;
-        var gameSize = (GameSize) gameTypeNum;
+        var gameSize = (GameSize)gameTypeNum;
         Console.WriteLine($"game size is {gameSize}");
 
         int rows, columns, maxAmaroks, maxMaelstroms, maxPitRooms;
@@ -48,18 +48,21 @@ internal class Game : IGame
                 maxAmaroks = 3;
                 maxMaelstroms = 1;
                 maxPitRooms = 1;
+                MaxMoves = 100;
                 break;
             case GameSize.Medium:
                 (rows, columns) = (20, 60);
                 maxAmaroks = 5;
                 maxMaelstroms = 2;
                 maxPitRooms = 6;
+                MaxMoves = 200;
                 break;
             case GameSize.Large:
                 (rows, columns) = (25, 75);
                 maxAmaroks = 8;
                 maxMaelstroms = 3;
                 maxPitRooms = 8;
+                MaxMoves = 300;
                 break;
             default:
                 (rows, columns) = (15, 45);
@@ -85,31 +88,34 @@ internal class Game : IGame
     internal void Run()
     {
         Console.WriteLine(_dasPlayer.Name);
-        var counter = 0;
-        const int maxMoves = 100;
-        while (counter < maxMoves && !Win && !Lose)
+        while (!Win && !Lose)
         {
             if (_dasPlayer.Control.ShowMap) _dasDraw.DrawRoom();
-            Console.WriteLine($"ShowMap is {_dasPlayer.Control.ShowMap}");
+            Console.WriteLine($"ShowMap is {_dasPlayer.Control.ShowMap}, using the map will cost {MaxMoves / 5} moves");
             Console.WriteLine(
                 $"You are headed {_dasPlayer.Control.Direction} and " +
-                $"currently at ({_dasPlayer.PlayerRow}, {_dasPlayer.PlayerColumn})" +
+                $"currently at ({_dasPlayer.PlayerRow + 1}, {_dasPlayer.PlayerColumn + 1})" +
                 $"map size: ({MainRoom.Rows},{MainRoom.Columns})");
 
             var messages = Messages.Senses(_dasPlayer.PlayerInteractions());
             WinLose();
 
             Console.ForegroundColor = ConsoleColor.Yellow;
-            Console.WriteLine($"you have made {_dasPlayer.Moves} moves, {maxMoves - _dasPlayer.Moves} remaining.");
+            Console.WriteLine($"you have made {_dasPlayer.Moves} moves, {MaxMoves - _dasPlayer.Moves} remaining.");
             Console.ForegroundColor = ConsoleColor.Red;
             Console.WriteLine(
                 $"shoot status: {_dasPlayer.Control.IsShoot} and {_dasPlayer.Control.Bow.Ammo} arrows");
             Console.ForegroundColor = ConsoleColor.Cyan;
             Console.WriteLine(messages);
             Console.ResetColor();
+
             _dasPlayer.Move();
+            if (_dasPlayer.Control.ShowMap)
+                _dasPlayer.Moves += MaxMoves / 10;
+
+            WinLose();
+
             Console.Clear();
-            counter++;
         }
     }
 
@@ -121,10 +127,29 @@ internal class Game : IGame
         Large = 3
     }
 
+    private enum WinLoseState
+    {
+        Win,
+        Lose
+    }
+
     private void WinLose()
     {
-        if (_dasPlayer.PlayerInteractions() == SenseTypes.Amarok) Lose = true;
-        if (_dasPlayer.PlayerInteractions() == SenseTypes.Pit) Lose = true;
-        if (_dasPlayer.PlayerInteractions() == SenseTypes.Fountain) Win = true;
+        if (_dasPlayer.PlayerInteractions() == SenseTypes.Amarok) FinalMessage(WinLoseState.Lose);
+        if (_dasPlayer.PlayerInteractions() == SenseTypes.Pit) FinalMessage(WinLoseState.Lose);
+        if (_dasPlayer.PlayerInteractions() == SenseTypes.Fountain) FinalMessage(WinLoseState.Lose);
+        if (_dasPlayer.Moves >= MaxMoves) FinalMessage(WinLoseState.Lose);
+    }
+
+    private void FinalMessage(WinLoseState winLoseState)
+    {
+        var messages = Messages.Senses(_dasPlayer.PlayerInteractions());
+        Console.Clear();
+        Console.Write(winLoseState == WinLoseState.Win ? "you win, " : "you lose, ");
+        Console.WriteLine(_dasPlayer.Moves <= MaxMoves ? $"{messages}" : $"out of moves");
+        Console.ReadKey();
+
+        if (winLoseState == WinLoseState.Lose) Lose = true;
+        else if (winLoseState == WinLoseState.Win) Win = true;
     }
 }

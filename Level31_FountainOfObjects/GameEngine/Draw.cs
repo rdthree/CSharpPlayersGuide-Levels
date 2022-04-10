@@ -90,7 +90,7 @@ internal class Draw : IDraw
 
     private static bool SubRoomOnOff(Player player, ISubRoom subRoom)
     {
-        if (!player.Control.IsShoot) return subRoom.IsOn();
+        if (!player.Control.IsShoot) return subRoom.IsOn;
         {
             var subRoomRow = subRoom.Location.Row;
             var subRoomCol = subRoom.Location.Column;
@@ -110,6 +110,6 @@ internal class Draw : IDraw
             }
         }
 
-        return subRoom.IsOn();
+        return subRoom.IsOn;
     }
 }

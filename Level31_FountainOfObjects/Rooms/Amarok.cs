@@ -15,11 +15,12 @@ internal class Amarok : SubRoom
         FieldSymbol = 'x';
 
         CanBeShot = true;
+        BoundaryCoords = new IMainRoom.Coordinate(1, 1);
     }
 
     protected override void BuildSenseCoordinates(int i, int j)
     {
-        SenseCoordinate(i, j, 1, 1, FieldCoordList);
+        SenseCoordinate(i, j, BoundaryCoords.Row, BoundaryCoords.Column, FieldCoordList);
         base.BuildSenseCoordinates(i, j);
     }
 

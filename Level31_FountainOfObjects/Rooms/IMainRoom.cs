@@ -1,4 +1,6 @@
-﻿namespace Level31_FountainOfObjects.Rooms;
+﻿using Level31_FountainOfObjects.GameEngine;
+
+namespace Level31_FountainOfObjects.Rooms;
 
 internal interface IMainRoom
 {
@@ -8,4 +10,6 @@ internal interface IMainRoom
     /// <param name="Row"></param>
     /// <param name="Column"></param>
     record Coordinate(int Row, int Column);
+
+    SenseTypes[,] SenseCoords { get; }
 }

@@ -15,11 +15,13 @@ internal class Maelstrom : SubRoom
         EdgeSymbol = '>';
         FieldSymbol = '/';
         OuterFieldSymbol = '\\';
+
+        BoundaryCoords = new IMainRoom.Coordinate(4, 4);
     }
 
     protected override void BuildSenseCoordinates(int i, int j)
     {
-        SenseCoordinate(i, j, 4, 4, OuterFieldCoordList);
+        SenseCoordinate(i, j, BoundaryCoords.Row, BoundaryCoords.Column, OuterFieldCoordList);
         SenseCoordinate(i, j, 3, 3, FieldCoordList);
         base.BuildSenseCoordinates(i, j);
     }

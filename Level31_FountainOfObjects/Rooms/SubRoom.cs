@@ -1,5 +1,4 @@
-﻿using System.Diagnostics.SymbolStore;
-using Level31_FountainOfObjects.GameEngine;
+﻿using Level31_FountainOfObjects.GameEngine;
 
 namespace Level31_FountainOfObjects.Rooms;
 
@@ -24,9 +23,10 @@ internal abstract class SubRoom : MainRoom, ISubRoom
         FieldSymbol = EdgeSymbol;
         OuterFieldSymbol = EdgeSymbol;
 
+        BoundaryCoords = new IMainRoom.Coordinate(0, 0);
         CanBeShot = false;
-
         IsOn = true;
+        
         LocateSenses();
     }
 
@@ -43,21 +43,20 @@ internal abstract class SubRoom : MainRoom, ISubRoom
     public List<IMainRoom.Coordinate> EdgeCoordList { get; }
     public List<IMainRoom.Coordinate> FieldCoordList { get; }
     public List<IMainRoom.Coordinate> OuterFieldCoordList { get; }
-    
-    internal bool CanBeShot { get; private protected set; }
+
+    public bool CanBeShot { get; private protected init; }
 
     /// <summary>
     /// Property and Method to turn SubRooms on and off
     /// </summary>
-    internal bool IsOn { get; set; }
+    public bool IsOn { get; protected internal set; }
 
-    bool ISubRoom.IsOn() => IsOn;
+    public IMainRoom.Coordinate BoundaryCoords { get; protected init; }
 
     /// <summary>
     /// ConsoleColors used for drawing sprites
     /// </summary>
     public ConsoleColor CenterColor { get; protected init; }
-
     public ConsoleColor EdgeColor { get; protected init; }
     public ConsoleColor FieldColor { get; protected init; }
     public ConsoleColor OuterFieldColor { get; protected init; }
