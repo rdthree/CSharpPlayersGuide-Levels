@@ -3,9 +3,5 @@
 internal class Bow
 {
     internal int Ammo { get; set; }
-
-    internal Bow()
-    {
-        Ammo = 5;
-    }
+    internal Bow() => Ammo = 5;
 }

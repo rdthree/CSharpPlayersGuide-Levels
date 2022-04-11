@@ -2,12 +2,12 @@
 
 namespace Level31_FountainOfObjects.GameEngine;
 
-internal class Player : IPlayer
+internal class Player : ICoordinate
 {
     public string? Name { get; }
     public int PlayerColumn { get; private set; }
     public int PlayerRow { get; private set; }
-    public IMainRoom.Coordinate PlayerLocation { get; private set; }
+    public Coordinate PlayerLocation { get; private set; }
     public int Moves { get; internal set; }
     public Controls Control { get; }
     private readonly Game _game;
@@ -19,7 +19,7 @@ internal class Player : IPlayer
         _game = game;
         PlayerRow = 0;
         PlayerColumn = 0;
-        PlayerLocation = new IMainRoom.Coordinate(PlayerRow, PlayerColumn);
+        PlayerLocation = new Coordinate(PlayerRow, PlayerColumn);
         Moves = 0;
     }
 
@@ -32,24 +32,24 @@ internal class Player : IPlayer
                 PlayerRow--;
                 break;
             case HeadingTypes.North when PlayerRow <= 0:
-                PlayerRow = _game.MainRoom.Rows - 1;
+                PlayerRow = _game.Coordinate.Row - 1;
                 break;
-            case HeadingTypes.South when PlayerRow < _game.MainRoom.Rows - 1:
+            case HeadingTypes.South when PlayerRow < _game.Coordinate.Row - 1:
                 PlayerRow++;
                 break;
-            case HeadingTypes.South when PlayerRow >= _game.MainRoom.Rows - 1:
+            case HeadingTypes.South when PlayerRow >= _game.Coordinate.Row - 1:
                 PlayerRow = 0;
                 break;
             case HeadingTypes.West when PlayerColumn > 0:
                 PlayerColumn--;
                 break;
             case HeadingTypes.West when PlayerColumn <= 0:
-                PlayerColumn = _game.MainRoom.Columns - 1;
+                PlayerColumn = _game.Coordinate.Column - 1;
                 break;
-            case HeadingTypes.East when PlayerColumn < _game.MainRoom.Columns - 1:
+            case HeadingTypes.East when PlayerColumn < _game.Coordinate.Column - 1:
                 PlayerColumn++;
                 break;
-            case HeadingTypes.East when PlayerColumn >= _game.MainRoom.Columns - 1:
+            case HeadingTypes.East when PlayerColumn >= _game.Coordinate.Column - 1:
                 PlayerColumn = 0;
                 break;
             case HeadingTypes.None:
@@ -58,7 +58,7 @@ internal class Player : IPlayer
         }
 
         Moves++;
-        PlayerLocation = new IMainRoom.Coordinate(PlayerRow, PlayerColumn);
+        PlayerLocation = new Coordinate(PlayerRow, PlayerColumn);
     }
 
     /// <summary>
@@ -68,7 +68,7 @@ internal class Player : IPlayer
     /// <returns></returns>
     public SenseTypes PlayerInteractions()
     {
-        var mainPos = _game.MainRoom.SenseCoords[PlayerRow, PlayerColumn];
+        var mainPos = _game.Coordinate.SenseCoords[PlayerRow, PlayerColumn];
         var fountainPos = _game.FountainRoom.SenseCoords[PlayerRow, PlayerColumn];
 
         foreach (var amarokPos in _game.Amaroks.Select(amarok => amarok.SenseCoords[PlayerRow, PlayerColumn])
@@ -89,12 +89,12 @@ internal class Player : IPlayer
             var playerRowMove = PlayerRow + rndRowMove.Next(-5, 5);
             var playerColMove = PlayerRow + rndColMove.Next(-5, 5);
 
-            if (playerRowMove < 0) PlayerRow = _game.MainRoom.Rows + playerRowMove;
-            else if (playerRowMove > _game.MainRoom.Rows - 1) PlayerRow = playerRowMove - _game.MainRoom.Rows;
+            if (playerRowMove < 0) PlayerRow = _game.Coordinate.Row + playerRowMove;
+            else if (playerRowMove > _game.Coordinate.Row - 1) PlayerRow = playerRowMove - _game.Coordinate.Row;
             else PlayerRow = playerRowMove;
 
-            if (playerColMove < 0) PlayerColumn = _game.MainRoom.Columns + playerColMove;
-            else if (playerColMove > _game.MainRoom.Columns - 1) PlayerColumn = playerColMove - _game.MainRoom.Columns;
+            if (playerColMove < 0) PlayerColumn = _game.Coordinate.Column + playerColMove;
+            else if (playerColMove > _game.Coordinate.Column - 1) PlayerColumn = playerColMove - _game.Coordinate.Column;
             else PlayerColumn = playerColMove;
 
             //PlayerRow -= 2;
@@ -105,7 +105,7 @@ internal class Player : IPlayer
                 var rnd = new Random(DateTime.Now.Millisecond);
                 //var newRow = _game.Maelstroms[i].Location.Row + rnd.Next(_game.MainRoom.Rows);
                 //var newCol = _game.Maelstroms[i].Location.Column + rnd.Next();
-                _game.Maelstroms[i] = new Maelstrom(_game.MainRoom.Rows, _game.MainRoom.Columns,
+                _game.Maelstroms[i] = new Maelstrom(_game.Coordinate.Row, _game.Coordinate.Column,
                     _game.Maelstroms[i].Location.Row + rnd.Next(2),
                     _game.Maelstroms[i].Location.Column + rnd.Next(2));
             }

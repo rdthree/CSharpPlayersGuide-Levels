@@ -2,16 +2,16 @@
 
 namespace Level31_FountainOfObjects.Rooms;
 
-internal abstract class SubRoom : MainRoom, ISubRoom
+internal abstract class SubRoom : Coordinate
 {
-    protected SubRoom(int rows, int columns, int rowOffset, int colOffset) : base(rows, columns)
+    protected SubRoom(int row, int column, int rowOffset, int colOffset) : base(row, column)
     {
-        Location = new IMainRoom.Coordinate(rows - rowOffset, columns - colOffset);
+        Location = new Coordinate(row - rowOffset, column - colOffset);
 
-        CenterCoordList = new List<IMainRoom.Coordinate>();
-        EdgeCoordList = new List<IMainRoom.Coordinate>();
-        FieldCoordList = new List<IMainRoom.Coordinate>();
-        OuterFieldCoordList = new List<IMainRoom.Coordinate>();
+        CenterCoordList = new List<Coordinate>();
+        EdgeCoordList = new List<Coordinate>();
+        FieldCoordList = new List<Coordinate>();
+        OuterFieldCoordList = new List<Coordinate>();
 
         CenterColor = ConsoleColor.Black;
         EdgeColor = CenterColor;
@@ -23,8 +23,7 @@ internal abstract class SubRoom : MainRoom, ISubRoom
         FieldSymbol = EdgeSymbol;
         OuterFieldSymbol = EdgeSymbol;
 
-        BoundaryCoords = new IMainRoom.Coordinate(0, 0);
-        CanBeShot = false;
+        BoundaryCoords = new Coordinate(0, 0);
         IsOn = true;
         
         LocateSenses();
@@ -33,25 +32,23 @@ internal abstract class SubRoom : MainRoom, ISubRoom
     /// <summary>
     /// Generally, the Location refers the center coordinate of the SubRoom
     /// </summary>
-    public IMainRoom.Coordinate Location { get; protected set; }
+    public Coordinate Location { get; protected set; }
 
     /// <summary>
     /// Coordinate Lists used to draw sprites and locate "senses"
     /// </summary>
-    public List<IMainRoom.Coordinate> CenterCoordList { get; }
+    public List<Coordinate> CenterCoordList { get; }
 
-    public List<IMainRoom.Coordinate> EdgeCoordList { get; }
-    public List<IMainRoom.Coordinate> FieldCoordList { get; }
-    public List<IMainRoom.Coordinate> OuterFieldCoordList { get; }
-
-    public bool CanBeShot { get; private protected init; }
+    public List<Coordinate> EdgeCoordList { get; }
+    public List<Coordinate> FieldCoordList { get; }
+    public List<Coordinate> OuterFieldCoordList { get; }
 
     /// <summary>
     /// Property and Method to turn SubRooms on and off
     /// </summary>
     public bool IsOn { get; protected internal set; }
 
-    public IMainRoom.Coordinate BoundaryCoords { get; protected init; }
+    public Coordinate BoundaryCoords { get; protected init; }
 
     /// <summary>
     /// ConsoleColors used for drawing sprites
@@ -101,12 +98,14 @@ internal abstract class SubRoom : MainRoom, ISubRoom
     /// <param name="rowDist">rows the "sense" will emanate outwards from SubRoom center</param>
     /// <param name="colDist">columns the "sense" will emanate outwards from the SubRoom center</param>
     /// <param name="senseCoordList">corresponding List within the subclass where "sense" locations are added</param>
-    protected void SenseCoordinate(int i, int j, int rowDist, int colDist, List<IMainRoom.Coordinate> senseCoordList)
+    protected void SenseCoordinate(int i, int j, int rowDist, int colDist, List<Coordinate> senseCoordList)
     {
-        var (row, column) = RelativeToCoordinate(i, j, Location);
-        if (row > rowDist || column > colDist) return;
+        //(row, column) = RelativeToCoordinate(i, j, Location);
+        var relativeCoordinate = RelativeToCoordinate(i, j, Location);
+        //if (row > rowDist || column > colDist) return;
+        if (relativeCoordinate.Row > rowDist || relativeCoordinate.Column > colDist) return;
         SenseCoords[i, j] = SenseTypeSelector(senseCoordList);
-        senseCoordList.Add(new IMainRoom.Coordinate(i, j));
+        senseCoordList.Add(new Coordinate(i, j));
     }
 
     /// <summary>
@@ -115,13 +114,13 @@ internal abstract class SubRoom : MainRoom, ISubRoom
     /// <param name="i">i in i,j for loop</param>
     /// <param name="j">j in i,j for loop</param>
     /// <param name="senseCoordList">corresponding List within the subclass where "sense" locations are added</param>
-    private void SenseCoordinateAdjacent(int i, int j, List<IMainRoom.Coordinate> senseCoordList)
+    private void SenseCoordinateAdjacent(int i, int j, List<Coordinate> senseCoordList)
     {
         var (row, column) = (Location.Row, Location.Column);
         if ((i != row + 1 || j != column) && (i != row - 1 || j != column) &&
             (i != row || j != column + 1) && (i != row || j != column - 1)) return;
         SenseCoords[i, j] = SenseTypeSelector(senseCoordList);
-        senseCoordList.Add(new IMainRoom.Coordinate(i, j));
+        senseCoordList.Add(new Coordinate(i, j));
     }
 
     /// <summary>
@@ -131,12 +130,11 @@ internal abstract class SubRoom : MainRoom, ISubRoom
     /// <param name="j">j in i,j for loop</param>
     /// <param name="targetItemCoordinate">target coordinate</param>
     /// <returns></returns>
-    private static IMainRoom.Coordinate RelativeToCoordinate(int i, int j, IMainRoom.Coordinate targetItemCoordinate)
+    private static Coordinate RelativeToCoordinate(int i, int j, Coordinate targetItemCoordinate)
     {
-        var (row, column) = targetItemCoordinate;
-        var checkI = Math.Abs(row - i);
-        var checkJ = Math.Abs(column - j);
-        return new IMainRoom.Coordinate(checkI, checkJ);
+        var checkI = Math.Abs(targetItemCoordinate.Row - i);
+        var checkJ = Math.Abs(targetItemCoordinate.Column - j);
+        return new Coordinate(checkI, checkJ);
     }
 
     /// <summary>
@@ -144,13 +142,13 @@ internal abstract class SubRoom : MainRoom, ISubRoom
     /// </summary>
     private void LocateSenses()
     {
-        for (var i = 0; i < Rows; i++)
-        for (var j = 0; j < Columns; j++)
+        for (var i = 0; i < Row; i++)
+        for (var j = 0; j < Column; j++)
         {
             BuildSenseCoordinates(i, j);
             BuildAdjSenseCoordinates(i, j);
         }
     }
 
-    protected virtual SenseTypes SenseTypeSelector(List<IMainRoom.Coordinate> senseCoordList) => SenseTypes.Nothing;
+    protected virtual SenseTypes SenseTypeSelector(List<Coordinate> senseCoordList) => SenseTypes.Nothing;
 }

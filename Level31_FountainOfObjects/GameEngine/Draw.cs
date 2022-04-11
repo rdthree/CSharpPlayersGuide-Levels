@@ -2,7 +2,7 @@
 
 namespace Level31_FountainOfObjects.GameEngine;
 
-internal class Draw : IDraw
+internal class Draw
 {
     private readonly Game _game;
     private readonly Player _player;
@@ -15,9 +15,9 @@ internal class Draw : IDraw
 
     public void DrawRoom()
     {
-        for (var i = 0; i < _game.MainRoom.Rows; i++)
+        for (var i = 0; i < _game.Coordinate.Row; i++)
         {
-            for (var j = 0; j < _game.MainRoom.Columns; j++)
+            for (var j = 0; j < _game.Coordinate.Column; j++)
                 SpriteDrawOrder(i, j);
 
             Console.WriteLine();
@@ -26,7 +26,7 @@ internal class Draw : IDraw
 
     private void SpriteDrawOrder(int i, int j)
     {
-        var coord = new IMainRoom.Coordinate(i, j);
+        var coord = new Coordinate(i, j);
         if (DrawPlayer(coord, _player.PlayerLocation, '@')) return;
         if (DrawItem(_player, _game.FountainRoom, coord)) return;
         if (_game.Amaroks.Any(amarok => DrawItem(_player, amarok, coord))) return;
@@ -35,17 +35,17 @@ internal class Draw : IDraw
         DrawRoomGrid(ConsoleColor.Yellow, ':');
     }
 
-    private static bool DrawPlayer(IMainRoom.Coordinate coord, IMainRoom.Coordinate playerCoord, char c = '+')
+    private static bool DrawPlayer(Coordinate coord, Coordinate playerCoord, char c = '+')
     {
         if (coord != playerCoord) return false;
         WriteResetChar(c, ConsoleColor.Red);
         return true;
     }
 
-    private static bool DrawItem(Player player, SubRoom place, IMainRoom.Coordinate coord)
+    private static bool DrawItem(Player player, SubRoom place, Coordinate coord)
     {
         place.IsOn = SubRoomOnOff(player, place);
-        if (!place.IsOn && place.CanBeShot) return false;
+        if (!place.IsOn && place is IShootable) return false;
         if (CheckIfCoordinateIsUsed(place, coord)) return false;
 
         if (DrawItemLocation(coord, place)) return true;
@@ -55,7 +55,7 @@ internal class Draw : IDraw
         return DrawSense(coord, place.OuterFieldCoordList, place.OuterFieldColor, place.OuterFieldSymbol) || true;
     }
 
-    private static bool CheckIfCoordinateIsUsed(SubRoom place, IMainRoom.Coordinate coord)
+    private static bool CheckIfCoordinateIsUsed(SubRoom place, Coordinate coord)
     {
         return place.CenterCoordList.All(coordinate => coord != coordinate) &&
                place.EdgeCoordList.All(coordinate => coord != coordinate) &&
@@ -63,14 +63,14 @@ internal class Draw : IDraw
                place.OuterFieldCoordList.All(coordinate => coord != coordinate);
     }
 
-    private static bool DrawItemLocation(IMainRoom.Coordinate coord, SubRoom place)
+    private static bool DrawItemLocation(Coordinate coord, SubRoom place)
     {
         if (coord != place.Location) return false;
         WriteResetChar(place.CenterSymbol, place.CenterColor);
         return true;
     }
 
-    private static bool DrawSense(IMainRoom.Coordinate coord, IEnumerable<IMainRoom.Coordinate> listSense,
+    private static bool DrawSense(Coordinate coord, List<Coordinate> listSense,
         ConsoleColor color,
         char c = '+')
     {
@@ -88,14 +88,16 @@ internal class Draw : IDraw
         Console.ResetColor();
     }
 
-    private static bool SubRoomOnOff(Player player, ISubRoom subRoom)
+    private static bool SubRoomOnOff(Player player, SubRoom subRoom)
     {
         if (!player.Control.IsShoot) return subRoom.IsOn;
         {
             var subRoomRow = subRoom.Location.Row;
             var subRoomCol = subRoom.Location.Column;
-            var playerRow = player.PlayerLocation.Row;
-            var playerCol = player.PlayerLocation.Column;
+            //var playerRow = player.PlayerLocation.Row;
+            var playerRow = player.PlayerRow;
+            //var playerCol = player.PlayerLocation.Column;
+            var playerCol = player.PlayerColumn;
             var playerDir = player.Control.Direction;
 
             switch (playerDir)

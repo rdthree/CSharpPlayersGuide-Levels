@@ -2,14 +2,14 @@
 
 namespace Level31_FountainOfObjects.GameEngine;
 
-internal class Game : IGame
+internal class Game
 {
     // player and ui
     private readonly Player _dasPlayer;
     private readonly Draw _dasDraw;
 
     // places and things
-    internal MainRoom MainRoom { get; private set; } = new(0, 0);
+    internal Coordinate Coordinate { get; private set; } = new(0, 0);
     internal FountainRoom FountainRoom { get; private set; } = new(0, 0, 0, 0);
     internal List<PitRoom> PitRooms { get; private set; } = new();
     internal List<Maelstrom> Maelstroms { get; private set; } = new();
@@ -72,7 +72,7 @@ internal class Game : IGame
                 break;
         }
 
-        MainRoom = new MainRoom(rows, columns);
+        Coordinate = new Coordinate(rows, columns);
         FountainRoom = new FountainRoom(rows, columns, 5, 4);
         PitRooms = new List<PitRoom>();
         for (var i = 0; i < maxPitRooms; i++)
@@ -88,6 +88,7 @@ internal class Game : IGame
     internal void Run()
     {
         Console.WriteLine(_dasPlayer.Name);
+        var start = DateTime.Now;
         while (!Win && !Lose)
         {
             if (_dasPlayer.Control.ShowMap) _dasDraw.DrawRoom();
@@ -95,9 +96,13 @@ internal class Game : IGame
             Console.WriteLine(
                 $"You are headed {_dasPlayer.Control.Direction} and " +
                 $"currently at ({_dasPlayer.PlayerRow + 1}, {_dasPlayer.PlayerColumn + 1})" +
-                $"map size: ({MainRoom.Rows},{MainRoom.Columns})");
+                $"map size: ({Coordinate.Row},{Coordinate.Column})");
+
+            var runningTime = DateTime.Now - start;
+            Console.WriteLine(runningTime);
 
             var messages = Messages.Senses(_dasPlayer.PlayerInteractions());
+
             WinLose();
 
             Console.ForegroundColor = ConsoleColor.Yellow;
@@ -114,7 +119,6 @@ internal class Game : IGame
                 _dasPlayer.Moves += MaxMoves / 10;
 
             WinLose();
-
             Console.Clear();
         }
     }

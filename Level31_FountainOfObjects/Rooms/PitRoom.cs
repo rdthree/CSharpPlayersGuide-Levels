@@ -4,9 +4,9 @@ namespace Level31_FountainOfObjects.Rooms;
 
 internal class PitRoom : SubRoom
 {
-    public PitRoom(int rows, int columns, int rowOffset, int colOffset) : base(rows, columns, rowOffset, colOffset)
+    public PitRoom(int row, int column, int rowOffset, int colOffset) : base(row, column, rowOffset, colOffset)
     {
-        Location = new IMainRoom.Coordinate(Rows - rowOffset, Columns - colOffset);
+        Location = new Coordinate(Row - rowOffset, Column - colOffset);
         CenterColor = ConsoleColor.Green;
         EdgeColor = ConsoleColor.DarkGreen;
         FieldColor = ConsoleColor.DarkCyan;
@@ -14,7 +14,7 @@ internal class PitRoom : SubRoom
         EdgeSymbol = '%';
         FieldSymbol = 's';
 
-        BoundaryCoords = new IMainRoom.Coordinate(2, 2);
+        BoundaryCoords = new Coordinate(2, 2);
     }
 
     protected override void BuildSenseCoordinates(int i, int j)
@@ -24,7 +24,7 @@ internal class PitRoom : SubRoom
         base.BuildSenseCoordinates(i, j);
     }
 
-    protected override SenseTypes SenseTypeSelector(List<IMainRoom.Coordinate> senseCoordList)
+    protected override SenseTypes SenseTypeSelector(List<Coordinate> senseCoordList)
     {
         if (senseCoordList == CenterCoordList) return SenseTypes.Pit;
         if (senseCoordList == EdgeCoordList) return SenseTypes.Chill;

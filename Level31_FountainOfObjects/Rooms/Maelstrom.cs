@@ -4,9 +4,9 @@ namespace Level31_FountainOfObjects.Rooms;
 
 internal class Maelstrom : SubRoom
 {
-    public Maelstrom(int rows, int columns, int rowOffset, int colOffset) : base(rows, columns, rowOffset, colOffset)
+    public Maelstrom(int row, int column, int rowOffset, int colOffset) : base(row, column, rowOffset, colOffset)
     {
-        Location = new IMainRoom.Coordinate(Rows - rowOffset, Columns - colOffset);
+        Location = new Coordinate(Row - rowOffset, Column - colOffset);
         CenterColor = ConsoleColor.White;
         EdgeColor = ConsoleColor.Gray;
         FieldColor = ConsoleColor.DarkGray;
@@ -16,7 +16,7 @@ internal class Maelstrom : SubRoom
         FieldSymbol = '/';
         OuterFieldSymbol = '\\';
 
-        BoundaryCoords = new IMainRoom.Coordinate(4, 4);
+        BoundaryCoords = new Coordinate(4, 4);
     }
 
     protected override void BuildSenseCoordinates(int i, int j)
@@ -26,7 +26,7 @@ internal class Maelstrom : SubRoom
         base.BuildSenseCoordinates(i, j);
     }
 
-    protected override SenseTypes SenseTypeSelector(List<IMainRoom.Coordinate> senseCoordList)
+    protected override SenseTypes SenseTypeSelector(List<Coordinate> senseCoordList)
     {
         if (senseCoordList == CenterCoordList) return SenseTypes.Blown;
         if (senseCoordList == EdgeCoordList) return SenseTypes.Alert;

@@ -1,6 +1,6 @@
 ﻿namespace Level31_FountainOfObjects.GameEngine;
 
-internal class Controls : IControls
+internal class Controls
 {
     public HeadingTypes Direction { get; private set; } = HeadingTypes.None;
     public bool IsShoot { get; private set; }
