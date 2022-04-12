@@ -54,6 +54,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Level30_Generics_ColoredIte
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Level31_FountainOfObjects", "Level31_FountainOfObjects\Level31_FountainOfObjects.csproj", "{B2FA536C-4E7D-4176-9586-E77105D88E8D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Level33_Interfaces_Namespaces_TheFeud", "Level33_Interfaces_Namespaces_TheFeud\Level33_Interfaces_Namespaces_TheFeud.csproj", "{A6E34AA9-31C6-419C-9C17-91013E0283DA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Level34_Methods_Out_SaferNumberCrunching", "Level34_Methods_Out_SaferNumberCrunching\Level34_Methods_Out_SaferNumberCrunching.csproj", "{9F661DA3-D993-4C06-AC85-90DD34B8CE46}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -168,5 +172,13 @@ Global
 		{B2FA536C-4E7D-4176-9586-E77105D88E8D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B2FA536C-4E7D-4176-9586-E77105D88E8D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B2FA536C-4E7D-4176-9586-E77105D88E8D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A6E34AA9-31C6-419C-9C17-91013E0283DA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A6E34AA9-31C6-419C-9C17-91013E0283DA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A6E34AA9-31C6-419C-9C17-91013E0283DA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A6E34AA9-31C6-419C-9C17-91013E0283DA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9F661DA3-D993-4C06-AC85-90DD34B8CE46}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9F661DA3-D993-4C06-AC85-90DD34B8CE46}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9F661DA3-D993-4C06-AC85-90DD34B8CE46}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9F661DA3-D993-4C06-AC85-90DD34B8CE46}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
