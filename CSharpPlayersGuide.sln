@@ -58,6 +58,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Level33_Interfaces_Namespac
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Level34_Methods_Out_SaferNumberCrunching", "Level34_Methods_Out_SaferNumberCrunching\Level34_Methods_Out_SaferNumberCrunching.csproj", "{9F661DA3-D993-4C06-AC85-90DD34B8CE46}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Level34_ExtensionMethods_BetterRandom", "Level34_ExtensionMethods_BetterRandom\Level34_ExtensionMethods_BetterRandom.csproj", "{721ED594-5627-4009-AA7F-C99E73063FCD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -180,5 +182,9 @@ Global
 		{9F661DA3-D993-4C06-AC85-90DD34B8CE46}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9F661DA3-D993-4C06-AC85-90DD34B8CE46}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9F661DA3-D993-4C06-AC85-90DD34B8CE46}.Release|Any CPU.Build.0 = Release|Any CPU
+		{721ED594-5627-4009-AA7F-C99E73063FCD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{721ED594-5627-4009-AA7F-C99E73063FCD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{721ED594-5627-4009-AA7F-C99E73063FCD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{721ED594-5627-4009-AA7F-C99E73063FCD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
