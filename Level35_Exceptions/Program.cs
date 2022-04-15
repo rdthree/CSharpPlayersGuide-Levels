@@ -20,4 +20,15 @@ while (true)
     Console.Write("guess");
     int.TryParse(Console.ReadLine(), out int guess);
     guessed.Add(guess);
+
+    if (guessed.Contains(guess))
+    {
+        Console.ResetColor();
+        Console.WriteLine("that's already been guessed");
+    }
+
+    if (guess == boom)
+    {
+        throw new Exception("you guessed the secret guess, say goodbye");
+    }
 }
