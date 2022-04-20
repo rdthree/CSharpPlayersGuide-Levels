@@ -14,21 +14,28 @@ var boom = rand.Next(10);
 var guessed = new List<int>();
 Console.WriteLine("guess a number 1 to 10");
 
-while (true)
+try
 {
-    Console.ForegroundColor = ConsoleColor.Red;
-    Console.Write("guess");
-    int.TryParse(Console.ReadLine(), out int guess);
-    guessed.Add(guess);
-
-    if (guessed.Contains(guess))
+    while (true)
     {
-        Console.ResetColor();
-        Console.WriteLine("that's already been guessed");
-    }
+        Console.ForegroundColor = ConsoleColor.Red;
+        Console.Write("guess: ");
+        int.TryParse(Console.ReadLine(), out int guess);
 
-    if (guess == boom)
-    {
-        throw new Exception("you guessed the secret guess, say goodbye");
+        if (guessed.Contains(guess))
+        {
+            Console.ResetColor();
+            Console.WriteLine("that's already been guessed");
+        }
+        else guessed.Add(guess);
+
+        if (guess == boom)
+        {
+            throw new Exception();
+        }
     }
+}
+catch (Exception)
+{
+    Console.WriteLine("you guessed the secret guess, say goodbye");
 }
