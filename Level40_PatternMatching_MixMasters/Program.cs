@@ -1,7 +1,6 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
-using System.ComponentModel.Design;
-
+// ReSharper disable UnusedVariable
 var drink = DrinkMix.Water;
 while (true)
 {

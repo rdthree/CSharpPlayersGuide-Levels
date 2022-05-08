@@ -1,5 +1,6 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
+// ReSharper disable UnusedVariable
 Console.WriteLine("Hello, World!");
 
 var tree = new CharberryTree();

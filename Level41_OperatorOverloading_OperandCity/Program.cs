@@ -1,13 +1,6 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
-using System.Diagnostics;
-using System.Globalization;
-using System.Runtime.CompilerServices;
-
-Console.WriteLine("Hello, World!");
-
 Console.WriteLine(new BlockCoordinate(1,1) + Direction.East);
-
 
 public record BlockCoordinate(int Row, int Column)
 {

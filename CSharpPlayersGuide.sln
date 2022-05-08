@@ -76,6 +76,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Level41_OperatorOverloading
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Level42_QueryExpressions_ThreeLenses", "Level42_QueryExpressions_ThreeLenses\Level42_QueryExpressions_ThreeLenses.csproj", "{B3E3C996-2CE6-4F52-80F1-B1FAF7D3E7B3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Level43_Threads_RepeatingStream", "Level43_Threads_RepeatingStream\Level43_Threads_RepeatingStream.csproj", "{67F5AC27-EA58-4A95-B1FF-BE0B28E809E7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -234,5 +236,9 @@ Global
 		{B3E3C996-2CE6-4F52-80F1-B1FAF7D3E7B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B3E3C996-2CE6-4F52-80F1-B1FAF7D3E7B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B3E3C996-2CE6-4F52-80F1-B1FAF7D3E7B3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{67F5AC27-EA58-4A95-B1FF-BE0B28E809E7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{67F5AC27-EA58-4A95-B1FF-BE0B28E809E7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{67F5AC27-EA58-4A95-B1FF-BE0B28E809E7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{67F5AC27-EA58-4A95-B1FF-BE0B28E809E7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

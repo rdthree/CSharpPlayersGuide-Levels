@@ -36,6 +36,7 @@ internal class Pack
         foreach (var packItem in _items)
         {
             // ReSharper disable once ConditionIsAlwaysTrueOrFalse
+            // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
             if (packItem == null)
                 EmptySlots++;
             // ReSharper disable once ConditionIsAlwaysTrueOrFalse
@@ -56,6 +57,7 @@ internal class Pack
         for (int i = 0; i < _items.Length; i++)
         {
             // ReSharper disable once ConditionIsAlwaysTrueOrFalse
+            // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
             if (_items[i] == null)
             {
                 if (item.Weight() + CurrentWeight > _maxWeight)

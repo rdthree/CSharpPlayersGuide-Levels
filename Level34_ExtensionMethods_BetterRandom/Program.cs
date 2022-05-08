@@ -1,4 +1,7 @@
-﻿var words = new List<string>()
+﻿// ReSharper disable UnusedVariable
+// ReSharper disable RedundantExplicitArrayCreation
+// ReSharper disable NotAccessedVariable
+var words = new List<string>()
 {
     "up",
     "down",

@@ -5,10 +5,14 @@ using Level36_Delegates_TheSieve;
 // test out delegates and how they work
 
 int AddOne(int number) => number + 1;
+/*
 int SubtractOne(int number) => number - 1;
+*/
+/*
 int Double(int number) => number * 2;
+*/
 
-var poop = ChangeArrayElements(new int[] { 1, 2, 3, 4, 5, 6 }, AddOne);
+var poop = ChangeArrayElements(new[] { 1, 2, 3, 4, 5, 6 }, AddOne);
 foreach (var i in poop) Console.WriteLine(i);
 
 int[] ChangeArrayElements(int[] numbers, NumberDelegate operation)
@@ -36,7 +40,8 @@ var sieveTest = choice switch
 {
     1 => new Sieve(IsEven),
     2 => new Sieve(IsPositive),
-    3 => new Sieve(IsTens)
+    3 => new Sieve(IsTens),
+    _ => throw new ArgumentOutOfRangeException()
 };
 
 while (true)

@@ -1,9 +1,11 @@
 ﻿using Level33_Interfaces_Namespaces_TheFeud.IField;
 using Level33_Interfaces_Namespaces_TheFeud.McDroid;
+// ReSharper disable UnusedVariable
 
 
 internal class Program
 {
+    // ReSharper disable once UnusedParameter.Local
     static void Main(string[] args)
     {
         var fieldSheep = new Sheep();
