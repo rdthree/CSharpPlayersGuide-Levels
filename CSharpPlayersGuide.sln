@@ -72,6 +72,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Level39_Files_LongGame", "L
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Level40_PatternMatching_MixMasters", "Level40_PatternMatching_MixMasters\Level40_PatternMatching_MixMasters.csproj", "{61C92701-FA46-4A0A-911F-6F65D0C21B9F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Level41_OperatorOverloading_OperandCity", "Level41_OperatorOverloading_OperandCity\Level41_OperatorOverloading_OperandCity.csproj", "{B89D0E9B-816F-4482-84DE-5A8D61CDCE8A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -222,5 +224,9 @@ Global
 		{61C92701-FA46-4A0A-911F-6F65D0C21B9F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{61C92701-FA46-4A0A-911F-6F65D0C21B9F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{61C92701-FA46-4A0A-911F-6F65D0C21B9F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B89D0E9B-816F-4482-84DE-5A8D61CDCE8A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B89D0E9B-816F-4482-84DE-5A8D61CDCE8A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B89D0E9B-816F-4482-84DE-5A8D61CDCE8A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B89D0E9B-816F-4482-84DE-5A8D61CDCE8A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
