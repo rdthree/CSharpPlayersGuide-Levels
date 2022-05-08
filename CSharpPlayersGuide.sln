@@ -70,6 +70,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Level38_Lambda_Sieve", "Lev
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Level39_Files_LongGame", "Level39_Files_LongGame\Level39_Files_LongGame.csproj", "{0D30C08E-3696-4754-AC7A-232C109CE7F3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Level40_PatternMatching_MixMasters", "Level40_PatternMatching_MixMasters\Level40_PatternMatching_MixMasters.csproj", "{61C92701-FA46-4A0A-911F-6F65D0C21B9F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -216,5 +218,9 @@ Global
 		{0D30C08E-3696-4754-AC7A-232C109CE7F3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0D30C08E-3696-4754-AC7A-232C109CE7F3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0D30C08E-3696-4754-AC7A-232C109CE7F3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{61C92701-FA46-4A0A-911F-6F65D0C21B9F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{61C92701-FA46-4A0A-911F-6F65D0C21B9F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{61C92701-FA46-4A0A-911F-6F65D0C21B9F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{61C92701-FA46-4A0A-911F-6F65D0C21B9F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
