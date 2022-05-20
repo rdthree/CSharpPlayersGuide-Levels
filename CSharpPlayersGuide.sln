@@ -80,6 +80,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Level43_Threads_RepeatingSt
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Level44_ASynch_RandomWords", "Level44_ASynch_RandomWords\Level44_ASynch_RandomWords.csproj", "{AE6BBB62-500F-4F94-B7CF-46C0905AA465}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Level52_Final", "Level52_Final\Level52_Final.csproj", "{A3A788C1-F333-4973-ABC8-2AAE5130EB92}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -246,5 +248,9 @@ Global
 		{AE6BBB62-500F-4F94-B7CF-46C0905AA465}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AE6BBB62-500F-4F94-B7CF-46C0905AA465}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AE6BBB62-500F-4F94-B7CF-46C0905AA465}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A3A788C1-F333-4973-ABC8-2AAE5130EB92}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A3A788C1-F333-4973-ABC8-2AAE5130EB92}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A3A788C1-F333-4973-ABC8-2AAE5130EB92}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A3A788C1-F333-4973-ABC8-2AAE5130EB92}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
