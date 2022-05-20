@@ -1,40 +1,48 @@
-﻿// See https://aka.ms/new-console-template for more information
+﻿// dodge ball game - multi team
 
-// dodge ball game - multi team
+// update so player goes up against several teams. each team has its own captain, color, difficulty
+
+using Level52_Final;
+using Action = Level52_Final.Action;
 
 var game = new Game();
 game.GameRun();
 
 internal class Game
 {
-    internal Team Red { get; init; }
-    internal Team Blue { get; init; }
-
-    internal Captain RedCaptain { get; init; }
-    internal Captain BlueCaptain { get; init; }
-
-    private Random _random = new Random();
+    private Team Red { get; set; } = null!;
+    private Team Blue { get; set; } = null!;
+    private Captain RedCaptain { get; set; } = null!;
+    private Captain BlueCaptain { get; set; } = null!;
+    private readonly Random _random = new Random();
+    
 
     internal Game()
     {
         Console.Write("player name: ");
         var redName = Console.ReadLine();
 
+        TeamSetUp(redName);
+
+        // red or blue team start first random
+        _ = _random.Next(1) == 0 ? RedCaptain.CurrentTurn = true : BlueCaptain.CurrentTurn = true;
+    }
+
+    private void TeamSetUp(string? redName)
+    {
         Red = new Team(TeamColor.Red, 3);
         Blue = new Team(TeamColor.Blue, 3);
 
         RedCaptain = new Captain(Red, redName, 75);
         BlueCaptain = new Captain(Blue, "Blue Bozo", 50);
 
-        Red.TeamList.Add(BlueCaptain);
+        Red.TeamList.Add(RedCaptain);
         for (var i = 0; i < Red.Size; i++)
             Red.TeamList.Add(new Character(Red, "generic player", _random.Next(10)));
 
-        Blue.TeamList.Add(RedCaptain);
+        Blue.TeamList.Add(BlueCaptain);
         for (var i = 0; i < Blue.Size; i++)
             Blue.TeamList.Add(new Character(Blue, "generic player", _random.Next(10)));
-
-        _ = _random.Next(1) == 0 ? RedCaptain.CurrentTurn = true : BlueCaptain.CurrentTurn = true;
     }
 
     internal void GameRun()
@@ -49,11 +57,13 @@ internal class Game
                 Console.WriteLine("Red Team Wins");
                 break;
             }
-            else if (Blue.TeamList.Count < 1)
+
+            if (Blue.TeamList.Count < 1)
             {
                 Console.WriteLine("Blue Team Wins");
                 break;
             }
+
             Thread.Sleep(3000);
         }
     }
@@ -61,20 +71,10 @@ internal class Game
     private void PlayTurn(Team team)
     {
         var character = team.TeamList[_random.Next(team.TeamList.Count)];
-        Character otherCharacter;
 
         PickAction(character);
+        Character otherCharacter = ShowCurrentTeamColor(character);
 
-        if (character.Team.Color == TeamColor.Red)
-        {
-            Console.ForegroundColor = ConsoleColor.Red;
-            otherCharacter = Blue.TeamList[_random.Next(Blue.TeamList.Count)];
-        }
-        else
-        {
-            Console.ForegroundColor = ConsoleColor.Blue;
-            otherCharacter = Red.TeamList[_random.Next(Red.TeamList.Count)];
-        }
 
         if (otherCharacter is Captain) Console.WriteLine($"UH OH ITS THE CAPTAIN");
         Console.WriteLine($"It is {character.Team.Color} {character.GetType()}'s turn.\n" +
@@ -96,6 +96,23 @@ internal class Game
         Console.ResetColor();
     }
 
+    private Character ShowCurrentTeamColor(Character character)
+    {
+        Character otherCharacter;
+        if (character.Team.Color == TeamColor.Red)
+        {
+            Console.ForegroundColor = ConsoleColor.Red;
+            otherCharacter = Blue.TeamList[_random.Next(Blue.TeamList.Count)];
+        }
+        else
+        {
+            Console.ForegroundColor = ConsoleColor.Blue;
+            otherCharacter = Red.TeamList[_random.Next(Red.TeamList.Count)];
+        }
+
+        return otherCharacter;
+    }
+
     private void TeamTurn()
     {
         if (BlueCaptain.CurrentTurn)
@@ -113,27 +130,20 @@ internal class Game
     private void TeamStats()
     {
         Console.ForegroundColor = ConsoleColor.Magenta;
-        foreach (var player in Red.TeamList.ToList())
+        foreach (var player in Red.TeamList.ToList().Where(player => !player.IsInGame))
         {
-            if (!player.IsInGame)
-            {
-                Red.TeamList.Remove(player);
-                Console.WriteLine($"{player.Name} from {TeamColor.Red} is out of the game.");
-            }
+            Red.TeamList.Remove(player);
+            Console.WriteLine($"{player.Name} from {TeamColor.Red} is out of the game.");
         }
 
-        foreach (var player in Blue.TeamList.ToList())
+        foreach (var player in Blue.TeamList.ToList().Where(player => !player.IsInGame))
         {
-            if (!player.IsInGame)
-            {
-                Blue.TeamList.Remove(player);
-                Console.WriteLine($"{player.Name} from {TeamColor.Blue} is out of the game.");
-            }
+            Blue.TeamList.Remove(player);
+            Console.WriteLine($"{player.Name} from {TeamColor.Blue} is out of the game.");
         }
 
         Console.WriteLine($"{TeamColor.Red} has {Red.TeamList.Count} players");
         Console.WriteLine($"{TeamColor.Blue} has {Blue.TeamList.Count} players");
-
         Console.ResetColor();
     }
 
@@ -178,74 +188,4 @@ internal class Game
 
         return hitPoints;
     }
-}
-
-internal class Character
-{
-    internal string? Name { get; init; }
-    internal int OriginalHp { get; init; }
-    internal bool IsInGame { get; set; }
-
-    // ReSharper disable once InconsistentNaming
-    internal int HP { get; set; }
-    internal Action Action { get; set; }
-    internal Team Team { get; init; }
-    internal bool CurrentTurn;
-
-    protected internal Character(Team team, string? name = "Auto Generated Character", int hp = 5)
-    {
-        Team = team;
-        Name = name;
-        Action = Action.DoNothing;
-        OriginalHp = hp;
-        HP = hp;
-        IsInGame = true;
-    }
-}
-
-internal class Captain : Character
-{
-    protected internal Captain(Team team) : base(team)
-    {
-    }
-
-    protected internal Captain(Team team, string? name) : base(team, name)
-    {
-    }
-
-    protected internal Captain(Team team, string? name, int hp) : base(team, name, hp)
-    {
-    }
-}
-
-internal class Team
-{
-    internal List<Character> TeamList { get; set; } = new List<Character>();
-    internal int Size { get; init; }
-    internal TeamColor Color;
-
-    internal Team(TeamColor color, int size = 10)
-    {
-        Size = size;
-        Color = color;
-    }
-}
-
-enum Action
-{
-    DoNothing = 1,
-    FastThrow,
-    CurveThrow,
-    FakeThrow,
-    HardThrow,
-    FastToss,
-    ScrewToss,
-    UnderToss,
-    BounceToss
-}
-
-enum TeamColor
-{
-    Red,
-    Blue
 }
