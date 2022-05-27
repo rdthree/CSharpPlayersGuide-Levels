@@ -57,7 +57,7 @@ internal class Game
 
             for (var i = 0; i < team.Size; i++)
                 team.TeamList.Add(new Character(team, Character.NamePicker(_namesList),
-                    _random.Next(5 + teamDifficulty)));
+                    _random.Next(1, 5 + teamDifficulty)));
 
             otherTeams.Add(team);
             teamDifficulty++;
@@ -90,13 +90,13 @@ internal class Game
                 Console.WriteLine($"{_currentTeam.Color} Team loses");
                 _otherTeams.Remove(_currentTeam);
                 _currentTeam = _otherTeams[0];
-                
+
                 Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine($"Next Opponents: {_currentTeam.Color} Team");
                 foreach (var character in _currentTeam.TeamList)
                     Console.WriteLine($"{character.Name}");
                 Console.ResetColor();
-                
+
                 // reset who's turn it is
                 RedCaptain.CurrentTurn = true;
             }
@@ -197,8 +197,27 @@ internal class Game
         if (character.Team.Color is TeamColor.Red)
         {
             Console.ForegroundColor = ConsoleColor.Red;
-            Console.Write($"Red Captain {RedCaptain.Name}, pick action (1-9): ");
-            int.TryParse(Console.ReadLine(), out choice);
+            Console.Write($"Red Captain {RedCaptain.Name}, pick action (1-9, k): ");
+            if (!int.TryParse(Console.ReadLine(), out choice))
+            {
+                Console.ForegroundColor = ConsoleColor.Blue;
+                Console.WriteLine($"Remaining Teams");
+                foreach (var otherTeam in _otherTeams)
+                {
+                    Console.ForegroundColor = ConsoleColor.Magenta;
+                    Console.WriteLine($"{otherTeam.Color} : {otherTeam.TeamList.Count}");
+                    Console.ForegroundColor = ConsoleColor.DarkRed;
+                    foreach (var character1 in otherTeam.TeamList)
+                        Console.WriteLine($"{character1.Name}:{character1.HP}/{character1.OriginalHp}");
+                    Console.ResetColor();
+                }
+
+                Console.ResetColor();
+
+                Console.Write($"Red Captain {RedCaptain.Name}, pick action (1-9): ");
+                int.TryParse(Console.ReadLine(), out choice);
+            }
+
             Console.ResetColor();
         }
         else choice = _random.Next(1, 9);
