@@ -3,5 +3,9 @@
 internal enum TeamColor
 {
     Red,
-    Blue
+    Blue,
+    Green,
+    Orange,
+    Violet,
+    Yellow
 }

@@ -11,38 +11,59 @@ game.GameRun();
 internal class Game
 {
     private Team Red { get; set; } = null!;
-    private Team Blue { get; set; } = null!;
-    private Captain RedCaptain { get; set; } = null!;
-    private Captain BlueCaptain { get; set; } = null!;
+    private Character RedCaptain { get; set; } = null!;
     private readonly Random _random = new Random();
-    
+
+    private readonly List<CharacterNames> _namesList;
+
+    private readonly List<Team> _otherTeams;
+    private Team _currentTeam;
+
 
     internal Game()
     {
+        _namesList = Character.CharacterNameList();
         Console.Write("player name: ");
         var redName = Console.ReadLine();
 
-        TeamSetUp(redName);
+        PlayerTeamSetUp(redName);
+        _otherTeams = OtherTeamsSetup();
+        _currentTeam = _otherTeams[0];
 
         // red or blue team start first random
-        _ = _random.Next(1) == 0 ? RedCaptain.CurrentTurn = true : BlueCaptain.CurrentTurn = true;
+        _ = _random.Next(10) >= 5 ? RedCaptain.CurrentTurn = true : _currentTeam.CurrentTurn = true;
     }
 
-    private void TeamSetUp(string? redName)
+    private void PlayerTeamSetUp(string? redName)
     {
         Red = new Team(TeamColor.Red, 3);
-        Blue = new Team(TeamColor.Blue, 3);
-
-        RedCaptain = new Captain(Red, redName, 75);
-        BlueCaptain = new Captain(Blue, "Blue Bozo", 50);
-
+        if (redName != null) RedCaptain = new Character(Red, redName, 10, true);
         Red.TeamList.Add(RedCaptain);
         for (var i = 0; i < Red.Size; i++)
-            Red.TeamList.Add(new Character(Red, "generic player", _random.Next(10)));
+            Red.TeamList.Add(new Character(Red, Character.NamePicker(_namesList), _random.Next(10)));
+    }
 
-        Blue.TeamList.Add(BlueCaptain);
-        for (var i = 0; i < Blue.Size; i++)
-            Blue.TeamList.Add(new Character(Blue, "generic player", _random.Next(10)));
+    private List<Team> OtherTeamsSetup()
+    {
+        var otherTeams = new List<Team>();
+        var teamDifficulty = 1;
+        foreach (TeamColor teamColor in Enum.GetValues(typeof(TeamColor)))
+        {
+            if (teamColor == TeamColor.Red) continue;
+
+            var team = new Team(teamColor, teamDifficulty);
+            var captain = new Character(team, Character.NamePicker(_namesList), 10 + teamDifficulty, true);
+            team.TeamList.Add(captain);
+
+            for (var i = 0; i < team.Size; i++)
+                team.TeamList.Add(new Character(team, Character.NamePicker(_namesList),
+                    _random.Next(5 + teamDifficulty)));
+
+            otherTeams.Add(team);
+            teamDifficulty++;
+        }
+
+        return otherTeams;
     }
 
     internal void GameRun()
@@ -50,7 +71,7 @@ internal class Game
         while (true)
         {
             if (RedCaptain.CurrentTurn) PlayTurn(Red);
-            else if (BlueCaptain.CurrentTurn) PlayTurn(Blue);
+            else if (_currentTeam.CurrentTurn) PlayTurn(_currentTeam);
 
             if (Red.TeamList.Count < 1)
             {
@@ -58,10 +79,26 @@ internal class Game
                 break;
             }
 
-            if (Blue.TeamList.Count < 1)
+            if (_currentTeam.TeamList.Count < 1)
             {
-                Console.WriteLine("Blue Team Wins");
-                break;
+                if (_otherTeams.Count <= 1)
+                {
+                    Console.WriteLine("Red Team Wins");
+                    break;
+                }
+
+                Console.WriteLine($"{_currentTeam.Color} Team loses");
+                _otherTeams.Remove(_currentTeam);
+                _currentTeam = _otherTeams[0];
+                
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine($"Next Opponents: {_currentTeam.Color} Team");
+                foreach (var character in _currentTeam.TeamList)
+                    Console.WriteLine($"{character.Name}");
+                Console.ResetColor();
+                
+                // reset who's turn it is
+                RedCaptain.CurrentTurn = true;
             }
 
             Thread.Sleep(3000);
@@ -73,12 +110,15 @@ internal class Game
         var character = team.TeamList[_random.Next(team.TeamList.Count)];
 
         PickAction(character);
-        Character otherCharacter = ShowCurrentTeamColor(character);
+        var otherCharacter = ShowCurrentTeamColor(character);
 
 
-        if (otherCharacter is Captain) Console.WriteLine($"UH OH ITS THE CAPTAIN");
-        Console.WriteLine($"It is {character.Team.Color} {character.GetType()}'s turn.\n" +
-                          $"{character.Team.Color} {character.GetType()} did a " +
+        if (otherCharacter.IsCaptain)
+            Console.WriteLine($"UH OH ITS THE {character.Team.Color} " +
+                              $"CAPTAIN {character.Name}");
+
+        Console.WriteLine($"It is {character.Team.Color} Team {character.Name}'s turn.\n" +
+                          $"{character.Team.Color} Team {character.Name} did a " +
                           $"{character.Action} on {otherCharacter.Name}\n");
 
         var hitPoints = HitPoints(character);
@@ -88,8 +128,12 @@ internal class Game
 
         if (character.IsInGame)
         {
-            Console.WriteLine($"{character.Name} scores {hitPoints}, {otherCharacter.Name} is at: {otherCharacter.HP}");
-            Console.WriteLine($"{character} is at: {character.HP}/{character.OriginalHp}");
+            Console.WriteLine(
+                $"{character.Team.Color} {character.Name} scores {hitPoints}, " +
+                $"{otherCharacter.Team.Color} {otherCharacter.Name} is at: {otherCharacter.HP}");
+
+            Console.WriteLine($"{character.Team.Color} {character.Name} is at: " +
+                              $"{character.HP}/{character.OriginalHp}");
         }
 
         TeamTurn();
@@ -102,7 +146,7 @@ internal class Game
         if (character.Team.Color == TeamColor.Red)
         {
             Console.ForegroundColor = ConsoleColor.Red;
-            otherCharacter = Blue.TeamList[_random.Next(Blue.TeamList.Count)];
+            otherCharacter = _currentTeam.TeamList[_random.Next(_currentTeam.TeamList.Count)];
         }
         else
         {
@@ -115,15 +159,15 @@ internal class Game
 
     private void TeamTurn()
     {
-        if (BlueCaptain.CurrentTurn)
+        if (_currentTeam.CurrentTurn)
         {
-            BlueCaptain.CurrentTurn = false;
+            _currentTeam.CurrentTurn = false;
             RedCaptain.CurrentTurn = true;
         }
         else if (RedCaptain.CurrentTurn)
         {
             RedCaptain.CurrentTurn = false;
-            BlueCaptain.CurrentTurn = true;
+            _currentTeam.CurrentTurn = true;
         }
     }
 
@@ -136,14 +180,14 @@ internal class Game
             Console.WriteLine($"{player.Name} from {TeamColor.Red} is out of the game.");
         }
 
-        foreach (var player in Blue.TeamList.ToList().Where(player => !player.IsInGame))
+        foreach (var player in _currentTeam.TeamList.ToList().Where(player => !player.IsInGame))
         {
-            Blue.TeamList.Remove(player);
-            Console.WriteLine($"{player.Name} from {TeamColor.Blue} is out of the game.");
+            _currentTeam.TeamList.Remove(player);
+            Console.WriteLine($"{player.Name} from {_currentTeam.Color} is out of the game.");
         }
 
-        Console.WriteLine($"{TeamColor.Red} has {Red.TeamList.Count} players");
-        Console.WriteLine($"{TeamColor.Blue} has {Blue.TeamList.Count} players");
+        Console.WriteLine($"{TeamColor.Red} Team has {Red.TeamList.Count} players");
+        Console.WriteLine($"{_currentTeam.Color} Team has {_currentTeam.TeamList.Count} players");
         Console.ResetColor();
     }
 
@@ -153,7 +197,7 @@ internal class Game
         if (character.Team.Color is TeamColor.Red)
         {
             Console.ForegroundColor = ConsoleColor.Red;
-            Console.Write($"{RedCaptain.Name}, pick action (1-9): ");
+            Console.Write($"Red Captain {RedCaptain.Name}, pick action (1-9): ");
             int.TryParse(Console.ReadLine(), out choice);
             Console.ResetColor();
         }
