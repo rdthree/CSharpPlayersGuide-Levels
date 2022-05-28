@@ -17,7 +17,6 @@ internal class Game
     private readonly List<CharacterNames> _namesList;
 
     private readonly List<Team> _otherTeams;
-    private Team _currentTeam;
 
 
     internal Game()
@@ -26,17 +25,17 @@ internal class Game
         Console.Write("player name: ");
         var redName = Console.ReadLine();
 
-        PlayerTeamSetUp(redName);
+        PlayerTeamSetUp(redName, 5);
         _otherTeams = OtherTeamsSetup();
-        _currentTeam = _otherTeams[0];
+        var currentTeam = _otherTeams[0];
 
         // red or blue team start first random
-        _ = _random.Next(10) >= 5 ? RedCaptain.CurrentTurn = true : _currentTeam.CurrentTurn = true;
+        _ = _random.Next(10) >= 5 ? Red.CurrentTurn = true : currentTeam.CurrentTurn = true;
     }
 
-    private void PlayerTeamSetUp(string? redName)
+    private void PlayerTeamSetUp(string? redName, int healthBoosts)
     {
-        Red = new Team(TeamColor.Red, 3);
+        Red = new Team(TeamColor.Red, 3, healthBoosts);
         if (redName != null) RedCaptain = new Character(Red, redName, 10, true);
         Red.TeamList.Add(RedCaptain);
         for (var i = 0; i < Red.Size; i++)
@@ -66,40 +65,68 @@ internal class Game
         return otherTeams;
     }
 
-    internal void GameRun()
+    private static void HealthBooster(Team team)
     {
-        while (true)
+        foreach (var character in team.TeamList.Where(character =>
+                     team.HealthBoosts > 0 && character.HP <= 3 && character._healthBoosts >= 1))
         {
-            if (RedCaptain.CurrentTurn) PlayTurn(Red);
-            else if (_currentTeam.CurrentTurn) PlayTurn(_currentTeam);
+            character.HP += 3;
+            team.HealthBoosts--;
+            Console.WriteLine($"{team.Color} {character.Name} health boosted: " +
+                              $"{character.HP}/{character.OriginalHp}");
+            Console.WriteLine($"{team.Color} Team has: {team.HealthBoosts} boosts left");
+        }
+    }
 
-            if (Red.TeamList.Count < 1)
+    private void WinLoseConditions(Team player, List<Team> opponentList, out bool winLose)
+    {
+        var opponent = opponentList[0];
+        if (player.TeamList.Count < 1)
+        {
+            Console.WriteLine("Red Team Loses");
+            winLose = false;
+        }
+
+        if (opponent.TeamList.Count < 1)
+        {
+            if (opponentList.Count <= 1)
             {
                 Console.WriteLine("Red Team Wins");
-                break;
+                winLose = false;
             }
 
-            if (_currentTeam.TeamList.Count < 1)
-            {
-                if (_otherTeams.Count <= 1)
-                {
-                    Console.WriteLine("Red Team Wins");
-                    break;
-                }
+            Console.WriteLine($"{opponent.Color} Team loses");
+            opponentList.Remove(opponent);
+            opponent = opponentList[0];
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine($"Next Opponents: {opponent.Color} Team");
+            foreach (var character in opponent.TeamList) Console.WriteLine($"{character.Name}");
+            Console.ResetColor();
 
-                Console.WriteLine($"{_currentTeam.Color} Team loses");
-                _otherTeams.Remove(_currentTeam);
-                _currentTeam = _otherTeams[0];
+            // reset who's turn it is
+            player.CurrentTurn = true;
+        }
 
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine($"Next Opponents: {_currentTeam.Color} Team");
-                foreach (var character in _currentTeam.TeamList)
-                    Console.WriteLine($"{character.Name}");
-                Console.ResetColor();
+        winLose = true;
+    }
 
-                // reset who's turn it is
-                RedCaptain.CurrentTurn = true;
-            }
+    internal void GameRun()
+    {
+        var winLose = true;
+        while (winLose)
+        {
+            var currentTeam = _otherTeams.First();
+
+            if (Red.CurrentTurn) PlayTurn(Red);
+            else if (currentTeam.CurrentTurn) PlayTurn(currentTeam);
+
+            HealthBooster(Red);
+            HealthBooster(currentTeam);
+            WinLoseConditions(Red, _otherTeams, out winLose);
+            currentTeam = _otherTeams[0]; // just in case the next team comes up
+
+            Console.WriteLine($"{Red.Color}/{Red.Size} vs {currentTeam.Color}/{currentTeam.Size}");
+            Console.WriteLine($"Other Teams Left: {_otherTeams.Count}");
 
             Thread.Sleep(3000);
         }
@@ -142,11 +169,12 @@ internal class Game
 
     private Character ShowCurrentTeamColor(Character character)
     {
+        var currentTeam = _otherTeams[0];
         Character otherCharacter;
         if (character.Team.Color == TeamColor.Red)
         {
             Console.ForegroundColor = ConsoleColor.Red;
-            otherCharacter = _currentTeam.TeamList[_random.Next(_currentTeam.TeamList.Count)];
+            otherCharacter = currentTeam.TeamList[_random.Next(currentTeam.TeamList.Count)];
         }
         else
         {
@@ -159,20 +187,22 @@ internal class Game
 
     private void TeamTurn()
     {
-        if (_currentTeam.CurrentTurn)
+        var currentTeam = _otherTeams[0];
+        if (currentTeam.CurrentTurn)
         {
-            _currentTeam.CurrentTurn = false;
-            RedCaptain.CurrentTurn = true;
+            currentTeam.CurrentTurn = false;
+            Red.CurrentTurn = true;
         }
-        else if (RedCaptain.CurrentTurn)
+        else if (Red.CurrentTurn)
         {
-            RedCaptain.CurrentTurn = false;
-            _currentTeam.CurrentTurn = true;
+            Red.CurrentTurn = false;
+            currentTeam.CurrentTurn = true;
         }
     }
 
     private void TeamStats()
     {
+        var currentTeam = _otherTeams[0];
         Console.ForegroundColor = ConsoleColor.Magenta;
         foreach (var player in Red.TeamList.ToList().Where(player => !player.IsInGame))
         {
@@ -180,14 +210,14 @@ internal class Game
             Console.WriteLine($"{player.Name} from {TeamColor.Red} is out of the game.");
         }
 
-        foreach (var player in _currentTeam.TeamList.ToList().Where(player => !player.IsInGame))
+        foreach (var player in currentTeam.TeamList.ToList().Where(player => !player.IsInGame))
         {
-            _currentTeam.TeamList.Remove(player);
-            Console.WriteLine($"{player.Name} from {_currentTeam.Color} is out of the game.");
+            currentTeam.TeamList.Remove(player);
+            Console.WriteLine($"{player.Name} from {currentTeam.Color} is out of the game.");
         }
 
         Console.WriteLine($"{TeamColor.Red} Team has {Red.TeamList.Count} players");
-        Console.WriteLine($"{_currentTeam.Color} Team has {_currentTeam.TeamList.Count} players");
+        Console.WriteLine($"{currentTeam.Color} Team has {currentTeam.TeamList.Count} players");
         Console.ResetColor();
     }
 

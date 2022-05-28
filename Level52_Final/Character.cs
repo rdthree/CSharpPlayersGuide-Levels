@@ -6,16 +6,19 @@ namespace Level52_Final;
 
 internal class Character
 {
-    internal string? Name { get; init; }
-    internal int OriginalHp { get; init; }
+    internal string? Name { get; }
+    internal int OriginalHp { get; }
     internal bool IsInGame { get; set; }
     internal bool IsCaptain { get; init; }
 
     // ReSharper disable once InconsistentNaming
     internal int HP { get; set; }
     internal Action Action { get; set; }
-    internal Team Team { get; init; }
-    internal bool CurrentTurn;
+    internal Team Team { get; }
+    //internal bool CurrentTurn { get; set; }
+    
+    internal bool HealthBoost { get; set; }
+    internal int _healthBoosts = 1;
 
     protected internal Character(Team team, string? name, int hp = 5, bool isCaptain = false)
     {
@@ -46,14 +49,9 @@ internal class Character
     {
         return characterNamesList[Random.Shared.Next(0, characterNamesList.Count)].name;
     }
-}
 
-// ReSharper disable once ClassNeverInstantiated.Global
-public class CharacterNames
-{
-    public string? year { get; set; }
-    // ReSharper disable once UnusedAutoPropertyAccessor.Global
-    public string? name { get; set; }
-    public string? percent { get; set; }
-    public string? sex { get; set; }
+    internal void HealthBooster()
+    {
+        if (HealthBoost && _healthBoosts >= 1) HP += 3;
+    }
 }

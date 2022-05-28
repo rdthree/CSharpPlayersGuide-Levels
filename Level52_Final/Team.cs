@@ -2,14 +2,16 @@
 
 internal class Team
 {
-    internal List<Character> TeamList { get; set; } = new List<Character>();
-    internal int Size { get; init; }
+    internal List<Character> TeamList { get; } = new();
+    internal int Size { get; }
     internal readonly TeamColor Color;
     internal bool CurrentTurn = false;
+    internal int HealthBoosts { get; set; }
 
-    internal Team(TeamColor color = TeamColor.Blue, int size = 10)
+    internal Team(TeamColor color = TeamColor.Blue, int size = 10, int healthBoosts = 3)
     {
         Size = size;
         Color = color;
+        HealthBoosts = healthBoosts;
     }
 }
