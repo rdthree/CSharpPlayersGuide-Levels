@@ -1,8 +1,4 @@
-﻿// dodge ball game - multi team
-
-// update so player goes up against several teams. each team has its own captain, color, difficulty
-
-using Level52_Final;
+﻿using Level52_Final;
 using Action = Level52_Final.Action;
 
 var game = new Game();
@@ -26,10 +22,9 @@ internal class Game
         var redName = Console.ReadLine();
 
         PlayerTeamSetUp(redName, 5);
-        _otherTeams = OtherTeamsSetup();
+        _otherTeams = OpponentTeamsSetup();
         var currentTeam = _otherTeams[0];
 
-        // red or blue team start first random
         _ = _random.Next(10) >= 5 ? Red.CurrentTurn = true : currentTeam.CurrentTurn = true;
     }
 
@@ -42,7 +37,7 @@ internal class Game
             Red.TeamList.Add(new Character(Red, Character.NamePicker(_namesList), _random.Next(10)));
     }
 
-    private List<Team> OtherTeamsSetup()
+    private List<Team> OpponentTeamsSetup()
     {
         var otherTeams = new List<Team>();
         var teamDifficulty = 1;
@@ -72,42 +67,32 @@ internal class Game
         {
             character.HP += 3;
             team.HealthBoosts--;
-            Console.WriteLine($"{team.Color} {character.Name} health boosted: " +
-                              $"{character.HP}/{character.OriginalHp}");
-            Console.WriteLine($"{team.Color} Team has: {team.HealthBoosts} boosts left");
+            Messages.HealthBoostMessage(team, character);
         }
     }
 
-    private void WinLoseConditions(Team player, List<Team> opponentList, out bool winLose)
+    private bool WinLoseConditions(Team player, List<Team> opponentList)
     {
-        var opponent = opponentList[0];
+        var opponent = opponentList.First();
         if (player.TeamList.Count < 1)
         {
-            Console.WriteLine("Red Team Loses");
-            winLose = false;
+            Messages.PlayerLose(player);
+            return false;
         }
 
-        if (opponent.TeamList.Count < 1)
+        if (opponent.TeamList.Count >= 1) return true;
+        if (opponentList.Count <= 1)
         {
-            if (opponentList.Count <= 1)
-            {
-                Console.WriteLine("Red Team Wins");
-                winLose = false;
-            }
-
-            Console.WriteLine($"{opponent.Color} Team loses");
-            opponentList.Remove(opponent);
-            opponent = opponentList[0];
-            Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine($"Next Opponents: {opponent.Color} Team");
-            foreach (var character in opponent.TeamList) Console.WriteLine($"{character.Name}");
-            Console.ResetColor();
-
-            // reset who's turn it is
-            player.CurrentTurn = true;
+            Messages.PlayerWin(player);
+            return false;
         }
 
-        winLose = true;
+        opponentList.Remove(opponent);
+        opponent = opponentList.First();
+        Messages.OpponentTeamLoses(opponent, opponentList);
+        player.CurrentTurn = true; // reset so player starts next round
+
+        return true;
     }
 
     internal void GameRun()
@@ -117,16 +102,14 @@ internal class Game
         {
             var currentTeam = _otherTeams.First();
 
-            if (Red.CurrentTurn) PlayTurn(Red);
-            else if (currentTeam.CurrentTurn) PlayTurn(currentTeam);
+            PlayTurn(Red.CurrentTurn ? Red : currentTeam);
 
             HealthBooster(Red);
             HealthBooster(currentTeam);
-            WinLoseConditions(Red, _otherTeams, out winLose);
-            currentTeam = _otherTeams[0]; // just in case the next team comes up
 
-            Console.WriteLine($"{Red.Color}/{Red.Size} vs {currentTeam.Color}/{currentTeam.Size}");
-            Console.WriteLine($"Other Teams Left: {_otherTeams.Count}");
+            winLose = WinLoseConditions(Red, _otherTeams);
+            currentTeam = _otherTeams.First(); // just in case the next team comes up
+            Messages.GameStatus(Red, currentTeam, _otherTeams);
 
             Thread.Sleep(3000);
         }
@@ -135,54 +118,29 @@ internal class Game
     private void PlayTurn(Team team)
     {
         var character = team.TeamList[_random.Next(team.TeamList.Count)];
-
+        var otherCharacter = RandomOpposingPlayer(character, Red, _otherTeams);
+        
         PickAction(character);
-        var otherCharacter = ShowCurrentTeamColor(character);
 
-
-        if (otherCharacter.IsCaptain)
-            Console.WriteLine($"UH OH ITS THE {character.Team.Color} " +
-                              $"CAPTAIN {character.Name}");
-
-        Console.WriteLine($"It is {character.Team.Color} Team {character.Name}'s turn.\n" +
-                          $"{character.Team.Color} Team {character.Name} did a " +
-                          $"{character.Action} on {otherCharacter.Name}\n");
-
+        if (otherCharacter.IsCaptain) Messages.PlayOpponentCaptain(otherCharacter);
+        Messages.TakeTurnsActionStats(character, otherCharacter);
+        
         var hitPoints = HitPoints(character);
         otherCharacter.HP -= hitPoints;
         if (otherCharacter.HP < 1) otherCharacter.IsInGame = false;
-        TeamStats();
-
-        if (character.IsInGame)
-        {
-            Console.WriteLine(
-                $"{character.Team.Color} {character.Name} scores {hitPoints}, " +
-                $"{otherCharacter.Team.Color} {otherCharacter.Name} is at: {otherCharacter.HP}");
-
-            Console.WriteLine($"{character.Team.Color} {character.Name} is at: " +
-                              $"{character.HP}/{character.OriginalHp}");
-        }
-
+        
+        Messages.TakeTurnsTeamStats(Red, _otherTeams);
+        if (character.IsInGame) Messages.TakeTurnsPlayerStats(character, otherCharacter, hitPoints);
         TeamTurn();
-        Console.ResetColor();
     }
 
-    private Character ShowCurrentTeamColor(Character character)
+    private Character RandomOpposingPlayer(Character character, Team playerTeam, List<Team> opposingTeamList)
     {
-        var currentTeam = _otherTeams[0];
-        Character otherCharacter;
-        if (character.Team.Color == TeamColor.Red)
-        {
-            Console.ForegroundColor = ConsoleColor.Red;
-            otherCharacter = currentTeam.TeamList[_random.Next(currentTeam.TeamList.Count)];
-        }
-        else
-        {
-            Console.ForegroundColor = ConsoleColor.Blue;
-            otherCharacter = Red.TeamList[_random.Next(Red.TeamList.Count)];
-        }
-
-        return otherCharacter;
+        var opponentTeam = opposingTeamList.First();
+        var randomOpponent = character.Team.Color == playerTeam.Color
+            ? opponentTeam.TeamList[_random.Next(opponentTeam.TeamList.Count)]
+            : Red.TeamList[_random.Next(Red.TeamList.Count)];
+        return randomOpponent;
     }
 
     private void TeamTurn()
@@ -200,55 +158,13 @@ internal class Game
         }
     }
 
-    private void TeamStats()
-    {
-        var currentTeam = _otherTeams[0];
-        Console.ForegroundColor = ConsoleColor.Magenta;
-        foreach (var player in Red.TeamList.ToList().Where(player => !player.IsInGame))
-        {
-            Red.TeamList.Remove(player);
-            Console.WriteLine($"{player.Name} from {TeamColor.Red} is out of the game.");
-        }
-
-        foreach (var player in currentTeam.TeamList.ToList().Where(player => !player.IsInGame))
-        {
-            currentTeam.TeamList.Remove(player);
-            Console.WriteLine($"{player.Name} from {currentTeam.Color} is out of the game.");
-        }
-
-        Console.WriteLine($"{TeamColor.Red} Team has {Red.TeamList.Count} players");
-        Console.WriteLine($"{currentTeam.Color} Team has {currentTeam.TeamList.Count} players");
-        Console.ResetColor();
-    }
-
     private void PickAction(Character character)
     {
         int choice;
         if (character.Team.Color is TeamColor.Red)
         {
-            Console.ForegroundColor = ConsoleColor.Red;
-            Console.Write($"Red Captain {RedCaptain.Name}, pick action (1-9, k): ");
-            if (!int.TryParse(Console.ReadLine(), out choice))
-            {
-                Console.ForegroundColor = ConsoleColor.Blue;
-                Console.WriteLine($"Remaining Teams");
-                foreach (var otherTeam in _otherTeams)
-                {
-                    Console.ForegroundColor = ConsoleColor.Magenta;
-                    Console.WriteLine($"{otherTeam.Color} : {otherTeam.TeamList.Count}");
-                    Console.ForegroundColor = ConsoleColor.DarkRed;
-                    foreach (var character1 in otherTeam.TeamList)
-                        Console.WriteLine($"{character1.Name}:{character1.HP}/{character1.OriginalHp}");
-                    Console.ResetColor();
-                }
-
-                Console.ResetColor();
-
-                Console.Write($"Red Captain {RedCaptain.Name}, pick action (1-9): ");
-                int.TryParse(Console.ReadLine(), out choice);
-            }
-
-            Console.ResetColor();
+            Messages.PlayerPickAction(RedCaptain);
+            if (!int.TryParse(Console.ReadLine(), out choice)) Messages.PlayerPickActionStats(_otherTeams);
         }
         else choice = _random.Next(1, 9);
 
