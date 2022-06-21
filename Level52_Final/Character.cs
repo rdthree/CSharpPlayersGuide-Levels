@@ -1,5 +1,6 @@
 ﻿using System.Globalization;
 using CsvHelper;
+
 // ReSharper disable InconsistentNaming
 
 namespace Level52_Final;
@@ -14,11 +15,23 @@ internal class Character
     // ReSharper disable once InconsistentNaming
     internal int HP { get; set; }
     internal Action Action { get; set; }
+
+    internal Items Item { get; set; }
+
     internal Team Team { get; }
     //internal bool CurrentTurn { get; set; }
-    
+
     internal bool HealthBoost { get; set; }
     internal int _healthBoosts = 1;
+    
+    internal bool Dodge { get; set; }
+    internal int DodgeQty { get; set; }= 3;
+    
+    internal bool PowerUp { get; set; }
+    internal int PowerUpQty { get; set; }= 3;
+    
+    internal bool Dash { get; set; }
+    internal int DashQty { get; set; }= 3;
 
     protected internal Character(Team team, string? name, int hp = 5, bool isCaptain = false)
     {
@@ -53,5 +66,40 @@ internal class Character
     internal void HealthBooster()
     {
         if (HealthBoost && _healthBoosts >= 1) HP += 3;
+    }
+
+    internal void UseItem(Items item)
+    {
+        switch (item)
+        {
+            case Items.Dash:
+                if (DashQty > 0)
+                {
+                    Dash = true;
+                    DashQty--;
+                }
+                break;
+            case Items.Dodge:
+                if (DodgeQty > 0)
+                {
+                    Dodge = true;
+                    DodgeQty--;
+                }
+                break;
+            case Items.PowerUp:
+                if (PowerUpQty > 0)
+                {
+                    PowerUp = true;
+                    PowerUpQty--;
+                }
+                break;
+        }
+    }
+
+    internal void ResetItems()
+    {
+        Dash = false;
+        Dodge = false;
+        PowerUp = false;
     }
 }

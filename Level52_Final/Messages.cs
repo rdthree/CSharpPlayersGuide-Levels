@@ -73,7 +73,7 @@ internal static class Messages
     internal static void PlayerPickAction(Character character)
     {
         Console.ForegroundColor = ConsoleColor.Red;
-        Console.Write($"Red Captain {character.Name}, pick action (1-9, k): ");
+        Console.Write($"Red Captain {character.Name}, pick action (1-9, k, s, d, p): ");
         Console.ResetColor();
     }
 
